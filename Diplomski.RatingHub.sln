@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{2D7FEC58-47A1-428F-AF55-EAECF05C40CD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Diplomski.RatingHub.Domain", "Diplomski.RatingHub.Domain\Diplomski.RatingHub.Domain.csproj", "{034C3725-CD89-4240-B565-54ADCB5FD28F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Diplomski.RatingHub.Application", "Diplomski.RatingHub.Application\Diplomski.RatingHub.Application.csproj", "{5C4C31F1-BF00-4148-8555-CFE610169A05}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{E593AE16-2BF8-42A1-8219-477243CF3ED8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{03B3A12E-1711-4640-AF7C-8EA3ADACA083}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Diplomski.RatingHub.Infrastructure", "Diplomski.RatingHub.Infrastructure\Diplomski.RatingHub.Infrastructure.csproj", "{1D50082B-961F-4C2A-9F07-357073D1DA23}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Diplomski.RatingHub.Web", "Diplomski.RatingHub.Web\Diplomski.RatingHub.Web.csproj", "{3E13C84F-88A6-4A70-9EFE-BE7065144D6F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{034C3725-CD89-4240-B565-54ADCB5FD28F} = {2D7FEC58-47A1-428F-AF55-EAECF05C40CD}
+		{5C4C31F1-BF00-4148-8555-CFE610169A05} = {2D7FEC58-47A1-428F-AF55-EAECF05C40CD}
+		{1D50082B-961F-4C2A-9F07-357073D1DA23} = {E593AE16-2BF8-42A1-8219-477243CF3ED8}
+		{3E13C84F-88A6-4A70-9EFE-BE7065144D6F} = {03B3A12E-1711-4640-AF7C-8EA3ADACA083}
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{034C3725-CD89-4240-B565-54ADCB5FD28F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{034C3725-CD89-4240-B565-54ADCB5FD28F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{034C3725-CD89-4240-B565-54ADCB5FD28F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{034C3725-CD89-4240-B565-54ADCB5FD28F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C4C31F1-BF00-4148-8555-CFE610169A05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C4C31F1-BF00-4148-8555-CFE610169A05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C4C31F1-BF00-4148-8555-CFE610169A05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C4C31F1-BF00-4148-8555-CFE610169A05}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D50082B-961F-4C2A-9F07-357073D1DA23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D50082B-961F-4C2A-9F07-357073D1DA23}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D50082B-961F-4C2A-9F07-357073D1DA23}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D50082B-961F-4C2A-9F07-357073D1DA23}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E13C84F-88A6-4A70-9EFE-BE7065144D6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E13C84F-88A6-4A70-9EFE-BE7065144D6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E13C84F-88A6-4A70-9EFE-BE7065144D6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E13C84F-88A6-4A70-9EFE-BE7065144D6F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
