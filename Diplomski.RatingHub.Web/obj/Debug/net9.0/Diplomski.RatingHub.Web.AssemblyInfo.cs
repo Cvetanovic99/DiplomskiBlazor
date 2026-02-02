@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Diplomski.RatingHub.Web")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+87c86781ddafb98af49541a28e96d13a96790aee")]
 [assembly: System.Reflection.AssemblyProductAttribute("Diplomski.RatingHub.Web")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Diplomski.RatingHub.Web")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
