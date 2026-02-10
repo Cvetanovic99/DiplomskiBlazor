@@ -1674,6 +1674,16 @@
             "rid": "win"
           }
         }
+      },
+      "Diplomski.RatingHub.Domain/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "compile": {
+          "bin/placeholder/Diplomski.RatingHub.Domain.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Diplomski.RatingHub.Domain.dll": {}
+        }
       }
     }
   },
@@ -4843,10 +4853,16 @@
         "system.windows.extensions.nuspec",
         "useSharedDesignerContext.txt"
       ]
+    },
+    "Diplomski.RatingHub.Domain/1.0.0": {
+      "type": "project",
+      "path": "../Diplomski.RatingHub.Domain/Diplomski.RatingHub.Domain.csproj",
+      "msbuildProject": "../Diplomski.RatingHub.Domain/Diplomski.RatingHub.Domain.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net9.0": [
+      "Diplomski.RatingHub.Domain >= 1.0.0",
       "Microsoft.AspNetCore.Identity.EntityFrameworkCore >= 9.0.12",
       "Microsoft.EntityFrameworkCore.Design >= 9.0.12",
       "Microsoft.EntityFrameworkCore.SqlServer >= 9.0.12"
@@ -4876,7 +4892,11 @@
       "frameworks": {
         "net9.0": {
           "targetAlias": "net9.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\Goran\\RiderProjects\\DiplomskiRad\\Code\\DiplomskiBlazor\\Diplomski.RatingHub.Domain\\Diplomski.RatingHub.Domain.csproj": {
+              "projectPath": "C:\\Users\\Goran\\RiderProjects\\DiplomskiRad\\Code\\DiplomskiBlazor\\Diplomski.RatingHub.Domain\\Diplomski.RatingHub.Domain.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
@@ -4926,7 +4946,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.309/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.311/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
