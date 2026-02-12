@@ -37,7 +37,7 @@ public static class DependencyInjection
         
         services.AddIdentityCore<ApplicationUser>(options =>
             {
-                options.SignIn.RequireConfirmedAccount = true;
+                //options.SignIn.RequireConfirmedAccount = true;
                 options.Password.RequireDigit = true;
             })
             .AddEntityFrameworkStores<ApplicationDbContext>()
