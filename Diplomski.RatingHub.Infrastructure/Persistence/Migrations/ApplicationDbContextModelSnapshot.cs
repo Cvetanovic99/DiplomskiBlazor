@@ -1411,6 +1411,9 @@ namespace Diplomski.RatingHub.Infrastructure.Persistence.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsAnonymousCreator")
+                        .HasColumnType("bit");
+
                     b.Property<double?>("Latitude")
                         .HasColumnType("float");
 
@@ -2217,13 +2220,13 @@ namespace Diplomski.RatingHub.Infrastructure.Persistence.Migrations
                     b.HasOne("Diplomski.RatingHub.Domain.Models.Category", "Category")
                         .WithMany("Companies")
                         .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Diplomski.RatingHub.Domain.Models.City", "City")
                         .WithMany("Companies")
                         .HasForeignKey("CityId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Diplomski.RatingHub.Domain.Models.UserProfile", "Creator")
@@ -2288,7 +2291,7 @@ namespace Diplomski.RatingHub.Infrastructure.Persistence.Migrations
                     b.HasOne("Diplomski.RatingHub.Domain.Models.Review", "Review")
                         .WithOne()
                         .HasForeignKey("Diplomski.RatingHub.Domain.Models.CompanyResponse", "ReviewId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Diplomski.RatingHub.Domain.Models.Review", null)
@@ -2393,13 +2396,13 @@ namespace Diplomski.RatingHub.Infrastructure.Persistence.Migrations
                     b.HasOne("Diplomski.RatingHub.Domain.Models.Company", "Company")
                         .WithMany("Reviews")
                         .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Diplomski.RatingHub.Domain.Models.UserProfile", "Reviewer")
                         .WithMany("Reviews")
                         .HasForeignKey("ReviewerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Company");

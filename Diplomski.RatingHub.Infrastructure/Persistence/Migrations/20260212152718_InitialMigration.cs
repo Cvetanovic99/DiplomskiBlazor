@@ -281,6 +281,7 @@ namespace Diplomski.RatingHub.Infrastructure.Persistence.Migrations
                     Number = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Latitude = table.Column<double>(type: "float", nullable: true),
                     Longitude = table.Column<double>(type: "float", nullable: true),
+                    IsAnonymousCreator = table.Column<bool>(type: "bit", nullable: false),
                     CreatorId = table.Column<int>(type: "int", nullable: false),
                     OwnerId = table.Column<int>(type: "int", nullable: false),
                     CategoryId = table.Column<int>(type: "int", nullable: false),
@@ -296,13 +297,13 @@ namespace Diplomski.RatingHub.Infrastructure.Persistence.Migrations
                         column: x => x.CategoryId,
                         principalTable: "Categories",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Companies_Cities_CityId",
                         column: x => x.CityId,
                         principalTable: "Cities",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -523,7 +524,7 @@ namespace Diplomski.RatingHub.Infrastructure.Persistence.Migrations
                         column: x => x.CompanyId,
                         principalTable: "Companies",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -961,7 +962,7 @@ namespace Diplomski.RatingHub.Infrastructure.Persistence.Migrations
                 column: "ReviewId",
                 principalTable: "Reviews",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_CompanyResponses_Reviews_ReviewId1",
@@ -1040,7 +1041,7 @@ namespace Diplomski.RatingHub.Infrastructure.Persistence.Migrations
                 column: "ReviewerId",
                 principalTable: "UserProfiles",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_UserImages_UserProfiles_UserId",

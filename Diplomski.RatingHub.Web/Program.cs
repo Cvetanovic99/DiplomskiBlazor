@@ -1,3 +1,4 @@
+using Diplomski.RatingHub.Application;
 using Diplomski.RatingHub.Infrastructure;
 using Diplomski.RatingHub.Infrastructure.Auth.Models;
 using Diplomski.RatingHub.Infrastructure.Persistence.Contexts;
@@ -16,6 +17,7 @@ builder.Services.AddRazorComponents()
 
 
 builder.Services.AddInfrastructure();
+builder.Services.AddApplication();
 builder.Services.AddWeb();
 
 

@@ -15,6 +15,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Diplomski.RatingHub.Application\Diplomski.RatingHub.Application.csproj" />
       <ProjectReference Include="..\Diplomski.RatingHub.Infrastructure\Diplomski.RatingHub.Infrastructure.csproj" />
     </ItemGroup>
 

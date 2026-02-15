@@ -182,8 +182,8 @@ public static class ModelBuilderExtension
     {
         modelBuilder.Entity<IdentityRole>().HasData(
         [
-            new IdentityRole { Name = Roles.Administrator, NormalizedName = Roles.Administrator.ToUpper() },
-            new IdentityRole { Name = Roles.RegularUser, NormalizedName = Roles.RegularUser.ToUpper() }
+            new IdentityRole { Id = "6ee8a71f-49e3-4f86-a952-563eeebb2bba", Name = Roles.Administrator, NormalizedName = Roles.Administrator.ToUpper() },
+            new IdentityRole { Id = "8c4baeea-d0f6-4c69-8120-473103452dad", Name = Roles.RegularUser, NormalizedName = Roles.RegularUser.ToUpper() }
         ]);
     }
 }

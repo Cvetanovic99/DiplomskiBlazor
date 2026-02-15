@@ -129,7 +129,17 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             .WithOne(cr => cr.Review)
             .HasForeignKey<CompanyResponse>(cr => cr.ReviewId)
             .IsRequired()
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Restrict);
+        
+        builder.HasOne(r => r.Company)
+            .WithMany(c => c.Reviews)
+            .HasForeignKey(r => r.CompanyId)
+            .OnDelete(DeleteBehavior.Restrict);
+        
+        builder.HasOne(r => r.Reviewer)
+            .WithMany(c => c.Reviews)
+            .HasForeignKey(r => r.ReviewerId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 
     private void ConfigureReviewGrade(EntityTypeBuilder<ReviewGrade> builder)

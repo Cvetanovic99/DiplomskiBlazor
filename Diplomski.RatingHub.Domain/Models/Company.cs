@@ -10,6 +10,7 @@ public class Company : EntityBase
     public required string Number { get; set; }
     public double? Latitude { get; set; }
     public double? Longitude { get; set; }
+    public bool IsAnonymousCreator { get; set; }
 
     public int CreatorId { get; set; }
     public UserProfile Creator { get; set; } = null!;
