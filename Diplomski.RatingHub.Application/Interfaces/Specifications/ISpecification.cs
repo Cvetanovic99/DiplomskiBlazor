@@ -12,7 +12,7 @@ public interface  ISpecification<T>
     Expression<Func<T, object>>? OrderByDescending { get; }
     int Take { get; }
     int Skip { get; }
-    bool IsPagingEnabled { get; }
+    bool IsPagingEnabled { get; set; }
     void ApplyOrderBy(Expression<Func<T, object>> orderByExpression);
     void ApplyOrderByDescending(Expression<Func<T, object>> orderByDescendingExpression);
     void ApplyPaging(int skip, int take);

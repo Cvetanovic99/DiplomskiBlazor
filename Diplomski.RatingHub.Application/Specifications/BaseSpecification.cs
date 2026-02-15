@@ -14,7 +14,7 @@ public abstract class BaseSpecification<T> : ISpecification<T>
     public Expression<Func<T, object>>? OrderByDescending { get; private set; }
     public int Take { get; private set; }
     public int Skip { get; private set; }
-    public bool IsPagingEnabled { get; private set; }
+    public bool IsPagingEnabled { get; set; }
 
     protected BaseSpecification(Expression<Func<T, bool>> criteria)
     {

@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Diplomski.RatingHub.Application.Builders;
+using Diplomski.RatingHub.Application.Interfaces.Models;
 using Diplomski.RatingHub.Application.Interfaces.Repositories;
 using Diplomski.RatingHub.Application.Interfaces.Specifications;
 using Diplomski.RatingHub.Application.Mapping;
+using Diplomski.RatingHub.Application.Models;
 using Diplomski.RatingHub.Application.Specifications;
 using Diplomski.RatingHub.Domain.Interfaces;
 using Diplomski.RatingHub.Infrastructure.Persistence.Contexts;
@@ -11,7 +14,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Diplomski.RatingHub.Infrastructure.Persistence.Repositories;
 
-public class DatabaseRepository<TEntity> : IDatabaseRepository<TEntity>, IRepositoryWithProjections<TEntity>
+public class DatabaseRepository<TEntity> 
+    : IDatabaseRepository<TEntity>, IRepositoryWithProjections<TEntity>, IRepositoryWithPaginatedList<TEntity>
     where TEntity : class, IDatabaseEntity
 {
     protected readonly ApplicationDbContext _dbContext;
@@ -145,5 +149,65 @@ public class DatabaseRepository<TEntity> : IDatabaseRepository<TEntity>, IReposi
     public async Task<T?> GetSingleAndProject<T>(ISpecification<TEntity> spec) where T : class, IMapFrom<TEntity>
     {
         return await ApplySpecification(spec).AsNoTracking().ProjectTo<T>(_mapper.ConfigurationProvider).FirstOrDefaultAsync();
+    }
+    
+    public async Task<IPaginatedList<TEntity>> GetAllAsPaginatedList(QueryArgs? queryArgs = null)
+    {
+        var spec = new Specification<TEntity>(e => true);
+        return await GetAsPaginatedList(spec, queryArgs);
+    }
+    
+    public async Task<IPaginatedList<TEntity>> GetAsPaginatedList(ISpecification<TEntity> spec, QueryArgs? queryArgs = null)
+    {
+        var totalCount = await GetTotalCount(spec);
+
+        if (queryArgs != null)
+            spec.ApplyPaging(queryArgs);
+
+        var items = await Get(spec);
+
+        return new PaginatedListBuilder<TEntity>()
+            .WithSkip(spec.Skip)
+            .WithTake(spec.Take)
+            .WithTotalCount(totalCount)
+            .WithItems(items)
+            .Build();
+    }
+    
+    public async Task<IPaginatedList<T>> GetAllAndProjectAsPaginatedList<T>(QueryArgs? queryArgs = null)
+        where T : class, IMapFrom<TEntity>
+    {
+        var spec = new Specification<TEntity>(e => true);
+        return await GetAndProjectAsPaginatedList<T>(spec, queryArgs);
+    }
+    
+    public async Task<IPaginatedList<T>> GetAndProjectAsPaginatedList<T>(ISpecification<TEntity> spec, QueryArgs? queryArgs = null) 
+        where T : class, IMapFrom<TEntity>
+    {
+        if (queryArgs != null)
+            spec.ApplyQueryArgs<T, TEntity>(_mapper, queryArgs);
+
+        var totalCount = await GetTotalCount(spec);
+
+        if (queryArgs != null)
+            spec.ApplyPaging(queryArgs);
+
+        var items = await GetAndProject<T>(spec);
+
+        return new PaginatedListBuilder<T>()
+            .WithSkip(spec.Skip)
+            .WithTake(spec.Take)
+            .WithTotalCount(totalCount)
+            .WithItems(items)
+            .Build();
+    }
+    
+    private async Task<int> GetTotalCount(ISpecification<TEntity> spec)
+    {
+        var isPagingEnabled = spec.IsPagingEnabled;
+        spec.IsPagingEnabled = false;
+        var totalCount = await GetCount(spec);
+        spec.IsPagingEnabled = isPagingEnabled;
+        return totalCount;
     }
 }
