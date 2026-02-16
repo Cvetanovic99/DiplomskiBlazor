@@ -3,7 +3,7 @@ using Diplomski.RatingHub.Domain.Interfaces;
 
 namespace Diplomski.RatingHub.Application.Interfaces.Repositories;
 
-public interface IDatabaseRepository<T>
+public interface IDatabaseRepository<T> : IRepositoryWithPaginatedList<T>, IRepositoryWithProjections<T>
 where T : class, IDatabaseEntity
 {
     Task<T?> GetById(int id);

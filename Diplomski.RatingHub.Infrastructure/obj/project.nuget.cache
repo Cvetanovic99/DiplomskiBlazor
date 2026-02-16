@@ -1,13 +1,17 @@
 {
   "version": 2,
-  "dgSpecHash": "aruvJnfkTZk=",
+  "dgSpecHash": "DSOGFuiMHxs=",
   "success": true,
   "projectFilePath": "C:\\Users\\Goran\\RiderProjects\\DiplomskiRad\\Code\\DiplomskiBlazor\\Diplomski.RatingHub.Infrastructure\\Diplomski.RatingHub.Infrastructure.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Goran\\.nuget\\packages\\automapper\\16.0.0\\automapper.16.0.0.nupkg.sha512",
     "C:\\Users\\Goran\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\Goran\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",
+    "C:\\Users\\Goran\\.nuget\\packages\\fluentvalidation\\12.1.1\\fluentvalidation.12.1.1.nupkg.sha512",
+    "C:\\Users\\Goran\\.nuget\\packages\\fluentvalidation.dependencyinjectionextensions\\12.1.1\\fluentvalidation.dependencyinjectionextensions.12.1.1.nupkg.sha512",
     "C:\\Users\\Goran\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
+    "C:\\Users\\Goran\\.nuget\\packages\\mediatr\\14.0.0\\mediatr.14.0.0.nupkg.sha512",
+    "C:\\Users\\Goran\\.nuget\\packages\\mediatr.contracts\\2.0.1\\mediatr.contracts.2.0.1.nupkg.sha512",
     "C:\\Users\\Goran\\.nuget\\packages\\microsoft.aspnetcore.cryptography.internal\\9.0.12\\microsoft.aspnetcore.cryptography.internal.9.0.12.nupkg.sha512",
     "C:\\Users\\Goran\\.nuget\\packages\\microsoft.aspnetcore.cryptography.keyderivation\\9.0.12\\microsoft.aspnetcore.cryptography.keyderivation.9.0.12.nupkg.sha512",
     "C:\\Users\\Goran\\.nuget\\packages\\microsoft.aspnetcore.identity.entityframeworkcore\\9.0.12\\microsoft.aspnetcore.identity.entityframeworkcore.9.0.12.nupkg.sha512",
