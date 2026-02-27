@@ -20,6 +20,22 @@
           }
         }
       },
+      "AutoMapper.Extensions.ExpressionMapping/10.0.0": {
+        "type": "package",
+        "dependencies": {
+          "AutoMapper": "[16.0.0, 17.0.0)"
+        },
+        "compile": {
+          "lib/net9.0/AutoMapper.Extensions.ExpressionMapping.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0/AutoMapper.Extensions.ExpressionMapping.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "FluentValidation/12.1.1": {
         "type": "package",
         "compile": {
@@ -280,6 +296,27 @@
         "lib/net9.0/AutoMapper.xml",
         "lib/netstandard2.0/AutoMapper.dll",
         "lib/netstandard2.0/AutoMapper.xml"
+      ]
+    },
+    "AutoMapper.Extensions.ExpressionMapping/10.0.0": {
+      "sha512": "j5ddNoo1ofifEy9T9BJQN/Romz7fNs1ZsUOYPUiXPGvH3kCsIrMZodMXLyyrCjgTATLqfHNNQDYUrLeHBZo2DQ==",
+      "type": "package",
+      "path": "automapper.extensions.expressionmapping/10.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "automapper.extensions.expressionmapping.10.0.0.nupkg.sha512",
+        "automapper.extensions.expressionmapping.nuspec",
+        "icon.png",
+        "lib/net10.0/AutoMapper.Extensions.ExpressionMapping.dll",
+        "lib/net10.0/AutoMapper.Extensions.ExpressionMapping.xml",
+        "lib/net8.0/AutoMapper.Extensions.ExpressionMapping.dll",
+        "lib/net8.0/AutoMapper.Extensions.ExpressionMapping.xml",
+        "lib/net9.0/AutoMapper.Extensions.ExpressionMapping.dll",
+        "lib/net9.0/AutoMapper.Extensions.ExpressionMapping.xml",
+        "lib/netstandard2.0/AutoMapper.Extensions.ExpressionMapping.dll",
+        "lib/netstandard2.0/AutoMapper.Extensions.ExpressionMapping.xml"
       ]
     },
     "FluentValidation/12.1.1": {
@@ -726,6 +763,7 @@
   "projectFileDependencyGroups": {
     "net9.0": [
       "AutoMapper >= 16.0.0",
+      "AutoMapper.Extensions.ExpressionMapping >= 10.0.0",
       "Diplomski.RatingHub.Domain >= 1.0.0",
       "FluentValidation.DependencyInjectionExtensions >= 12.1.1",
       "MediatR >= 14.0.0",
@@ -782,6 +820,10 @@
           "AutoMapper": {
             "target": "Package",
             "version": "[16.0.0, )"
+          },
+          "AutoMapper.Extensions.ExpressionMapping": {
+            "target": "Package",
+            "version": "[10.0.0, )"
           },
           "FluentValidation.DependencyInjectionExtensions": {
             "target": "Package",

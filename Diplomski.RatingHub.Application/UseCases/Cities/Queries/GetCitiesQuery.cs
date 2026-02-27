@@ -1,4 +1,5 @@
-﻿using Diplomski.RatingHub.Application.Interfaces.Models;
+﻿using AutoMapper;
+using Diplomski.RatingHub.Application.Interfaces.Models;
 using Diplomski.RatingHub.Application.Interfaces.Repositories;
 using Diplomski.RatingHub.Application.Mapping;
 using Diplomski.RatingHub.Application.Models;
@@ -44,7 +45,15 @@ public class GetCitiesQueryHandler : IRequestHandler<GetCitiesQuery, IPaginatedL
 
 public class CityDto : IMapFrom<City>
 {
+    public int Id { get; set; }
     public required string Name { get; set; } 
     public double Latitude { get; set; }
     public double Longitude { get; set; }
+    
+    public void Mapping(Profile profile)
+    {
+        profile.CreateMap<City, CityDto>()
+            .ForMember(dest => dest.Id,
+                options => options.MapFrom((src) => src.Id));
+    }
 }

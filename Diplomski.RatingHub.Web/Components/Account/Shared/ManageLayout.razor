@@ -1,17 +1,39 @@
 ﻿@inherits LayoutComponentBase
 @layout Diplomski.RatingHub.Web.Components.Layout.MainLayout
 
-<h1>Manage your account</h1>
+@inject NavigationManager Navigation
 
-<div>
-    <h2>Change your account settings</h2>
-    <hr/>
-    <div class="row">
-        <div class="col-lg-3">
-            <ManageNavMenu/>
-        </div>
-        <div class="col-lg-9">
-            @Body
+@if (HttpContext is null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <h1>Manage your account</h1>
+
+    <div>
+        <h2>Change your account settings</h2>
+        <hr/>
+        <div class="row">
+            <div class="col-lg-3">
+                <ManageNavMenu/>
+            </div>
+            <div class="col-lg-9">
+                @Body
+            </div>
         </div>
     </div>
-</div>
+}
+
+
+@code {
+    [CascadingParameter] private HttpContext? HttpContext { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        if (HttpContext is null)
+        {
+            Navigation.Refresh(forceReload: true);
+        }
+    }
+}

@@ -1,4 +1,9 @@
-﻿using Diplomski.RatingHub.Infrastructure.Persistence.Contexts;
+﻿using Diplomski.RatingHub.Application.Interfaces.Repositories;
+using Diplomski.RatingHub.Infrastructure.Auth.Models;
+using Diplomski.RatingHub.Infrastructure.Auth.Stores;
+using Diplomski.RatingHub.Infrastructure.Persistence.Contexts;
+using Diplomski.RatingHub.Infrastructure.Persistence.Repositories;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,6 +25,9 @@ public static class DependencyInjection
             default:
                 throw new Exception("Environment variable is not correctly added.");
         }
+        
+        services.AddScoped(typeof(IDatabaseRepository<>), typeof(DatabaseRepository<>));
+        services.AddScoped<IUserConfirmation<ApplicationUser>, UserConfirmationStore>();
         
         return services;
     }

@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using AutoMapper.Extensions.ExpressionMapping;
 using Diplomski.RatingHub.Application.Behaviors;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,7 +19,7 @@ public static class DependencyInjection
         });
         
         services.AddValidatorsFromAssembly(assembly);
-        services.AddAutoMapper(cfg => { }, assembly);
+        services.AddAutoMapper(cfg => cfg.AddExpressionMapping(), assembly);
         return services;
     }
 }

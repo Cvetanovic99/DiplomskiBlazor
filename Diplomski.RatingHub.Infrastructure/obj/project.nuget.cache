@@ -1,10 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "DSOGFuiMHxs=",
+  "dgSpecHash": "iVoCdFXKGwA=",
   "success": true,
   "projectFilePath": "C:\\Users\\Goran\\RiderProjects\\DiplomskiRad\\Code\\DiplomskiBlazor\\Diplomski.RatingHub.Infrastructure\\Diplomski.RatingHub.Infrastructure.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Goran\\.nuget\\packages\\automapper\\16.0.0\\automapper.16.0.0.nupkg.sha512",
+    "C:\\Users\\Goran\\.nuget\\packages\\automapper.extensions.expressionmapping\\10.0.0\\automapper.extensions.expressionmapping.10.0.0.nupkg.sha512",
     "C:\\Users\\Goran\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\Goran\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",
     "C:\\Users\\Goran\\.nuget\\packages\\fluentvalidation\\12.1.1\\fluentvalidation.12.1.1.nupkg.sha512",

@@ -14,16 +14,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Diplomski.RatingHub.Infrastructure.Persistence.Repositories;
 
-public class DatabaseRepository<TEntity> 
-    : IDatabaseRepository<TEntity>, IRepositoryWithProjections<TEntity>, IRepositoryWithPaginatedList<TEntity>
+public class DatabaseRepository<TEntity> : IDatabaseRepository<TEntity>, IDisposable
     where TEntity : class, IDatabaseEntity
 {
     protected readonly ApplicationDbContext _dbContext;
     private readonly IMapper _mapper;
 
-    protected DatabaseRepository(ApplicationDbContext dbContext, IMapper mapper)
+    public DatabaseRepository(ApplicationDbContext dbContext, IMapper mapper)
     {
         _dbContext = dbContext;
+        //_dbContext = dbFactory.CreateDbContext();
         _mapper = mapper;
     }
 
@@ -209,5 +209,10 @@ public class DatabaseRepository<TEntity>
         var totalCount = await GetCount(spec);
         spec.IsPagingEnabled = isPagingEnabled;
         return totalCount;
+    }
+    
+    public void Dispose()
+    {
+        _dbContext.Dispose();
     }
 }

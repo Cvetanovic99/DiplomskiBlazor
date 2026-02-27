@@ -1,6 +1,8 @@
 ﻿using Diplomski.RatingHub.Infrastructure.Auth.Models;
 using Diplomski.RatingHub.Infrastructure.Persistence.Contexts;
 using Diplomski.RatingHub.Web.Components.Account;
+using Diplomski.RatingHub.Web.Data.Interfaces;
+using Diplomski.RatingHub.Web.Data.Services;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 
@@ -10,6 +12,8 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddWeb(this IServiceCollection services)
     {
+        services.AddScoped<ICityDataService, CityDataService>();
+        
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
         AddAuthenticationSupport(services);
@@ -37,7 +41,7 @@ public static class DependencyInjection
         
         services.AddIdentityCore<ApplicationUser>(options =>
             {
-                //options.SignIn.RequireConfirmedAccount = true;
+                options.SignIn.RequireConfirmedAccount = true; 
                 options.Password.RequireDigit = true;
             })
             .AddEntityFrameworkStores<ApplicationDbContext>()

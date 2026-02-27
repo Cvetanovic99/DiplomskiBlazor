@@ -1,4 +1,8 @@
 ﻿@page "/counter"
+@using Diplomski.RatingHub.Application.Interfaces.Models
+@using Diplomski.RatingHub.Application.Models
+@using Diplomski.RatingHub.Application.UseCases.Cities.Queries
+@using Diplomski.RatingHub.Web.Data.Interfaces
 @rendermode InteractiveServer
 
 <PageTitle>Counter</PageTitle>
@@ -9,8 +13,30 @@
 
 <button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
 
+@if (_cities != null)
+{
+    foreach (var city in _cities.Items)
+    {
+        <p> @city.Name</p>
+        <br/>
+    }
+    
+}
+
 @code {
+
+    [Inject] ICityDataService? CityDataService { get; set; }
+    
     private int currentCount = 0;
+
+    private IPaginatedList<CityDto>? _cities;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _cities = await CityDataService.GetCities("Beo",
+            new QueryArgs { OrderBy = "Id asc", Skip = 0, Take = 10 });
+        
+    }
 
     private void IncrementCount()
     {
