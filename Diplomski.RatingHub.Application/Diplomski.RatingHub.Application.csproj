@@ -21,6 +21,7 @@
     <ItemGroup>
       <Folder Include="Interfaces\Services\" />
       <Folder Include="UseCases\Cities\Commands\" />
+      <Folder Include="UseCases\UserProfiles\Queries\" />
     </ItemGroup>
 
 </Project>

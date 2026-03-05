@@ -13,6 +13,8 @@ public static class DependencyInjection
     public static IServiceCollection AddWeb(this IServiceCollection services)
     {
         services.AddScoped<ICityDataService, CityDataService>();
+        services.AddScoped<IAccountDataService, AccountDataService>();
+        services.AddScoped<IUserProfileDataService, UserProfileDataService>();
         
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
