@@ -54,7 +54,7 @@ namespace Diplomski.RatingHub.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("ParentId");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("Diplomski.RatingHub.Domain.Models.CategoryKeyword", b =>
@@ -82,7 +82,7 @@ namespace Diplomski.RatingHub.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("CategoryKeywords");
+                    b.ToTable("CategoryKeywords", (string)null);
                 });
 
             modelBuilder.Entity("Diplomski.RatingHub.Domain.Models.City", b =>
@@ -111,7 +111,7 @@ namespace Diplomski.RatingHub.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Cities");
+                    b.ToTable("Cities", (string)null);
 
                     b.HasData(
                         new
@@ -1454,7 +1454,7 @@ namespace Diplomski.RatingHub.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("OwnerId");
 
-                    b.ToTable("Companies");
+                    b.ToTable("Companies", (string)null);
                 });
 
             modelBuilder.Entity("Diplomski.RatingHub.Domain.Models.CompanyImage", b =>
@@ -1492,7 +1492,7 @@ namespace Diplomski.RatingHub.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.ToTable("CompanyImages");
+                    b.ToTable("CompanyImages", (string)null);
                 });
 
             modelBuilder.Entity("Diplomski.RatingHub.Domain.Models.CompanyRatingAggregate", b =>
@@ -1531,7 +1531,7 @@ namespace Diplomski.RatingHub.Infrastructure.Persistence.Migrations
                     b.HasIndex("CompanyId", "RatingCriterionId")
                         .IsUnique();
 
-                    b.ToTable("CompanyRatingAggregates");
+                    b.ToTable("CompanyRatingAggregates", (string)null);
                 });
 
             modelBuilder.Entity("Diplomski.RatingHub.Domain.Models.CompanyResponse", b =>
@@ -1572,7 +1572,7 @@ namespace Diplomski.RatingHub.Infrastructure.Persistence.Migrations
                         .IsUnique()
                         .HasFilter("[ReviewId1] IS NOT NULL");
 
-                    b.ToTable("CompanyResponses");
+                    b.ToTable("CompanyResponses", (string)null);
                 });
 
             modelBuilder.Entity("Diplomski.RatingHub.Domain.Models.CompanyResponseImage", b =>
@@ -1607,7 +1607,7 @@ namespace Diplomski.RatingHub.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("CompanyResponseId");
 
-                    b.ToTable("CompanyResponseImages");
+                    b.ToTable("CompanyResponseImages", (string)null);
                 });
 
             modelBuilder.Entity("Diplomski.RatingHub.Domain.Models.Like", b =>
@@ -1636,7 +1636,7 @@ namespace Diplomski.RatingHub.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Likes");
+                    b.ToTable("Likes", (string)null);
                 });
 
             modelBuilder.Entity("Diplomski.RatingHub.Domain.Models.NewCategorySuggestion", b =>
@@ -1667,7 +1667,7 @@ namespace Diplomski.RatingHub.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("ParentCategoryId");
 
-                    b.ToTable("NewCategorySuggestions");
+                    b.ToTable("NewCategorySuggestions", (string)null);
                 });
 
             modelBuilder.Entity("Diplomski.RatingHub.Domain.Models.Notification", b =>
@@ -1713,7 +1713,7 @@ namespace Diplomski.RatingHub.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("RecipientId");
 
-                    b.ToTable("Notifications");
+                    b.ToTable("Notifications", (string)null);
                 });
 
             modelBuilder.Entity("Diplomski.RatingHub.Domain.Models.RatingCriterion", b =>
@@ -1748,7 +1748,7 @@ namespace Diplomski.RatingHub.Infrastructure.Persistence.Migrations
                     b.HasIndex("CategoryId", "Name")
                         .IsUnique();
 
-                    b.ToTable("RatingCriteria");
+                    b.ToTable("RatingCriteria", (string)null);
                 });
 
             modelBuilder.Entity("Diplomski.RatingHub.Domain.Models.ReportedContent", b =>
@@ -1791,7 +1791,7 @@ namespace Diplomski.RatingHub.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("ReporterUserId");
 
-                    b.ToTable("ReportedContents");
+                    b.ToTable("ReportedContents", (string)null);
                 });
 
             modelBuilder.Entity("Diplomski.RatingHub.Domain.Models.Review", b =>
@@ -1830,7 +1830,7 @@ namespace Diplomski.RatingHub.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("ReviewerId");
 
-                    b.ToTable("Reviews");
+                    b.ToTable("Reviews", (string)null);
                 });
 
             modelBuilder.Entity("Diplomski.RatingHub.Domain.Models.ReviewGrade", b =>
@@ -1863,7 +1863,7 @@ namespace Diplomski.RatingHub.Infrastructure.Persistence.Migrations
                     b.HasIndex("ReviewId", "RatingCriterionId")
                         .IsUnique();
 
-                    b.ToTable("ReviewGrades");
+                    b.ToTable("ReviewGrades", (string)null);
                 });
 
             modelBuilder.Entity("Diplomski.RatingHub.Domain.Models.ReviewImage", b =>
@@ -1898,7 +1898,7 @@ namespace Diplomski.RatingHub.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("ReviewId");
 
-                    b.ToTable("ReviewImages");
+                    b.ToTable("ReviewImages", (string)null);
                 });
 
             modelBuilder.Entity("Diplomski.RatingHub.Domain.Models.UserImage", b =>
@@ -1931,7 +1931,7 @@ namespace Diplomski.RatingHub.Infrastructure.Persistence.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("UserImages");
+                    b.ToTable("UserImages", (string)null);
                 });
 
             modelBuilder.Entity("Diplomski.RatingHub.Domain.Models.UserProfile", b =>
@@ -1979,7 +1979,7 @@ namespace Diplomski.RatingHub.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("ProfileImageId");
 
-                    b.ToTable("UserProfiles");
+                    b.ToTable("UserProfiles", (string)null);
                 });
 
             modelBuilder.Entity("Diplomski.RatingHub.Infrastructure.Auth.Models.ApplicationUser", b =>

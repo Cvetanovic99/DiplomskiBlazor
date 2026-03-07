@@ -3,7 +3,11 @@
 @using System.ComponentModel.DataAnnotations
 @using System.Text
 @using System.Text.Encodings.Web
+@using Diplomski.RatingHub.Infrastructure.Auth.Enums
 @using Diplomski.RatingHub.Infrastructure.Auth.Models
+@using Diplomski.RatingHub.Web.CustomValidationAttributes
+@using Diplomski.RatingHub.Web.Data.Interfaces
+@using Diplomski.RatingHub.Web.Models
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.Identity.EntityFrameworkCore
 @using Microsoft.AspNetCore.WebUtilities
@@ -15,6 +19,7 @@
 @inject ILogger<Register> Logger
 @inject NavigationManager NavigationManager
 @inject IdentityRedirectManager RedirectManager
+@inject IAccountDataService AccountDataService
 
 <PageTitle>Register</PageTitle>
 
@@ -24,26 +29,40 @@
     <div class="col-lg-6">
         <StatusMessage Message="@Message"/>
         <EditForm Model="UserModel" asp-route-returnUrl="@ReturnUrl" method="post" OnValidSubmit="RegisterUser" FormName="register">
+            
             <DataAnnotationsValidator/>
             <h2>Create a new account.</h2>
             <hr/>
             <ValidationSummary class="text-danger" role="alert"/>
+            
             <div class="form-floating mb-3">
-                <InputText @bind-Value="UserModel.Email" id="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com"/>
-                <label for="Input.Email">Email</label>
-                <ValidationMessage For="() => UserModel.Email" class="text-danger"/>
+                <InputText @bind-Value="UserModel.Name" id="Input.Name" class="form-control" aria-required="true" />
+                <label for="Input.Name">Ime</label>
+                <ValidationMessage For="() => UserModel.Name" class="text-danger"/>
             </div>
             <div class="form-floating mb-3">
-                <InputText type="password" @bind-Value="UserModel.Password" id="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password"/>
-                <label for="Input.Password">Password</label>
+                <InputText @bind-Value="UserModel.Surname" id="Input.Surname" class="form-control" aria-required="true" />
+                <label for="Input.Surname">Prezime</label>
+                <ValidationMessage For="() => UserModel.Surname" class="text-danger"/>
+            </div>
+            <div class="form-floating mb-3">
+                <InputText @bind-Value="UserModel.Verifier" id="Input.Verifier" class="form-control" autocomplete="username" aria-required="true" placeholder="ime@gmail.com ili (0653543543)"/>
+                <label for="Input.Verifier">Korisnicko Ime</label>
+                <ValidationMessage For="() => UserModel.Verifier" class="text-danger"/>
+            </div>
+            <div class="form-floating mb-3">
+                <InputText type="password" @bind-Value="UserModel.Password" id="Input.Password" class="form-control" autocomplete="new-password" aria-required="true"/>
+                <label for="Input.Password">Sifra</label>
                 <ValidationMessage For="() => UserModel.Password" class="text-danger"/>
             </div>
             <div class="form-floating mb-3">
-                <InputText type="password" @bind-Value="UserModel.ConfirmPassword" id="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password"/>
-                <label for="Input.ConfirmPassword">Confirm Password</label>
+                <InputText type="password" @bind-Value="UserModel.ConfirmPassword" id="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" />
+                <label for="Input.ConfirmPassword">Potvrda sifre</label>
                 <ValidationMessage For="() => UserModel.ConfirmPassword" class="text-danger"/>
             </div>
+            
             <button type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
+            
         </EditForm>
     </div>
     <div class="col-lg-4 col-lg-offset-2">
@@ -66,39 +85,61 @@
 
     public async Task RegisterUser(EditContext editContext)
     {
-        var user = CreateUser();
- 
-        await UserStore.SetUserNameAsync(user, UserModel.Email, CancellationToken.None);
-        var emailStore = GetEmailStore();
-        await emailStore.SetEmailAsync(user, UserModel.Email, CancellationToken.None);
-        var result = await UserManager.CreateAsync(user, UserModel.Password);
+        var user = Activator.CreateInstance<ApplicationUser>();
+        await EmailSender.SendConfirmationLinkAsync(user, "proba.cvetanovic@gmail.com", "link za potvrdu");
+        return;
         
-        if (!result.Succeeded)
-        {
-            identityErrors = result.Errors;
-            return;
-        }
+         var result = await AccountDataService.RegisterUser(new RegisterUserDto
+         {
+             Name = UserModel.Name,
+             Surname = UserModel.Surname,
+             Verifier = UserModel.Verifier,
+             Password = UserModel.Password
+         });
+        
+        if(result.RegistrationMethod == RegistrationMethod.Email)
+             RedirectManager.RedirectTo(
+         "Account/RegisterConfirmation",
+         new() { ["email"] = "proba.cvetanovic@gmail.com", ["returnUrl"] = ReturnUrl });
+         else
+         {
+             //Navigate To Confirm phone number page
+         }
 
-        Logger.LogInformation("User created a new account with password.");
 
-        var userId = await UserManager.GetUserIdAsync(user);
-        var code = await UserManager.GenerateEmailConfirmationTokenAsync(user);
-        code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-        var callbackUrl = NavigationManager.GetUriWithQueryParameters(
-            NavigationManager.ToAbsoluteUri("Account/ConfirmEmail").AbsoluteUri,
-            new Dictionary<string, object?> { ["userId"] = userId, ["code"] = code, ["returnUrl"] = ReturnUrl });
+        // var user = CreateUser();
+        //
+        // await UserStore.SetUserNameAsync(user, UserModel.Email, CancellationToken.None);
+        // var emailStore = GetEmailStore();
+        // await emailStore.SetEmailAsync(user, UserModel.Email, CancellationToken.None);
+        // var result = await UserManager.CreateAsync(user, UserModel.Password);
+        //
+        // if (!result.Succeeded)
+        // {
+        //     identityErrors = result.Errors;
+        //     return;
+        // }
 
-        await EmailSender.SendConfirmationLinkAsync(user, UserModel.Email, HtmlEncoder.Default.Encode(callbackUrl));
+        //Logger.LogInformation("User created a new account with password.");
 
-        if (UserManager.Options.SignIn.RequireConfirmedAccount)
-        {
-            RedirectManager.RedirectTo(
-                "Account/RegisterConfirmation",
-                new() { ["email"] = UserModel.Email, ["returnUrl"] = ReturnUrl });
-        }
+        // var userId = await UserManager.GetUserIdAsync(user);
+        // var code = await UserManager.GenerateEmailConfirmationTokenAsync(user);
+        // code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+        // var callbackUrl = NavigationManager.GetUriWithQueryParameters(
+        //     NavigationManager.ToAbsoluteUri("Account/ConfirmEmail").AbsoluteUri,
+        //     new Dictionary<string, object?> { ["userId"] = userId, ["code"] = code, ["returnUrl"] = ReturnUrl });
+        //
+        // await EmailSender.SendConfirmationLinkAsync(user, UserModel.Email, HtmlEncoder.Default.Encode(callbackUrl));
+        //
+        // if (UserManager.Options.SignIn.RequireConfirmedAccount)
+        // {
+        //     RedirectManager.RedirectTo(
+        //         "Account/RegisterConfirmation",
+        //         new() { ["email"] = UserModel.Email, ["returnUrl"] = ReturnUrl });
+        // }
 
-        await SignInManager.SignInAsync(user, isPersistent: false);
-        RedirectManager.RedirectTo(ReturnUrl);
+        // await SignInManager.SignInAsync(user, isPersistent: false);
+        // RedirectManager.RedirectTo(ReturnUrl);
     }
 
     private ApplicationUser CreateUser()
@@ -126,27 +167,31 @@
 
     public class RegisterUserModel
     {
-        [Required]
+        [Required(ErrorMessage = "Name is required")]
+        [MinLength(1, ErrorMessage = "Name cannot be empty")]
         [Display(Name = "Name")]
-        public string Name { get; set; } 
-        
-        [Required]
+        public string Name { get; set; } = "";
+
+        [Required(ErrorMessage = "Surname is required")]
+        [MinLength(1, ErrorMessage = "Surname cannot be empty")]
         [Display(Name = "Surname")]
-        public string Surname { get; set; }
-        
-        [Required]
-        [Display(Name = "UserName")]
+        public string Surname { get; set; } = "";
+
+        [Required(ErrorMessage = "Email or phone number is required")]
+        [EmailOrPhone]
+        [Display(Name = "Email or Phone")]
         public string Verifier { get; set; } = "";
 
-        [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+        [Required(ErrorMessage = "Password is required")]
+        [RegularExpression(@"^(?=.*\d).{8,15}$",
+            ErrorMessage = "Password must be 8-15 characters long and contain at least one number.")]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string Password { get; set; } = "";
 
         [DataType(DataType.Password)]
         [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [Compare("Password", ErrorMessage = "Passwords do not match.")]
         public string ConfirmPassword { get; set; } = "";
     }
 

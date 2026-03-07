@@ -1,4 +1,5 @@
 ﻿using Diplomski.RatingHub.Infrastructure.Auth.Models;
+using Diplomski.RatingHub.Infrastructure.Notifications.Email;
 using Diplomski.RatingHub.Infrastructure.Persistence.Contexts;
 using Diplomski.RatingHub.Web.Components.Account;
 using Diplomski.RatingHub.Web.Data.Interfaces;
@@ -20,7 +21,8 @@ public static class DependencyInjection
 
         AddAuthenticationSupport(services);
         
-        services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
+        services.AddScoped(typeof(IEmailSender<>), typeof(IdentityEmailSender<>));
+        services.AddScoped<IEmailSender<ApplicationUser>, IdentityEmailSender<ApplicationUser>>();
         
         return services;
     }
@@ -45,6 +47,10 @@ public static class DependencyInjection
             {
                 options.SignIn.RequireConfirmedAccount = true; 
                 options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequiredLength = 8;
             })
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddSignInManager()
