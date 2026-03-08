@@ -14,13 +14,12 @@ public static class EmailTemplates
                        """
         );
 
-    public static EmailMessage Welcome(string toEmail, string firstName) =>
+    public static EmailMessage ConfirmToken(string token) =>
         new(
-            To: new EmailRecipient(toEmail),
-            Subject: "Welcome!",
+            To: new EmailRecipient("cvetanovicgoran99@gmail.com"),
+            Subject: "Potvrda broja telefona",
             HtmlBody: $"""
-                           <p>Hi {firstName},</p>
-                           <p>Welcome to our app 🙂</p>
+                           <p>Kod za potvdu broja je: {token} </p>
                        """
         );
 }

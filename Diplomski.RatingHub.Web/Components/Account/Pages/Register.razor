@@ -3,6 +3,7 @@
 @using System.ComponentModel.DataAnnotations
 @using System.Text
 @using System.Text.Encodings.Web
+@using Diplomski.RatingHub.Application.Interfaces.Notifications
 @using Diplomski.RatingHub.Infrastructure.Auth.Enums
 @using Diplomski.RatingHub.Infrastructure.Auth.Models
 @using Diplomski.RatingHub.Web.CustomValidationAttributes
@@ -20,6 +21,7 @@
 @inject NavigationManager NavigationManager
 @inject IdentityRedirectManager RedirectManager
 @inject IAccountDataService AccountDataService
+@inject ISmsNotificationService SmsNotificationService
 
 <PageTitle>Register</PageTitle>
 
@@ -85,26 +87,24 @@
 
     public async Task RegisterUser(EditContext editContext)
     {
-        var user = Activator.CreateInstance<ApplicationUser>();
-        await EmailSender.SendConfirmationLinkAsync(user, "proba.cvetanovic@gmail.com", "link za potvrdu");
-        return;
-        
-         var result = await AccountDataService.RegisterUser(new RegisterUserDto
-         {
-             Name = UserModel.Name,
-             Surname = UserModel.Surname,
-             Verifier = UserModel.Verifier,
-             Password = UserModel.Password
-         });
-        
-        if(result.RegistrationMethod == RegistrationMethod.Email)
-             RedirectManager.RedirectTo(
-         "Account/RegisterConfirmation",
-         new() { ["email"] = "proba.cvetanovic@gmail.com", ["returnUrl"] = ReturnUrl });
-         else
-         {
-             //Navigate To Confirm phone number page
-         }
+        await SmsNotificationService.SendConfirmationToken("0655837008", "3544");
+        //  var result = await AccountDataService.RegisterUser(new RegisterUserDto
+        //  {
+        //      Name = UserModel.Name,
+        //      Surname = UserModel.Surname,
+        //      Verifier = UserModel.Verifier,
+        //      Password = UserModel.Password
+        //  });
+        //
+        // if(result.RegistrationMethod == RegistrationMethod.Email)
+        //      RedirectManager.RedirectTo(
+        //  "Account/RegisterConfirmation",
+        //  new() { ["email"] = "proba.cvetanovic@gmail.com", ["returnUrl"] = ReturnUrl });
+        //  else
+        //  {
+        //      //Navigate To Confirm phone number page
+        //      return;
+        //  }
 
 
         // var user = CreateUser();

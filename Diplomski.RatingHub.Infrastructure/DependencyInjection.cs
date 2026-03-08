@@ -5,6 +5,8 @@ using Diplomski.RatingHub.Infrastructure.Auth.Models;
 using Diplomski.RatingHub.Infrastructure.Auth.Stores;
 using Diplomski.RatingHub.Infrastructure.Notifications.Email;
 using Diplomski.RatingHub.Infrastructure.Notifications.Email.Models;
+using Diplomski.RatingHub.Infrastructure.Notifications.Sms;
+using Diplomski.RatingHub.Infrastructure.Notifications.Sms.Models;
 using Diplomski.RatingHub.Infrastructure.Persistence.Contexts;
 using Diplomski.RatingHub.Infrastructure.Persistence.Repositories;
 using Microsoft.AspNetCore.Http;
@@ -35,6 +37,7 @@ public static class DependencyInjection
         services.AddScoped(typeof(IDatabaseRepository<>), typeof(DatabaseRepository<>));
         services.AddScoped<IUserConfirmation<ApplicationUser>, UserConfirmationStore>();
         AddEmailNotification(services, configuration);
+        AddSmsNotification(services, configuration);
         
         return services;
     }
@@ -63,5 +66,27 @@ public static class DependencyInjection
         
         services.AddScoped<IEmailNotificationService, EmailNotificationService>();
         //services.AddScoped(typeof(IEmailSender<>), typeof(IdentityEmailSender<>));
+    }
+
+    private static void AddSmsNotification(IServiceCollection services, IConfiguration configuration)
+    {
+        //This is another way of registering options
+        services.AddOptions<InfobipOptions>()
+            .Bind(configuration.GetSection(InfobipOptions.SectionName))
+            .Validate(o => !string.IsNullOrWhiteSpace(o.BaseUrl), "Infobip BaseUrl is required")
+            .Validate(o => !string.IsNullOrWhiteSpace(o.ApiKey), "Infobip ApiKey is required")
+            .Validate(o => !string.IsNullOrWhiteSpace(o.Sender), "Infobip Sender is required")
+            .ValidateOnStart();
+
+        services.AddHttpClient<IInfobipClient, InfobipClient>((sp, http) =>
+        {
+            var opt = sp.GetRequiredService<IOptions<InfobipOptions>>().Value;
+
+            http.BaseAddress = new Uri(opt.BaseUrl);
+            http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("App", opt.ApiKey);
+            http.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        });
+
+        services.AddScoped<ISmsNotificationService, SmsNotificationService>();
     }
 }

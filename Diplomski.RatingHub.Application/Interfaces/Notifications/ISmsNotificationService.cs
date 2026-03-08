@@ -1,0 +1,9 @@
+﻿using Diplomski.RatingHub.Application.Models.Notifications;
+
+namespace Diplomski.RatingHub.Application.Interfaces.Notifications;
+
+public interface ISmsNotificationService
+{
+    Task SendConfirmationToken(string toPhoneNUmber, string token, CancellationToken ct = default);
+    Task SendConfirmationTokenWithEmail(string token);
+}

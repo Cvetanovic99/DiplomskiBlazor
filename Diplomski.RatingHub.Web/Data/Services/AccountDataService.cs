@@ -1,6 +1,8 @@
 ﻿using System.Text;
 using System.Text.Encodings.Web;
 using Diplomski.RatingHub.Application.Exceptions;
+using Diplomski.RatingHub.Application.Interfaces.Notifications;
+using Diplomski.RatingHub.Application.Models.Notifications;
 using Diplomski.RatingHub.Infrastructure.Auth.Enums;
 using Diplomski.RatingHub.Infrastructure.Auth.Models;
 using Diplomski.RatingHub.Web.Components.Account.Pages;
@@ -18,16 +20,19 @@ public class AccountDataService : DataServiceBase, IAccountDataService
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IEmailSender<ApplicationUser> _emailSender;
     private readonly IUserProfileDataService _userProfileDataService;
+    private readonly ISmsNotificationService _smsNotificationService;
     
     public AccountDataService(IMediator mediator,  
         UserManager<ApplicationUser> userManager,
         IEmailSender<ApplicationUser> emailSender,
-        IUserProfileDataService userProfileDataService) : base(mediator)
+        IUserProfileDataService userProfileDataService,
+        ISmsNotificationService smsNotificationService) : base(mediator)
     {
         _mediator = mediator;
         _userManager = userManager;
         _emailSender = emailSender;
         _userProfileDataService = userProfileDataService;
+        _smsNotificationService = smsNotificationService;
     }
 
     public async Task<RegisterUserResult> RegisterUser(RegisterUserDto registerUserDto)
@@ -43,7 +48,9 @@ public class AccountDataService : DataServiceBase, IAccountDataService
             }
             else if(registerUserDto.RegistrationMethod == RegistrationMethod.Phone)
             {
-                
+                string phoneNumberConfirmationToken = await CreatePhoneNumberConfirmationToken(identityUser.Id);
+                //await _smsNotificationService.SendConfirmationToken(identityUser.PhoneNumber!, phoneNumberConfirmationToken);
+                await _smsNotificationService.SendConfirmationTokenWithEmail(phoneNumberConfirmationToken);
             }
         }
         catch (Exception e)
@@ -63,7 +70,7 @@ public class AccountDataService : DataServiceBase, IAccountDataService
             Email = registerUserDto.RegistrationMethod is RegistrationMethod.Email ? registerUserDto.Verifier : null,
         });
 
-        return new RegisterUserResult { RegistrationMethod = identityUser.RegistrationMethod };
+        return new RegisterUserResult { RegistrationMethod = identityUser.RegistrationMethod , UserIdentityId = identityUser.Id};
     }
 
     private async Task<ApplicationUser> CreateIdentityUser(RegisterUserDto registerUserDto)
@@ -105,6 +112,19 @@ public class AccountDataService : DataServiceBase, IAccountDataService
         string callbackUrl = $"Account/ConfirmEmail?userId={user.Id}&code={emailConfirmationToken}";
         
         return HtmlEncoder.Default.Encode(callbackUrl);
+    }
+
+    private async Task<string> CreatePhoneNumberConfirmationToken(string identityUserId)
+    {
+        var user = await _userManager.FindByIdAsync(identityUserId);
+        if (user is null) 
+            throw new AppException("User not found");
+        
+        var phoneNumberConfirmationToken = await _userManager.GenerateChangePhoneNumberTokenAsync(user, user.PhoneNumber!);
+        if (phoneNumberConfirmationToken is null)
+            throw new AppException("Unable to generate phone number confirmation token");
+        
+        return phoneNumberConfirmationToken;
     }
 
     private async Task DeleteIdentityUserAsync(string identityUserId)
