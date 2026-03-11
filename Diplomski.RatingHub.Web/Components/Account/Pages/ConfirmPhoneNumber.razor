@@ -1,0 +1,287 @@
+﻿@page "/Account/ConfirmPhoneNumber"
+
+@using System.ComponentModel.DataAnnotations
+@using Diplomski.RatingHub.Infrastructure.Auth.Models
+@using Microsoft.AspNetCore.Identity
+
+@inject IdentityRedirectManager RedirectManager
+@inject UserManager<ApplicationUser> UserManager
+
+<PageTitle>Potvrda broja telefona</PageTitle>
+
+<div class="confirm-phone-wrapper">
+    <div class="confirm-phone-card">
+        <div class="confirm-phone-header">
+            <div class="confirm-phone-logo-wrap">
+                <img src="/images/Logo-transparent.png" alt="Logo" class="confirm-phone-logo" />
+            </div>
+
+            <h1>Potvrda broja telefona</h1>
+            <p>Unesite četvorocifreni kod koji vam je poslat.</p>
+        </div>
+
+        @if (IsSuccess)
+        {
+            <div class="confirm-success-box">
+                <div class="confirm-success-icon">✓</div>
+                <div class="confirm-success-title">Broj telefona je uspešno potvrđen.</div>
+                <div class="confirm-success-text">
+                    Uspešno ste potvrdili vaš broj, kliknite na link ispod da bi ste se prijavili.
+                </div>
+                <a href="/Account/Login" class="confirm-success-link">Idi na prijavu</a>
+            </div>
+        }
+        else
+        {
+            @if (!string.IsNullOrWhiteSpace(ErrorMessage))
+            {
+                <div class="confirm-alert">@ErrorMessage</div>
+            }
+
+            <EditForm Model="@PhoneNumberToken" method="post" OnValidSubmit="ConfirmPhoneNumberAsync" FormName="confirm-phone">
+                <DataAnnotationsValidator />
+
+                <input type="hidden" name="userId" value="@IdentityUserId" />
+                <div class="otp-section">
+    
+                    <label class="otp-label">
+                        Verifikacioni kod <span class="otp-required">*</span>
+                    </label>
+
+                    <div class="otp-container">
+                        <InputText @bind-Value="PhoneNumberToken.Digit1"
+                                   id="digit1"
+                                   class="form-control otp-input"
+                                   maxlength="1" />
+
+                        <InputText @bind-Value="PhoneNumberToken.Digit2"
+                                   id="digit2"
+                                   class="form-control otp-input"
+                                   maxlength="1" />
+
+                        <InputText @bind-Value="PhoneNumberToken.Digit3"
+                                   id="digit3"
+                                   class="form-control otp-input"
+                                   maxlength="1" />
+
+                        <InputText @bind-Value="PhoneNumberToken.Digit4"
+                                   id="digit4"
+                                   class="form-control otp-input"
+                                   maxlength="1" />
+                    </div>
+
+                </div>
+
+                <button type="submit" class="confirm-btn">Potvrdi</button>
+                
+            </EditForm>
+        }
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const inputs = Array.from(document.querySelectorAll('.otp-input'));
+
+        inputs.forEach((input, index) => {
+            input.setAttribute('inputmode', 'numeric');
+            input.setAttribute('pattern', '[0-9]*');
+            input.setAttribute('autocomplete', 'one-time-code');
+
+            input.addEventListener('input', function (e) {
+                let value = e.target.value.replace(/\D/g, '');
+                e.target.value = value.substring(0, 1);
+
+                if (value && index < inputs.length - 1) {
+                    inputs[index + 1].focus();
+                }
+            });
+
+            input.addEventListener('keydown', function (e) {
+                if (e.key === 'Backspace' && !e.target.value && index > 0) {
+                    inputs[index - 1].focus();
+                }
+            });
+
+            input.addEventListener('paste', function (e) {
+                e.preventDefault();
+
+                const pasted = (e.clipboardData || window.clipboardData)
+                    .getData('text')
+                    .replace(/\D/g, '')
+                    .substring(0, inputs.length);
+
+                pasted.split('').forEach((char, i) => {
+                    if (inputs[i]) {
+                        inputs[i].value = char;
+                    }
+                });
+
+                const nextIndex = Math.min(pasted.length, inputs.length - 1);
+                if (inputs[nextIndex]) {
+                    inputs[nextIndex].focus();
+                }
+            });
+        });
+    });
+</script>
+@* <PageTitle>Potvrda broja telefona</PageTitle> *@
+@* *@
+@* <div class="confirm-phone-wrapper"> *@
+@*     <div class="confirm-phone-card"> *@
+@*         <div class="confirm-phone-header"> *@
+@*             <div class="confirm-phone-icon">#</div> *@
+@*             <h1>Potvrda broja telefona</h1> *@
+@*             <p>Unesite četvorocifreni kod koji vam je poslat</p> *@
+@*         </div> *@
+@* *@
+@*         @if (!string.IsNullOrWhiteSpace(ErrorMessage)) *@
+@*         { *@
+@*             <div class="confirm-alert">@ErrorMessage</div> *@
+@*         } *@
+@* *@
+@*         <EditForm Model="@PhoneNumberToken" method="post" OnValidSubmit="ConfirmPhoneNumberAsync" FormName="confirm-phone"> *@
+@*             <DataAnnotationsValidator /> *@
+@* *@
+@*             <input type="hidden" name="userId" value="@IdentityUserId" /> *@
+@*             <div class="otp-section"> *@
+@*                 <label class="otp-label"> *@
+@*                     Verifikacioni kod <span class="required-star">*</span> *@
+@*                 </label> *@
+@* *@
+@*                 <div class="otp-container"> *@
+@*                     <InputText @bind-Value="PhoneNumberToken.Digit1" *@
+@*                                id="digit1" *@
+@*                                class="form-control otp-input" *@
+@*                                maxlength="1" /> *@
+@* *@
+@*                     <InputText @bind-Value="PhoneNumberToken.Digit2" *@
+@*                                id="digit2" *@
+@*                                class="form-control otp-input" *@
+@*                                maxlength="1" /> *@
+@* *@
+@*                     <InputText @bind-Value="PhoneNumberToken.Digit3" *@
+@*                                id="digit3" *@
+@*                                class="form-control otp-input" *@
+@*                                maxlength="1" /> *@
+@* *@
+@*                     <InputText @bind-Value="PhoneNumberToken.Digit4" *@
+@*                                id="digit4" *@
+@*                                class="form-control otp-input" *@
+@*                                maxlength="1" /> *@
+@*                 </div> *@
+@*             </div> *@
+@* *@
+@*             <button type="submit" class="confirm-btn">Potvrdi</button> *@
+@*              *@
+@*         </EditForm> *@
+@*     </div> *@
+@* </div> *@
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const inputs = Array.from(document.querySelectorAll('.otp-input'));
+
+        inputs.forEach((input, index) => {
+            input.setAttribute('inputmode', 'numeric');
+            input.setAttribute('pattern', '[0-9]*');
+            input.setAttribute('autocomplete', 'one-time-code');
+
+            input.addEventListener('input', function (e) {
+                let value = e.target.value.replace(/\D/g, '');
+                e.target.value = value.substring(0, 1);
+
+                if (value && index < inputs.length - 1) {
+                    inputs[index + 1].focus();
+                }
+            });
+
+            input.addEventListener('keydown', function (e) {
+                if (e.key === 'Backspace' && !e.target.value && index > 0) {
+                    inputs[index - 1].focus();
+                }
+            });
+
+            input.addEventListener('paste', function (e) {
+                e.preventDefault();
+                const pasted = (e.clipboardData || window.clipboardData)
+                    .getData('text')
+                    .replace(/\D/g, '')
+                    .substring(0, inputs.length);
+
+                pasted.split('').forEach((char, i) => {
+                    if (inputs[i]) {
+                        inputs[i].value = char;
+                    }
+                });
+
+                const nextIndex = Math.min(pasted.length, inputs.length - 1);
+                inputs[nextIndex].focus();
+            });
+        });
+    });
+</script>
+
+@code {
+    [SupplyParameterFromQuery] private string? IdentityUserId { get; set; }
+    [SupplyParameterFromForm] private PhoneNumberTokenModel PhoneNumberToken { get; set; } = new();
+    private string? ErrorMessage { get; set; }
+    private bool IsSuccess { get; set; }
+
+    private async Task ConfirmPhoneNumberAsync(EditContext editContext)
+    {
+        if (IdentityUserId is null)
+        {
+            ErrorMessage = "Doslo je do greske, molimo vas pokusajte ponovo";
+            return;
+        }
+
+        var user = await UserManager.FindByIdAsync(IdentityUserId!);
+        if (user is null)
+        {
+            ErrorMessage = "Korisnik nije pronadjen, molimo vas pokusajte ponovo";
+            return;
+        }
+
+        if (!PhoneNumberToken.IsComplete)
+        {
+            ErrorMessage = "Unesite sve 4 cifre.";
+            return;
+        }
+
+        var result = await UserManager.ChangePhoneNumberAsync(user, user.PhoneNumber!, PhoneNumberToken.Code);
+        if (!result.Succeeded)
+        {
+            ErrorMessage = "Doslo je do greske prilikom potvrdjivanja broja, molimo vas pokusajte ponovo";
+        }
+        else
+        {
+            IsSuccess = true;
+        }
+    }
+
+    public class PhoneNumberTokenModel
+    {
+        [Required]
+        [RegularExpression(@"^\d$")]
+        public string Digit1 { get; set; } = "";
+    
+        [Required]
+        [RegularExpression(@"^\d$")]
+        public string Digit2 { get; set; } = "";
+    
+        [Required]
+        [RegularExpression(@"^\d$")]
+        public string Digit3 { get; set; } = "";
+    
+        [Required]
+        [RegularExpression(@"^\d$")]
+        public string Digit4 { get; set; } = "";
+    
+        public string Code => $"{Digit1}{Digit2}{Digit3}{Digit4}";
+    
+        public bool IsComplete =>
+            new[] { Digit1, Digit2, Digit3, Digit4 }
+                .All(x => !string.IsNullOrWhiteSpace(x) && x.Length == 1 && char.IsDigit(x[0]));
+    }
+}

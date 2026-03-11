@@ -11,6 +11,9 @@ internal sealed class EmailNotificationService : IEmailNotificationService
     {
         _brevo = brevo;
     }
+    
+    public Task SendConfirmationLinkAsync(string email, string confirmationLink)
+        => SendAsync(EmailTemplates.ConfirmEmail(email, confirmationLink));
 
     public Task SendAsync(EmailMessage message, CancellationToken ct = default)
         => _brevo.SendTransactionalEmailAsync(message, ct);

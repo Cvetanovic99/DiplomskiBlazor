@@ -6,4 +6,5 @@ public class RegisterUserResult
 {
     public RegistrationMethod RegistrationMethod { get; set; } 
     public string UserIdentityId { get; set; }
+    public string Verifier { get; set; }
 }

@@ -21,8 +21,7 @@ public static class DependencyInjection
 
         AddAuthenticationSupport(services);
         
-        services.AddScoped(typeof(IEmailSender<>), typeof(IdentityEmailSender<>));
-        services.AddScoped<IEmailSender<ApplicationUser>, IdentityEmailSender<ApplicationUser>>();
+        services.AddScoped<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
         
         return services;
     }

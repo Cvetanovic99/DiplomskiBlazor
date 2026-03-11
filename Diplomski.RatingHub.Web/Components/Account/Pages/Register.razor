@@ -1,79 +1,139 @@
 ﻿@page "/Account/Register"
 
 @using System.ComponentModel.DataAnnotations
-@using System.Text
-@using System.Text.Encodings.Web
 @using Diplomski.RatingHub.Application.Interfaces.Notifications
 @using Diplomski.RatingHub.Infrastructure.Auth.Enums
-@using Diplomski.RatingHub.Infrastructure.Auth.Models
 @using Diplomski.RatingHub.Web.CustomValidationAttributes
 @using Diplomski.RatingHub.Web.Data.Interfaces
 @using Diplomski.RatingHub.Web.Models
 @using Microsoft.AspNetCore.Identity
-@using Microsoft.AspNetCore.Identity.EntityFrameworkCore
-@using Microsoft.AspNetCore.WebUtilities
 
-@inject UserManager<ApplicationUser> UserManager
-@inject IUserStore<ApplicationUser> UserStore
-@inject SignInManager<ApplicationUser> SignInManager
-@inject IEmailSender<ApplicationUser> EmailSender
-@inject ILogger<Register> Logger
-@inject NavigationManager NavigationManager
+
 @inject IdentityRedirectManager RedirectManager
 @inject IAccountDataService AccountDataService
-@inject ISmsNotificationService SmsNotificationService
+@inject IEmailNotificationService NotificationService
 
 <PageTitle>Register</PageTitle>
 
-<h1>Register</h1>
+<div class="auth-layout">
 
-<div class="row">
-    <div class="col-lg-6">
-        <StatusMessage Message="@Message"/>
-        <EditForm Model="UserModel" asp-route-returnUrl="@ReturnUrl" method="post" OnValidSubmit="RegisterUser" FormName="register">
-            
-            <DataAnnotationsValidator/>
-            <h2>Create a new account.</h2>
-            <hr/>
-            <ValidationSummary class="text-danger" role="alert"/>
-            
-            <div class="form-floating mb-3">
-                <InputText @bind-Value="UserModel.Name" id="Input.Name" class="form-control" aria-required="true" />
-                <label for="Input.Name">Ime</label>
-                <ValidationMessage For="() => UserModel.Name" class="text-danger"/>
+    <!-- LEFT SIDE -->
+    <div class="auth-left">
+        <div class="auth-left-overlay"></div>
+
+        <div class="auth-left-content">
+            <div class="auth-brand">
+                <img src="/images/logo.png" alt="RatingHub logo" class="auth-logo" />
+                <span class="auth-brand-name">RatingHub</span>
             </div>
-            <div class="form-floating mb-3">
-                <InputText @bind-Value="UserModel.Surname" id="Input.Surname" class="form-control" aria-required="true" />
-                <label for="Input.Surname">Prezime</label>
-                <ValidationMessage For="() => UserModel.Surname" class="text-danger"/>
+
+            <div class="auth-left-text">
+                <h1>Pronađite i ocenite najbolje usluge</h1>
+                <p>
+                    Platforma koja vam omogućava da na jednom mestu pregledate ocene,
+                    komentare i preporuke korisnika za različite pružaoce usluga.
+                </p>
             </div>
-            <div class="form-floating mb-3">
-                <InputText @bind-Value="UserModel.Verifier" id="Input.Verifier" class="form-control" autocomplete="username" aria-required="true" placeholder="ime@gmail.com ili (0653543543)"/>
-                <label for="Input.Verifier">Korisnicko Ime</label>
-                <ValidationMessage For="() => UserModel.Verifier" class="text-danger"/>
+
+            <div class="auth-left-points">
+                <div class="auth-point">
+                    <span class="auth-point-icon">✔</span>
+                    <span>Provereni korisnici i pouzdane preporuke</span>
+                </div>
+                <div class="auth-point">
+                    <span class="auth-point-icon">✔</span>
+                    <span>Jednostavna pretraga i poređenje usluga</span>
+                </div>
+                <div class="auth-point">
+                    <span class="auth-point-icon">✔</span>
+                    <span>Transparentne ocene i komentari</span>
+                </div>
             </div>
-            <div class="form-floating mb-3">
-                <InputText type="password" @bind-Value="UserModel.Password" id="Input.Password" class="form-control" autocomplete="new-password" aria-required="true"/>
-                <label for="Input.Password">Sifra</label>
-                <ValidationMessage For="() => UserModel.Password" class="text-danger"/>
-            </div>
-            <div class="form-floating mb-3">
-                <InputText type="password" @bind-Value="UserModel.ConfirmPassword" id="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" />
-                <label for="Input.ConfirmPassword">Potvrda sifre</label>
-                <ValidationMessage For="() => UserModel.ConfirmPassword" class="text-danger"/>
-            </div>
-            
-            <button type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
-            
-        </EditForm>
+        </div>
     </div>
-    <div class="col-lg-4 col-lg-offset-2">
-        <section>
-            <h3>Use another service to register.</h3>
-            <hr/>
-            <ExternalLoginPicker/>
-        </section>
+    
+    <!-- RIGHT SIDE -->
+    <div class="auth-right">
+
+        <div class="auth-card">
+
+            <div class="auth-header">
+                <h2>Kreirajte nalog</h2>
+                <p>Unesite podatke kako biste napravili novi nalog.</p>
+            </div>
+
+            <StatusMessage Message="@Message" Type="danger"/>
+
+            <EditForm Model="UserModel"
+                      asp-route-returnUrl="@ReturnUrl"
+                      method="post"
+                      OnValidSubmit="RegisterUser"
+                      FormName="register">
+
+                <DataAnnotationsValidator/>
+
+                <div class="form-group">
+                    <label for="register-name">Ime</label>
+                    <InputText @bind-Value="UserModel.Name"
+                               id="register-name"
+                               class="form-control modern-input" />
+                    <ValidationMessage For="() => UserModel.Name" class="validation-error" />
+                </div>
+
+                <div class="form-group">
+                    <label for="register-surname">Prezime</label>
+                    <InputText @bind-Value="UserModel.Surname"
+                               id="register-surname"
+                               class="form-control modern-input" />
+                    <ValidationMessage For="() => UserModel.Surname" class="validation-error" />
+                </div>
+
+                <div class="form-group">
+                    <label for="register-verifier">Email ili telefon</label>
+                    <InputText @bind-Value="UserModel.Verifier"
+                               id="register-verifier"
+                               class="form-control modern-input"
+                               autocomplete="username"
+                               placeholder="email@gmail.com ili 06xxxxxxxx" />
+                    <ValidationMessage For="() => UserModel.Verifier" class="validation-error" />
+                </div>
+
+                <div class="form-group">
+                    <label for="register-password">Šifra</label>
+                    <InputText type="password"
+                               @bind-Value="UserModel.Password"
+                               id="register-password"
+                               class="form-control modern-input"
+                               autocomplete="new-password" />
+                    <ValidationMessage For="() => UserModel.Password" class="validation-error" />
+                </div>
+
+                <div class="form-group">
+                    <label for="register-confirm-password">Potvrdite šifru</label>
+                    <InputText type="password"
+                               @bind-Value="UserModel.ConfirmPassword"
+                               id="register-confirm-password"
+                               class="form-control modern-input"
+                               autocomplete="new-password" />
+                    <ValidationMessage For="() => UserModel.ConfirmPassword" class="validation-error" />
+                </div>
+
+                <button type="submit" class="auth-btn">
+                    Kreiraj nalog
+                </button>
+
+            </EditForm>
+
+            <div class="auth-footer">
+                <a href="/" class="back-home-link">
+                    ← Povratak na početnu stranicu
+                </a>
+            </div>
+
+        </div>
+
     </div>
+
 </div>
 
 @code {
@@ -83,116 +143,65 @@
 
     [SupplyParameterFromQuery] private string? ReturnUrl { get; set; }
 
-    private string? Message => identityErrors is null ? null : $"Error: {string.Join(", ", identityErrors.Select(error => error.Description))}";
+    private string? Message { get; set; }
 
     public async Task RegisterUser(EditContext editContext)
     {
-        await SmsNotificationService.SendConfirmationToken("0655837008", "3544");
-        //  var result = await AccountDataService.RegisterUser(new RegisterUserDto
-        //  {
-        //      Name = UserModel.Name,
-        //      Surname = UserModel.Surname,
-        //      Verifier = UserModel.Verifier,
-        //      Password = UserModel.Password
-        //  });
-        //
-        // if(result.RegistrationMethod == RegistrationMethod.Email)
-        //      RedirectManager.RedirectTo(
-        //  "Account/RegisterConfirmation",
-        //  new() { ["email"] = "proba.cvetanovic@gmail.com", ["returnUrl"] = ReturnUrl });
-        //  else
-        //  {
-        //      //Navigate To Confirm phone number page
-        //      return;
-        //  }
-
-
-        // var user = CreateUser();
-        //
-        // await UserStore.SetUserNameAsync(user, UserModel.Email, CancellationToken.None);
-        // var emailStore = GetEmailStore();
-        // await emailStore.SetEmailAsync(user, UserModel.Email, CancellationToken.None);
-        // var result = await UserManager.CreateAsync(user, UserModel.Password);
-        //
-        // if (!result.Succeeded)
-        // {
-        //     identityErrors = result.Errors;
-        //     return;
-        // }
-
-        //Logger.LogInformation("User created a new account with password.");
-
-        // var userId = await UserManager.GetUserIdAsync(user);
-        // var code = await UserManager.GenerateEmailConfirmationTokenAsync(user);
-        // code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-        // var callbackUrl = NavigationManager.GetUriWithQueryParameters(
-        //     NavigationManager.ToAbsoluteUri("Account/ConfirmEmail").AbsoluteUri,
-        //     new Dictionary<string, object?> { ["userId"] = userId, ["code"] = code, ["returnUrl"] = ReturnUrl });
-        //
-        // await EmailSender.SendConfirmationLinkAsync(user, UserModel.Email, HtmlEncoder.Default.Encode(callbackUrl));
-        //
-        // if (UserManager.Options.SignIn.RequireConfirmedAccount)
-        // {
-        //     RedirectManager.RedirectTo(
-        //         "Account/RegisterConfirmation",
-        //         new() { ["email"] = UserModel.Email, ["returnUrl"] = ReturnUrl });
-        // }
-
-        // await SignInManager.SignInAsync(user, isPersistent: false);
-        // RedirectManager.RedirectTo(ReturnUrl);
-    }
-
-    private ApplicationUser CreateUser()
-    {
         try
         {
-            return Activator.CreateInstance<ApplicationUser>();
+            var result = await AccountDataService.RegisterUser(new RegisterUserDto
+            {
+                Name = UserModel.Name,
+                Surname = UserModel.Surname,
+                Verifier = UserModel.Verifier,
+                Password = UserModel.Password
+            });
+            
+            if(result.RegistrationMethod == RegistrationMethod.Email)
+                RedirectManager.RedirectTo(
+                    "Account/RegisterConfirmation",
+                    new() { ["email"] = result.Verifier, ["returnUrl"] = ReturnUrl });
+            else
+            {
+                RedirectManager.RedirectTo(
+                    "Account/ConfirmPhoneNumber",
+                    new() { ["identityUserId"] = result.UserIdentityId, ["returnUrl"] = ReturnUrl });
+            }
         }
-        catch
+        catch (Exception e)
         {
-            throw new InvalidOperationException($"Can't create an instance of '{nameof(ApplicationUser)}'. " +
-                                                $"Ensure that '{nameof(ApplicationUser)}' is not an abstract class and has a parameterless constructor.");
+            Message = e.Message;
         }
     }
-
-    private IUserEmailStore<ApplicationUser> GetEmailStore()
-    {
-        if (!UserManager.SupportsUserEmail)
-        {
-            throw new NotSupportedException("The default UI requires a user store with email support.");
-        }
-        
-        return (IUserEmailStore<ApplicationUser>)UserStore;
-    }
+    
 
     public class RegisterUserModel
     {
-        [Required(ErrorMessage = "Name is required")]
+        [Required(ErrorMessage = "Unesite ime")]
         [MinLength(1, ErrorMessage = "Name cannot be empty")]
         [Display(Name = "Name")]
         public string Name { get; set; } = "";
 
-        [Required(ErrorMessage = "Surname is required")]
+        [Required(ErrorMessage = "Unesite prezime")]
         [MinLength(1, ErrorMessage = "Surname cannot be empty")]
         [Display(Name = "Surname")]
         public string Surname { get; set; } = "";
-
-        [Required(ErrorMessage = "Email or phone number is required")]
+        
+        [Required(ErrorMessage="Unesite email ili broj telefona")]
         [EmailOrPhone]
         [Display(Name = "Email or Phone")]
         public string Verifier { get; set; } = "";
 
-        [Required(ErrorMessage = "Password is required")]
+        [Required(ErrorMessage = "Unesite sifru")]
         [RegularExpression(@"^(?=.*\d).{8,15}$",
-            ErrorMessage = "Password must be 8-15 characters long and contain at least one number.")]
+            ErrorMessage = "Sifra se mora sastojati od 8-15 karaktera i mora sadrzati bar jedan broj")]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string Password { get; set; } = "";
 
         [DataType(DataType.Password)]
         [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "Passwords do not match.")]
+        [Compare("Password", ErrorMessage = "Sifre se ne poklapaju")]
         public string ConfirmPassword { get; set; } = "";
     }
-
 }

@@ -7,10 +7,10 @@ public static class EmailTemplates
             To: new EmailRecipient(toEmail),
             Subject: "Confirm your email",
             HtmlBody: $"""
-                           <p>Thanks for registering.</p>
-                           <p>Please confirm your email by clicking the link below:</p>
-                           <p><a href="{confirmationLink}">Confirm email</a></p>
-                           <p>If you didn’t request this, you can ignore this message.</p>
+                           <p>Hvala za registraciju na nasoj platformi RatingHub.</p>
+                           <p>Molimo vas da potvrdite email klikom na link ispod:</p>
+                           <p><a href="{confirmationLink}">Potvrdi email</a></p>
+                           <p>Ako vi niste izvrsili registraciju na nasoj platformi, ovu poruku mozete ignorisati.</p>
                        """
         );
 

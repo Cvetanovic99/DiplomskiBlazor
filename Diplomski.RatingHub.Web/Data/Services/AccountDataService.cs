@@ -6,6 +6,7 @@ using Diplomski.RatingHub.Application.Models.Notifications;
 using Diplomski.RatingHub.Infrastructure.Auth.Enums;
 using Diplomski.RatingHub.Infrastructure.Auth.Models;
 using Diplomski.RatingHub.Web.Components.Account.Pages;
+using Diplomski.RatingHub.Web.Constants;
 using Diplomski.RatingHub.Web.Data.Interfaces;
 using Diplomski.RatingHub.Web.Models;
 using MediatR;
@@ -18,19 +19,19 @@ public class AccountDataService : DataServiceBase, IAccountDataService
 {
     private readonly IMediator _mediator;
     private readonly UserManager<ApplicationUser> _userManager;
-    private readonly IEmailSender<ApplicationUser> _emailSender;
+    private readonly IEmailNotificationService _emailNotificationService;
     private readonly IUserProfileDataService _userProfileDataService;
     private readonly ISmsNotificationService _smsNotificationService;
     
     public AccountDataService(IMediator mediator,  
         UserManager<ApplicationUser> userManager,
-        IEmailSender<ApplicationUser> emailSender,
+        IEmailNotificationService emailNotificationService,
         IUserProfileDataService userProfileDataService,
         ISmsNotificationService smsNotificationService) : base(mediator)
     {
         _mediator = mediator;
         _userManager = userManager;
-        _emailSender = emailSender;
+        _emailNotificationService = emailNotificationService;
         _userProfileDataService = userProfileDataService;
         _smsNotificationService = smsNotificationService;
     }
@@ -44,7 +45,7 @@ public class AccountDataService : DataServiceBase, IAccountDataService
             if (registerUserDto.RegistrationMethod == RegistrationMethod.Email)
             {
                 string emailConfirmationLink = await CreateEmailConfirmationLink(identityUser.Id);
-                await _emailSender.SendConfirmationLinkAsync(identityUser, identityUser.Email!, emailConfirmationLink);
+                await _emailNotificationService.SendConfirmationLinkAsync(identityUser.Email!, emailConfirmationLink);
             }
             else if(registerUserDto.RegistrationMethod == RegistrationMethod.Phone)
             {
@@ -70,7 +71,12 @@ public class AccountDataService : DataServiceBase, IAccountDataService
             Email = registerUserDto.RegistrationMethod is RegistrationMethod.Email ? registerUserDto.Verifier : null,
         });
 
-        return new RegisterUserResult { RegistrationMethod = identityUser.RegistrationMethod , UserIdentityId = identityUser.Id};
+        return new RegisterUserResult
+        {
+            RegistrationMethod = identityUser.RegistrationMethod, 
+            UserIdentityId = identityUser.Id,
+            Verifier = identityUser.UserName!
+        };
     }
 
     private async Task<ApplicationUser> CreateIdentityUser(RegisterUserDto registerUserDto)
@@ -109,7 +115,7 @@ public class AccountDataService : DataServiceBase, IAccountDataService
         if (emailConfirmationToken is null)
             throw new AppException("Unable to generate email confirmation token");
         
-        string callbackUrl = $"Account/ConfirmEmail?userId={user.Id}&code={emailConfirmationToken}";
+        string callbackUrl = $"{BaseApplicationUrls.BaseHttpsUrl}/Account/ConfirmEmail?userId={user.Id}&code={emailConfirmationToken}";
         
         return HtmlEncoder.Default.Encode(callbackUrl);
     }

@@ -1,10 +1,9 @@
 ﻿using Diplomski.RatingHub.Application.Interfaces.Notifications;
 using Diplomski.RatingHub.Application.Models.Notifications;
-using Microsoft.AspNetCore.Identity;
 
 namespace Diplomski.RatingHub.Infrastructure.Notifications.Email;
 
-public sealed class IdentityEmailSender<TUser> : IEmailSender<TUser> where TUser : class
+public sealed class IdentityEmailSender<TUser>
 {
     private readonly IEmailNotificationService _email;
 

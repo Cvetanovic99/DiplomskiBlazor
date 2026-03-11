@@ -9,7 +9,6 @@ using Diplomski.RatingHub.Infrastructure.Notifications.Sms;
 using Diplomski.RatingHub.Infrastructure.Notifications.Sms.Models;
 using Diplomski.RatingHub.Infrastructure.Persistence.Contexts;
 using Diplomski.RatingHub.Infrastructure.Persistence.Repositories;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
