@@ -68,7 +68,8 @@
                       asp-route-returnUrl="@ReturnUrl"
                       method="post"
                       OnValidSubmit="RegisterUser"
-                      FormName="register">
+                      FormName="register"
+                      id="registerForm">
 
                 <DataAnnotationsValidator/>
 
@@ -117,9 +118,19 @@
                                autocomplete="new-password" />
                     <ValidationMessage For="() => UserModel.ConfirmPassword" class="validation-error" />
                 </div>
+                
+                <button type="submit" class="auth-btn" id="auth-btn">
 
-                <button type="submit" class="auth-btn">
-                    Kreiraj nalog
+                    <span id="btnText">
+                        Kreiraj nalog
+                    </span>
+
+                    <span id="btnSpinner"
+                          class="spinner-border spinner-border-sm ms-2"
+                          role="status"
+                          aria-hidden="true"
+                          style="display:none">
+                    </span>
                 </button>
 
             </EditForm>
@@ -135,6 +146,34 @@
     </div>
 
 </div>
+
+<script>
+    
+    document.addEventListener("DOMContentLoaded", function () {
+    
+        const form = document.getElementById("registerForm");
+        const button = document.getElementById("auth-btn");
+        const spinner = document.getElementById("btnSpinner");
+        const text = document.getElementById("btnText");
+    
+        if (!form) return;
+    
+        form.addEventListener("submit", function () {
+    
+            button.disabled = true;
+            button.classList.add("submitting");
+    
+            if (spinner)
+                spinner.style.display = "inline-block";
+    
+            if (text)
+                text.textContent = "Kreiranje naloga...";
+    
+        });
+    
+    });
+
+</script>
 
 @code {
     private IEnumerable<IdentityError>? identityErrors;
@@ -160,7 +199,7 @@
             if(result.RegistrationMethod == RegistrationMethod.Email)
                 RedirectManager.RedirectTo(
                     "Account/RegisterConfirmation",
-                    new() { ["email"] = result.Verifier, ["returnUrl"] = ReturnUrl });
+                    new() { ["email"] = result.Verifier });
             else
             {
                 RedirectManager.RedirectTo(

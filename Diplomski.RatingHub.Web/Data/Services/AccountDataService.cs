@@ -44,7 +44,7 @@ public class AccountDataService : DataServiceBase, IAccountDataService
         {
             if (registerUserDto.RegistrationMethod == RegistrationMethod.Email)
             {
-                string emailConfirmationLink = await CreateEmailConfirmationLink(identityUser.Id);
+                string emailConfirmationLink = await CreateEmailConfirmationLink(identityUser.Email!);
                 await _emailNotificationService.SendConfirmationLinkAsync(identityUser.Email!, emailConfirmationLink);
             }
             else if(registerUserDto.RegistrationMethod == RegistrationMethod.Phone)
@@ -103,17 +103,31 @@ public class AccountDataService : DataServiceBase, IAccountDataService
         return user;
     }
 
-    private async Task<string> CreateEmailConfirmationLink(string identityUserId)
+    public async Task ResendEmailConfirmationLink(string email)
     {
-        var user = await _userManager.FindByIdAsync(identityUserId);
+        string emailConfirmationLink = await CreateEmailConfirmationLink(email);
+        try
+        {
+            await _emailNotificationService.SendConfirmationLinkAsync(email, emailConfirmationLink);
+        }
+        catch
+        {
+            throw new AppException(
+                "Trenutno nismo u mogucnosti da posaljemo link za potvrdu email adrese, molimo vas pokusajte kasnije");
+        }
+    }
+
+    private async Task<string> CreateEmailConfirmationLink(string email)
+    {
+        var user = await _userManager.FindByEmailAsync(email);
         if (user is null) 
-            throw new AppException("User not found");
+            throw new AppException("Korisnik sa trazenom email adresom nije pronadjen");
 
         string emailConfirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
         
         emailConfirmationToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(emailConfirmationToken));
         if (emailConfirmationToken is null)
-            throw new AppException("Unable to generate email confirmation token");
+            throw new AppException("Trenutno nismo u mogucnosti da posaljemo link za potvrdu email adrese, molimo vas pokusajte kasnije");
         
         string callbackUrl = $"{BaseApplicationUrls.BaseHttpsUrl}/Account/ConfirmEmail?userId={user.Id}&code={emailConfirmationToken}";
         

@@ -6,4 +6,5 @@ namespace Diplomski.RatingHub.Web.Data.Interfaces;
 public interface IAccountDataService
 {
     Task<RegisterUserResult> RegisterUser(RegisterUserDto registerUserDto);
+    Task ResendEmailConfirmationLink(string email);
 }

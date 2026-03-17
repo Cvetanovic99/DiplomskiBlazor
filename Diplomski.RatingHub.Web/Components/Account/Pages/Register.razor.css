@@ -240,6 +240,15 @@
     transform: translateY(0);
 }
 
+.auth-btn:disabled,
+.auth-btn.submitting {
+    opacity: 0.65;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none;
+    background: #3066be;
+    filter: grayscale(0.08);
+}
 /* FOOTER */
 
 .auth-footer {

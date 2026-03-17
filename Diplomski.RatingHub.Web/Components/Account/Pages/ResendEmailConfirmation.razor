@@ -1,66 +1,134 @@
 ﻿@page "/Account/ResendEmailConfirmation"
 
 @using System.ComponentModel.DataAnnotations
-@using System.Text
-@using System.Text.Encodings.Web
-@using Diplomski.RatingHub.Infrastructure.Auth.Models
-@using Microsoft.AspNetCore.Identity
-@using Microsoft.AspNetCore.WebUtilities
+@using Diplomski.RatingHub.Web.Data.Interfaces
 
-@inject UserManager<ApplicationUser> UserManager
-@inject IEmailSender<ApplicationUser> EmailSender
-@inject NavigationManager NavigationManager
-@inject IdentityRedirectManager RedirectManager
+@inject IAccountDataService AccountDataService
 
 <PageTitle>Resend email confirmation</PageTitle>
 
-<h1>Resend email confirmation</h1>
-<h2>Enter your email.</h2>
-<hr/>
-<StatusMessage Message="@message"/>
-<div class="row">
-    <div class="col-md-4">
-        <EditForm Model="Input" FormName="resend-email-confirmation" OnValidSubmit="OnValidSubmitAsync" method="post">
-            <DataAnnotationsValidator/>
-            <ValidationSummary class="text-danger" role="alert"/>
-            <div class="form-floating mb-3">
-                <InputText @bind-Value="Input.Email" id="Input.Email" class="form-control" aria-required="true" placeholder="name@example.com"/>
-                <label for="Input.Email" class="form-label">Email</label>
-                <ValidationMessage For="() => Input.Email" class="text-danger"/>
+<div class="resend-wrapper">
+    <div class="resend-card">
+
+        <div class="resend-header">
+            <div class="resend-logo-wrap">
+                <img src="/images/logo.png" alt="Logo" class="resend-logo" />
             </div>
-            <button type="submit" class="w-100 btn btn-lg btn-primary">Resend</button>
+
+            <h1>Ponovno slanje potvrde</h1>
+            <p>
+                Unesite email adresu kako bismo vam ponovo poslali link za potvrdu naloga.
+            </p>
+        </div>
+
+        @if (!string.IsNullOrWhiteSpace(message))
+        {
+            <div class="resend-status-box @messageType">
+                <div class="resend-status-icon">
+                    @(messageType == "success" ? "✔" : "⚠")
+                </div>
+                <div class="resend-status-content">
+                    <div class="resend-status-title">Obaveštenje</div>
+                    <div class="resend-status-text">@message</div>
+                </div>
+            </div>
+        }
+
+        <EditForm Model="Input"
+                  FormName="resend-email-confirmation"
+                  OnValidSubmit="OnValidSubmitAsync"
+                  method="post"
+                  id="resendForm">
+            <DataAnnotationsValidator />
+
+            <div class="form-group">
+                <label for="resend-email">Email adresa</label>
+                <InputText @bind-Value="Input.Email"
+                           id="resend-email"
+                           class="form-control modern-input"
+                           aria-required="true"
+                           placeholder="name@example.com" />
+                <ValidationMessage For="() => Input.Email" class="validation-error" />
+            </div>
+
+            <button type="submit" class="resend-btn" id="resendButton">
+
+                <span id="btnText">
+                    Pošalji ponovo link za potvrdu
+                </span>
+
+                <span id="btnSpinner"
+                      class="spinner-border spinner-border-sm ms-2"
+                      role="status"
+                      aria-hidden="true"
+                      style="display:none">
+                </span>
+            </button>
+            @* <button type="submit" class="resend-btn" disabled="@emailSent"> *@
+            @*     Pošalji ponovo link za potvrdu *@
+            @* </button> *@
         </EditForm>
+
+        <div class="resend-footer">
+            <a href="/" class="resend-secondary-link">← Povratak na početnu stranicu</a>
+        </div>
+
     </div>
 </div>
 
+<script>
+    
+    document.addEventListener("DOMContentLoaded", function () {
+    
+        const form = document.getElementById("resendForm");
+        const button = document.getElementById("resendButton");
+        const spinner = document.getElementById("btnSpinner");
+        const text = document.getElementById("btnText");
+    
+        if (!form) return;
+    
+        form.addEventListener("submit", function () {
+    
+            button.disabled = true;
+            button.classList.add("submitting");
+    
+            if (spinner)
+                spinner.style.display = "inline-block";
+    
+            if (text)
+                text.textContent = "Slanje...";
+    
+        });
+    
+    });
+
+</script>
+
 @code {
     private string? message;
+    private string messageType = "success";
 
     [SupplyParameterFromForm] private InputModel Input { get; set; } = new();
 
     private async Task OnValidSubmitAsync()
     {
-        var user = await UserManager.FindByEmailAsync(Input.Email!);
-        if (user is null)
+        try
         {
-            message = "Verification email sent. Please check your email.";
-            return;
+            await AccountDataService.ResendEmailConfirmationLink(Input.Email);
+            message = "Poslali smo link za potvrdu email adrese. Molimo vas da proverite inbox, kao i spam folder ukoliko poruka nije odmah vidljiva.";
+            messageType = "success";
         }
-
-        var userId = await UserManager.GetUserIdAsync(user);
-        var code = await UserManager.GenerateEmailConfirmationTokenAsync(user);
-        code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-        var callbackUrl = NavigationManager.GetUriWithQueryParameters(
-            NavigationManager.ToAbsoluteUri("Account/ConfirmEmail").AbsoluteUri,
-            new Dictionary<string, object?> { ["userId"] = userId, ["code"] = code });
-        await EmailSender.SendConfirmationLinkAsync(user, Input.Email, HtmlEncoder.Default.Encode(callbackUrl));
-
-        message = "Verification email sent. Please check your email.";
+        catch (Exception e)
+        {
+            message = e.Message;
+            messageType = "error";
+        }
     }
-
+    
     private sealed class InputModel
     {
-        [Required] [EmailAddress] public string Email { get; set; } = "";
+        [Required(ErrorMessage = "Unesite email adresu")]
+        [EmailAddress(ErrorMessage = "Unesite validnu email adresu")]
+        public string Email { get; set; } = "";
     }
-
 }
