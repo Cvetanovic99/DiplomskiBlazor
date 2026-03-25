@@ -10,11 +10,59 @@
 
 <PageTitle>Confirm email</PageTitle>
 
-<h1>Confirm email</h1>
-<StatusMessage Message="@statusMessage"/>
+<div class="confirm-wrapper">
+    <div class="confirm-card">
+        <div class="confirm-header">
+            <div class="confirm-logo-wrap">
+                <img src="/images/logo.png" alt="Logo" class="confirm-logo" />
+            </div>
+
+            <h1>Potvrda email adrese</h1>
+            <p>
+                Status potvrde vašeg naloga prikazan je ispod
+            </p>
+        </div>
+
+        @if (!string.IsNullOrWhiteSpace(statusMessage))
+        {
+            <div class="confirm-status-box @(isSuccess ? "success" : "error")">
+                <div class="confirm-status-icon">
+                    @(isSuccess ? "✔" : "⚠")
+                </div>
+
+                <div class="confirm-status-content">
+                    <div class="confirm-status-title">
+                        @(isSuccess ? "Uspešno potvrđeno" : "Potvrda nije uspela")
+                    </div>
+                    <div class="confirm-status-text">
+                        @statusMessage
+                    </div>
+                </div>
+            </div>
+        }
+
+        <div class="confirm-actions">
+            @if (isSuccess)
+            {
+                <a href="/Account/Login" class="confirm-btn">
+                    Nastavi na prijavu
+                </a>
+            }
+            else
+            {
+                <a href="/Account/ResendEmailConfirmation" class="confirm-btn">
+                    Pošalji ponovo link
+                </a>
+            }
+
+            <a href="/" class="confirm-secondary-link">← Povratak na početnu stranicu</a>
+        </div>
+    </div>
+</div>
 
 @code {
     private string? statusMessage;
+    private bool isSuccess;
 
     [CascadingParameter] private HttpContext HttpContext { get; set; } = default!;
 
@@ -26,20 +74,26 @@
     {
         if (UserId is null || Code is null)
         {
-            RedirectManager.RedirectTo("");
+            isSuccess = false;
+            statusMessage = "Link nije ispravan, molimo vas pokusajte ponovo";
+            return;
         }
 
         var user = await UserManager.FindByIdAsync(UserId);
         if (user is null)
         {
-            HttpContext.Response.StatusCode = StatusCodes.Status404NotFound;
-            statusMessage = $"Error loading user with ID {UserId}";
+            isSuccess = false;
+            statusMessage = "Korisnik nije pronadjen";
         }
         else
         {
             var code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(Code));
             var result = await UserManager.ConfirmEmailAsync(user, code);
-            statusMessage = result.Succeeded ? "Thank you for confirming your email." : "Error confirming your email.";
+            
+            isSuccess = result.Succeeded;
+            statusMessage = result.Succeeded 
+                ? "Hvala vam, vasa email adresa je uspesno potvrđena, klikom na dugme ispod se mozete prijaviti" 
+                : "doslo je do greske prilikom potvrde email adrese";
         }
     }
 

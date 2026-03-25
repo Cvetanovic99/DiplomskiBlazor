@@ -49,9 +49,9 @@ public class AccountDataService : DataServiceBase, IAccountDataService
             }
             else if(registerUserDto.RegistrationMethod == RegistrationMethod.Phone)
             {
-                string phoneNumberConfirmationToken = await CreatePhoneNumberConfirmationToken(identityUser.Id);
+                var result = await CreatePhoneNumberConfirmationToken(identityUser.UserName!);
                 //await _smsNotificationService.SendConfirmationToken(identityUser.PhoneNumber!, phoneNumberConfirmationToken);
-                await _smsNotificationService.SendConfirmationTokenWithEmail(phoneNumberConfirmationToken);
+                await _smsNotificationService.SendConfirmationTokenWithEmail(result.Token);
             }
         }
         catch (Exception e)
@@ -116,6 +116,22 @@ public class AccountDataService : DataServiceBase, IAccountDataService
                 "Trenutno nismo u mogucnosti da posaljemo link za potvrdu email adrese, molimo vas pokusajte kasnije");
         }
     }
+    
+    public async Task<string> ResendPhoneNumberConfirmationToken(string phoneNumber)
+    {
+        var result = await CreatePhoneNumberConfirmationToken(phoneNumber);
+        try
+        {
+            //await _smsNotificationService.SendConfirmationToken(identityUser.PhoneNumber!, phoneNumberConfirmationToken);
+            await _smsNotificationService.SendConfirmationTokenWithEmail(result.Token);
+            return result.IdentityId;
+        }
+        catch
+        {
+            throw new AppException(
+                "Trenutno nismo u mogucnosti da posaljemo poruku za potvrdu broja telefona, molimo vas pokusajte kasnije");
+        }
+    }
 
     private async Task<string> CreateEmailConfirmationLink(string email)
     {
@@ -134,17 +150,17 @@ public class AccountDataService : DataServiceBase, IAccountDataService
         return HtmlEncoder.Default.Encode(callbackUrl);
     }
 
-    private async Task<string> CreatePhoneNumberConfirmationToken(string identityUserId)
+    private async Task<(string Token, string IdentityId)> CreatePhoneNumberConfirmationToken(string phoneNumber)
     {
-        var user = await _userManager.FindByIdAsync(identityUserId);
+        var user = await _userManager.FindByNameAsync(phoneNumber);
         if (user is null) 
-            throw new AppException("User not found");
+            throw new AppException("Korisnik sa trazenim brojem telefona nije pronadjen");
         
         var phoneNumberConfirmationToken = await _userManager.GenerateChangePhoneNumberTokenAsync(user, user.PhoneNumber!);
         if (phoneNumberConfirmationToken is null)
-            throw new AppException("Unable to generate phone number confirmation token");
+            throw new AppException("Trenutno nismo u mogucnosti da posaljemo poruku za potvrdu broja telefona, molimo vas pokusajte kasnije");
         
-        return phoneNumberConfirmationToken;
+        return (phoneNumberConfirmationToken, user.Id);
     }
 
     private async Task DeleteIdentityUserAsync(string identityUserId)

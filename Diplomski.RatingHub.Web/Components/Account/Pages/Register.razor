@@ -204,7 +204,7 @@
             {
                 RedirectManager.RedirectTo(
                     "Account/ConfirmPhoneNumber",
-                    new() { ["identityUserId"] = result.UserIdentityId, ["returnUrl"] = ReturnUrl });
+                    new() { ["identityUserId"] = result.UserIdentityId });
             }
         }
         catch (Exception e)

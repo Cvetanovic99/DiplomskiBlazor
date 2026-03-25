@@ -1,11 +1,9 @@
-﻿@page "/Account/ResendEmailConfirmation"
-
+﻿@page "/Account/ResendPhoneNumberConfirmation"
 @using System.ComponentModel.DataAnnotations
 @using Diplomski.RatingHub.Web.Data.Interfaces
 
 @inject IAccountDataService AccountDataService
-
-<PageTitle>Resend email confirmation</PageTitle>
+@inject IdentityRedirectManager RedirectManager
 
 <div class="resend-wrapper">
     <div class="resend-card">
@@ -15,48 +13,42 @@
                 <img src="/images/logo.png" alt="Logo" class="resend-logo" />
             </div>
 
-            <h1>Ponovno slanje aktivacionog linka</h1>
+            <h1>Ponovno slanje aktivacionog koda</h1>
             <p>
-                Unesite email adresu kako bismo vam ponovo poslali link za potvrdu naloga.
+                Unesite broj telefona kako bismo vam ponovo poslali kod za potvrdu naloga.
             </p>
         </div>
 
-        @if (!string.IsNullOrWhiteSpace(message))
+        @if (!string.IsNullOrWhiteSpace(errorMessage))
         {
-            <div class="resend-status-box @messageType">
-                <div class="resend-status-icon">
-                    @(messageType == "success" ? "✔" : "⚠")
-                </div>
+            <div class="resend-status-box error">
+                <div class="resend-status-icon">⚠</div>
                 <div class="resend-status-content">
-                    <div class="resend-status-title">Obaveštenje</div>
-                    <div class="resend-status-text">@message</div>
+                    <div class="resend-status-title">Greška</div>
+                    <div class="resend-status-text">@errorMessage</div>
                 </div>
             </div>
         }
 
         <EditForm Model="Input"
-                  FormName="resend-email-confirmation"
+                  FormName="resend-phone-confirmation"
                   OnValidSubmit="OnValidSubmitAsync"
                   method="post"
-                  id="resendForm">
-            <DataAnnotationsValidator />  
+                  id="resendPhoneForm">
+            <DataAnnotationsValidator />
 
             <div class="form-group">
-                <label for="resend-email">Email adresa</label>
-                <InputText @bind-Value="Input.Email"
-                           id="resend-email"
+                <label for="resend-phone">Broj telefona</label>
+                <InputText @bind-Value="Input.PhoneNumber"
+                           id="resend-phone"
                            class="form-control modern-input"
                            aria-required="true"
-                           placeholder="name@example.com" />
-                <ValidationMessage For="() => Input.Email" class="validation-error" />
+                           placeholder="0651234567" />
+                <ValidationMessage For="() => Input.PhoneNumber" class="validation-error" />
             </div>
 
-            <button type="submit" class="resend-btn" id="resendButton">
-
-                <span id="btnText">
-                    Pošalji link za potvrdu
-                </span>
-
+            <button type="submit" class="resend-btn" id="resendPhoneButton">
+                <span id="btnText">Pošalji kod za potvrdu</span>
                 <span id="btnSpinner"
                       class="spinner-border spinner-border-sm ms-2"
                       role="status"
@@ -74,58 +66,54 @@
 </div>
 
 <script>
-    
     document.addEventListener("DOMContentLoaded", function () {
-    
-        const form = document.getElementById("resendForm");
-        const button = document.getElementById("resendButton");
+
+        const form = document.getElementById("resendPhoneForm");
+        const button = document.getElementById("resendPhoneButton");
         const spinner = document.getElementById("btnSpinner");
         const text = document.getElementById("btnText");
-    
+
         if (!form) return;
-    
+
         form.addEventListener("submit", function () {
-    
             button.disabled = true;
             button.classList.add("submitting");
-    
+
             if (spinner)
                 spinner.style.display = "inline-block";
-    
+
             if (text)
                 text.textContent = "Slanje...";
-    
         });
-    
-    });
 
+    });
 </script>
 
 @code {
-    private string? message;
-    private string messageType = "success";
-
+    private string? errorMessage;
+    
     [SupplyParameterFromForm] private InputModel Input { get; set; } = new();
 
     private async Task OnValidSubmitAsync()
     {
         try
         {
-            await AccountDataService.ResendEmailConfirmationLink(Input.Email);
-            message = "Poslali smo link za potvrdu email adrese. Molimo vas da proverite inbox, kao i spam folder ukoliko poruka nije odmah vidljiva.";
-            messageType = "success";
+            string identityId = await AccountDataService.ResendPhoneNumberConfirmationToken(Input.PhoneNumber);
+            
+            RedirectManager.RedirectTo(
+                "Account/ConfirmPhoneNumber",
+                new() { ["identityUserId"] = identityId });
         }
         catch (Exception e)
         {
-            message = e.Message;
-            messageType = "error";
+            errorMessage = e.Message;
         }
     }
-    
+
     private sealed class InputModel
     {
-        [Required(ErrorMessage = "Unesite email adresu")]
-        [EmailAddress(ErrorMessage = "Unesite validnu email adresu")]
-        public string Email { get; set; } = "";
+        [Required(ErrorMessage = "Unesite broj telefona")]
+        [RegularExpression(@"^06[0-9]{7,8}$", ErrorMessage = "Unesite validan broj telefona")]
+        public string PhoneNumber { get; set; } = "";
     }
 }
