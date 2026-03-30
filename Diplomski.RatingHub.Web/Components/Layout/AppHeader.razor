@@ -1,0 +1,40 @@
+﻿<header class="app-header">
+    <div class="app-header-inner">
+        <a href="/" class="app-header-brand" aria-label="Početna stranica">
+            <img src="/images/Logo-long.png" alt="Logo" class="app-header-logo" />
+        </a>
+
+        <div class="app-header-actions">
+            <AuthorizeView>
+                <Authorized Context="authState">
+                    <div class="app-header-user d-none d-md-flex">
+                        <span class="app-header-username">@GetDisplayName(authState.User)</span>
+
+                        <button type="button"
+                                class="app-header-icon-btn"
+                                @onclick="ToggleDesktopSidebar"
+                                aria-label="Prikaži ili sakrij sidebar">
+                            <RadzenIcon Icon="menu" class="app-header-action-icon" />
+                        </button>
+                    </div>
+                </Authorized>
+
+                <NotAuthorized>
+                    <div class="app-header-guest d-none d-md-flex">
+                        <a href="/Account/Login" class="app-header-link-btn">Prijavi se</a>
+                        <a href="/Account/Register" class="app-header-primary-btn">Kreiraj nalog</a>
+                    </div>
+                </NotAuthorized>
+            </AuthorizeView>
+
+            <button type="button"
+                    class="app-header-icon-btn d-flex d-md-none"
+                    data-bs-toggle="offcanvas"
+                    data-bs-target="#appMobileOffcanvas"
+                    aria-controls="appMobileOffcanvas"
+                    aria-label="Otvori meni">
+                <RadzenIcon Icon="menu" class="app-header-action-icon" />
+            </button>
+        </div>
+    </div>
+</header>

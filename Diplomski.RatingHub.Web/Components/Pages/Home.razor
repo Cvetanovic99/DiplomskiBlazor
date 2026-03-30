@@ -1,7 +1,8 @@
 ﻿@page "/"
 
-<PageTitle>Home</PageTitle>
+@using Diplomski.RatingHub.Web.Components.HomePageSections
 
-<h1>Hello, world!</h1>
-
-Welcome to your new app.
+<HeroSection SearchSectionId="home-search-section"
+             CreateCompanyUrl="/companies/create" />
+             
+<SearchSection SectionId="home-search-section" />

@@ -1,0 +1,161 @@
+﻿<section class="hero-section">
+    <div class="hero-decor hero-decor-1"></div>
+    <div class="hero-decor hero-decor-2"></div>
+
+    <div class="hero-shell">
+        <div class="hero-content">
+            <div class="hero-left-top">
+                <div class="hero-badge">
+                    <RadzenIcon Icon="bolt" class="hero-badge-icon" />
+                    <span>Pametan izbor lokalnih usluga</span>
+                </div>
+
+                <h1 class="hero-title">
+                    Pronađite proverene usluge u svom gradu
+                </h1>
+
+                <p class="hero-description">
+                    Uporedite firme, majstore i stručnjake po ocenama, komentarima i lokaciji.
+                    Brže dođite do kvalitetnog izbora za svakodnevne potrebe.
+                </p>
+
+                <div class="hero-cta-group">
+                    <a href="@($"#{SearchSectionId}")" class="hero-primary-btn hero-primary-btn-lg">
+                        <RadzenIcon Icon="search" class="hero-btn-icon" />
+                        <span>Pretraži pružaoce usluga</span>
+                    </a>
+
+                    <a href="@CreateCompanyUrl" class="hero-secondary-btn">
+                        <RadzenIcon Icon="add_business" class="hero-btn-icon" />
+                        <span>Kreiraj firmu za ocenjivanje</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="hero-right">
+                <div class="hero-carousel-frame">
+                    <RadzenCarousel @ref="carousel"
+                                    AllowNavigation="true"
+                                    Auto="true"
+                                    Interval="4500"
+                                    ButtonStyle="ButtonStyle.Base"
+                                    ButtonSize="ButtonSize.Medium"
+                                    ButtonShade="Shade.Lighter"
+                                    ButtonVariant="Variant.Text"
+                                    class="hero-carousel">
+                        <Items>
+                            <RadzenCarouselItem>
+                                <div class="hero-slide">
+                                    <RadzenImage Path="/images/hero-hairdresser.jpg"
+                                                 Alt="Frizeri i saloni"
+                                                 class="hero-slide-image" />
+
+                                    <div class="hero-slide-overlay"></div>
+
+                                    <div class="hero-slide-chip">
+                                        <RadzenIcon Icon="content_cut" class="hero-slide-chip-icon" />
+                                        <span>Frizeri i saloni</span>
+                                    </div>
+
+                                    <div class="hero-slide-content">
+                                        <h3>Pronađite najbolje frizere u svom gradu</h3>
+                                        <p>Pregledajte ocene i iskustva korisnika pre zakazivanja termina.</p>
+                                    </div>
+                                </div>
+                            </RadzenCarouselItem>
+
+                            <RadzenCarouselItem>
+                                <div class="hero-slide">
+                                    <RadzenImage Path="/images/hero-handyman.jpg"
+                                                 Alt="Kućne usluge"
+                                                 class="hero-slide-image" />
+
+                                    <div class="hero-slide-overlay"></div>
+
+                                    <div class="hero-slide-chip">
+                                        <RadzenIcon Icon="home_repair_service" class="hero-slide-chip-icon" />
+                                        <span>Kućne usluge</span>
+                                    </div>
+
+                                    <div class="hero-slide-content">
+                                        <h3>Lakše do pouzdanih majstora za dom</h3>
+                                        <p>Vodoinstalateri, električari i servisne usluge na jednom mestu.</p>
+                                    </div>
+                                </div>
+                            </RadzenCarouselItem>
+
+                            <RadzenCarouselItem>
+                                <div class="hero-slide">
+                                    <RadzenImage Path="/images/hero-mechanic.jpg"
+                                                 Alt="Auto servis"
+                                                 class="hero-slide-image" />
+
+                                    <div class="hero-slide-overlay"></div>
+
+                                    <div class="hero-slide-chip">
+                                        <RadzenIcon Icon="directions_car" class="hero-slide-chip-icon" />
+                                        <span>Auto servis</span>
+                                    </div>
+
+                                    <div class="hero-slide-content">
+                                        <h3>Uporedite automehaničare i servise</h3>
+                                        <p>Brže pronađite proverene servise i izaberite najbolju opciju.</p>
+                                    </div>
+                                </div>
+                            </RadzenCarouselItem>
+                        </Items>
+                    </RadzenCarousel>
+
+                    <div class="hero-floating-card hero-floating-card-left">
+                        <RadzenIcon Icon="verified" class="hero-floating-icon" />
+                        <div>
+                            <div class="hero-floating-title">Proverene ocene</div>
+                            <div class="hero-floating-text">Sigurniji izbor pružaoca usluga.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-highlights">
+                <div class="hero-highlight-item">
+                    <div class="hero-highlight-top">
+                        <div class="hero-highlight-icon-wrap">
+                            <RadzenIcon Icon="star" class="hero-highlight-icon" />
+                        </div>
+                        <span class="hero-highlight-title">Ocene</span>
+                    </div>
+
+                    <span class="hero-highlight-text">
+                        Na osnovu iskustava korisnika
+                    </span>
+                </div>
+
+                <div class="hero-highlight-item">
+                    <div class="hero-highlight-top">
+                        <div class="hero-highlight-icon-wrap">
+                            <RadzenIcon Icon="location_on" class="hero-highlight-icon" />
+                        </div>
+                        <span class="hero-highlight-title">Lokacija</span>
+                    </div>
+
+                    <span class="hero-highlight-text">
+                        Brže pronađite usluge u svom gradu
+                    </span>
+                </div>
+
+                <div class="hero-highlight-item">
+                    <div class="hero-highlight-top">
+                        <div class="hero-highlight-icon-wrap">
+                            <RadzenIcon Icon="monitoring" class="hero-highlight-icon" />
+                        </div>
+                        <span class="hero-highlight-title">Poređenje</span>
+                    </div>
+
+                    <span class="hero-highlight-text">
+                        Lakše izaberite najbolju opciju
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

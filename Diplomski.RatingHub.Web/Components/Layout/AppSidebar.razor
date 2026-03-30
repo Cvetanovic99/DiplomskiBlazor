@@ -1,0 +1,42 @@
+﻿<AuthorizeView>
+    <Authorized>
+        <aside class="app-sidebar @(IsExpanded ? "expanded" : "collapsed") d-none d-md-flex">
+            <nav class="app-sidebar-nav">
+                <a href="/dashboard" class="app-sidebar-link" title="Kontrolna tabla">
+                    <RadzenIcon Icon="dashboard" class="app-sidebar-link-icon" />
+                    <span class="app-sidebar-link-text">Kontrolna tabla</span>
+                </a>
+
+                <a href="/my-reviews" class="app-sidebar-link" title="Moje ocene">
+                    <RadzenIcon Icon="reviews" class="app-sidebar-link-icon" />
+                    <span class="app-sidebar-link-text">Moje ocene</span>
+                </a>
+
+                <a href="/my-companies" class="app-sidebar-link" title="Moje firme">
+                    <RadzenIcon Icon="business" class="app-sidebar-link-icon" />
+                    <span class="app-sidebar-link-text">Moje firme</span>
+                </a>
+
+                <a href="/companies/create" class="app-sidebar-link" title="Dodaj firmu">
+                    <RadzenIcon Icon="add_business" class="app-sidebar-link-icon" />
+                    <span class="app-sidebar-link-text">Dodaj firmu</span>
+                </a>
+
+                <a href="/profile" class="app-sidebar-link" title="Profil">
+                    <RadzenIcon Icon="person" class="app-sidebar-link-icon" />
+                    <span class="app-sidebar-link-text">Profil</span>
+                </a>
+
+                <a href="/categories" class="app-sidebar-link" title="Kategorije">
+                    <RadzenIcon Icon="category" class="app-sidebar-link-icon" />
+                    <span class="app-sidebar-link-text">Kategorije</span>
+                </a>
+
+                <a href="/Account/Logout" class="app-sidebar-link app-sidebar-link-danger" title="Odjavi se">
+                    <RadzenIcon Icon="logout" class="app-sidebar-link-icon" />
+                    <span class="app-sidebar-link-text">Odjavi se</span>
+                </a>
+            </nav>
+        </aside>
+    </Authorized>
+</AuthorizeView>

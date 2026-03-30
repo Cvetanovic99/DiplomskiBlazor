@@ -1,0 +1,70 @@
+﻿<section class="search-section" id="@SectionId">
+    <div class="search-shell">
+        <div class="search-card">
+            <div class="search-header">
+                <div class="search-badge">
+                    <RadzenIcon Icon="travel_explore" class="search-badge-icon" />
+                    <span>Brza pretraga</span>
+                </div>
+
+                <h2 class="search-title">Pretražite usluge, firme i gradove</h2>
+                <p class="search-subtitle">
+                    Unesite kategoriju, pružaoca usluge ili firmu, zatim izaberite najbliži grad vama i pronađite rezultate koji vam najviše odgovaraju.
+                </p>
+            </div>
+
+            <div class="search-form">
+                <div class="search-inputs">
+                    <div class="search-field">
+                        <label class="search-label search-label-with-icon" for="search-term">
+                            <span>Šta tražite</span>
+                            <RadzenIcon Icon="psychology_alt" class="search-label-icon" />
+                        </label>
+
+                        <RadzenAutoComplete
+                            @bind-Value="SearchTerm"
+                            Data="@FilteredSuggestions"
+                            TextProperty="Label"
+                            Placeholder="Npr. frizer, vodoinstalater, salon..."
+                            Class="search-autocomplete"
+                            Name="search-term"
+                            MinLength="1"
+                            Change="@OnSearchTermChanged"
+                            LoadData="@LoadSuggestions">
+                            <Template Context="item">
+                                <div class="search-suggestion-item">
+                                    <div class="search-suggestion-main">@item.Label</div>
+                                    <div class="search-suggestion-sub">@item.Subtitle</div>
+                                </div>
+                            </Template>
+                        </RadzenAutoComplete>
+                    </div>
+
+                    <div class="search-field">
+                        <label class="search-label search-label-with-icon" for="search-city">
+                            <span>Grad</span>
+                            <RadzenIcon Icon="add_location_alt" class="search-label-icon" />
+                        </label>
+
+                        <RadzenAutoComplete
+                            @bind-Value="SelectedCity"
+                            Data="@FilteredCities"
+                            Placeholder="Npr. Niš, Beograd, Novi Sad..."
+                            Class="search-autocomplete"
+                            Name="search-city"
+                            MinLength="1"
+                            Change="@OnCityChanged"
+                            LoadData="@LoadCities" />
+                    </div>
+                </div>
+
+                <div class="search-actions">
+                    <button type="button" class="search-btn" @onclick="ExecuteSearch">
+                        <RadzenIcon Icon="search" class="search-btn-icon" />
+                        <span>Pretraži</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

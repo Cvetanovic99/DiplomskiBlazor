@@ -8,12 +8,15 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Diplomski.RatingHub.Web.Components;
 using Diplomski.RatingHub.Web.Components.Account;
+using Radzen;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+builder.Services.AddRadzenComponents();
 
 
 builder.Services.AddInfrastructure();

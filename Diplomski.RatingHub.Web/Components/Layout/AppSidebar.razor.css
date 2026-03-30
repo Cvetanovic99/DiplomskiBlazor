@@ -1,0 +1,86 @@
+﻿.app-sidebar {
+    position: fixed;
+    top: 76px;
+    right: 0;
+    bottom: 0;
+    z-index: 1030;
+    background: rgba(255, 255, 255, 0.9);
+    border-left: 1px solid rgba(224, 232, 244, 0.95);
+    backdrop-filter: blur(14px);
+    box-shadow: -10px 0 28px rgba(48, 102, 190, 0.06);
+    transition: width 0.25s ease;
+    overflow: hidden;
+    flex-direction: column;
+}
+
+.app-sidebar.collapsed {
+    width: 84px;
+}
+
+.app-sidebar.expanded {
+    width: 250px;
+}
+
+.app-sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 18px 14px;
+    width: 100%;
+}
+
+.app-sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-height: 48px;
+    padding: 0 14px;
+    border-radius: 14px;
+    text-decoration: none;
+    color: #1f2a37;
+    font-weight: 534;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.app-sidebar-link:hover {
+    background: #f4f7fb;
+    color: #234a8d;
+    transform: translateX(-2px);
+}
+
+.app-sidebar-link-icon {
+    font-size: 1.2rem;
+    color: #2b5db1;
+    min-width: 24px;
+    text-align: center;
+}
+
+.app-sidebar-link-text {
+    opacity: 1;
+    transition: opacity 0.18s ease;
+}
+
+.app-sidebar.collapsed .app-sidebar-link {
+    justify-content: center;
+    padding: 0;
+}
+
+.app-sidebar.collapsed .app-sidebar-link-text {
+    opacity: 0;
+    width: 0;
+    overflow: hidden;
+}
+
+.app-sidebar-link-danger {
+    color: #b54747;
+}
+
+.app-sidebar-link-danger .app-sidebar-link-icon {
+    color: #b54747;
+}
+
+.app-sidebar-link-danger:hover {
+    background: #fdf1f1;
+    color: #8b3a3a;
+}
