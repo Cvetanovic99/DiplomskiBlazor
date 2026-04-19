@@ -32,10 +32,14 @@
                     <span class="app-sidebar-link-text">Kategorije</span>
                 </a>
 
-                <a href="/Account/Logout" class="app-sidebar-link app-sidebar-link-danger" title="Odjavi se">
-                    <RadzenIcon Icon="logout" class="app-sidebar-link-icon" />
-                    <span class="app-sidebar-link-text">Odjavi se</span>
-                </a>
+                <form action="Account/Logout" method="post">
+                    <AntiforgeryToken/>
+                    <button type="submit" class="app-sidebar-link app-sidebar-link-danger">
+                        <RadzenIcon Icon="logout" class="app-sidebar-link-icon" />
+                        <span class="app-sidebar-link-text">Odjavi se</span>
+                    </button>
+                </form>
+                
             </nav>
         </aside>
     </Authorized>

@@ -1,0 +1,103 @@
+﻿.more-categories-section {
+    margin-top: 22px;
+    padding: 22px 0 4px;
+    border-top: 1px solid rgba(220,230,244,0.9);
+}
+
+.more-categories-header {
+    margin-bottom: 14px;
+}
+
+.more-categories-title {
+    margin: 0 0 6px;
+    font-size: 1.2rem;
+    font-weight: 900;
+    color: #1f2a37;
+}
+
+.more-categories-subtitle {
+    margin: 0;
+    font-size: 0.94rem;
+    color: #5f6b7a;
+}
+
+.more-categories-scroll {
+    max-height: 360px;
+    overflow-y: auto;
+    padding-right: 6px;
+}
+
+.more-categories-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.more-categories-card {
+    min-height: 78px;
+    border-radius: 16px;
+    border: 1px solid rgba(220,230,244,0.95);
+    background: rgba(255,255,255,0.82);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 12px;
+    transition: all 0.2s ease;
+}
+
+.more-categories-card:hover {
+    transform: translateY(-2px);
+    background: #ffffff;
+    box-shadow: 0 10px 24px rgba(48, 102, 190, 0.08);
+}
+
+.more-categories-card-icon {
+    font-size: 1.1rem;
+    color: #2b5db1;
+    flex-shrink: 0;
+}
+
+.more-categories-card-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #1f2a37;
+    line-height: 1.25;
+}
+
+@media (max-width: 991px) {
+    .more-categories-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 767px) {
+    .more-categories-section {
+        margin-top: 18px;
+        padding-top: 18px;
+    }
+
+    .more-categories-scroll {
+        max-height: 320px;
+    }
+
+    .more-categories-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    .more-categories-card {
+        min-height: 64px;
+        padding: 0 8px;
+        gap: 8px;
+        border-radius: 14px;
+    }
+
+    .more-categories-card-icon {
+        font-size: 0.95rem;
+    }
+
+    .more-categories-card-title {
+        font-size: 0.78rem;
+    }
+}

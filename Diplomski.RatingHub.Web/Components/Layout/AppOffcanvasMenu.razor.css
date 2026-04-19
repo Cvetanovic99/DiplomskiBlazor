@@ -56,7 +56,7 @@
     text-decoration: none;
     border-radius: 12px;
     color: #1f2a37;
-    font-weight: 700;
+    font-weight: 593;
     font-size: 0.96rem;
     transition: all 0.2s ease;
 }
@@ -74,6 +74,9 @@
 
 .app-mobile-link-danger {
     color: #b54747;
+    width: 100%;
+    border: none;
+    background: transparent;
 }
 
 .app-mobile-link-danger .app-mobile-link-icon {
@@ -110,7 +113,7 @@
 
 .app-mobile-username {
     font-size: 1rem;
-    font-weight: 900;
+    font-weight: 730;
     color: #1f2a37;
     word-break: break-word;
 }

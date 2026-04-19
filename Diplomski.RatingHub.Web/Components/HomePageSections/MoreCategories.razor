@@ -1,0 +1,20 @@
+﻿<div class="more-categories-section">
+    <div class="more-categories-header">
+        <h3 class="more-categories-title">Još popularnih kategorija</h3>
+        <p class="more-categories-subtitle">
+            Dodatne oblasti koje korisnici često pretražuju.
+        </p>
+    </div>
+
+    <div class="more-categories-scroll">
+        <div class="more-categories-grid">
+            @foreach (var category in Categories)
+            {
+                <a href="@($"/categories/{category.Slug}")" class="more-categories-card">
+                    <RadzenIcon Icon="@category.Icon" class="more-categories-card-icon" />
+                    <span class="more-categories-card-title">@category.Name</span>
+                </a>
+            }
+        </div>
+    </div>
+</div>

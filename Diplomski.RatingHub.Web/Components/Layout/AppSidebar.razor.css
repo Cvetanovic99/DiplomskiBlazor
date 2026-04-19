@@ -74,6 +74,10 @@
 
 .app-sidebar-link-danger {
     color: #b54747;
+    padding-left: 4px;
+    width: 100%;
+    border: none;
+    background: transparent;
 }
 
 .app-sidebar-link-danger .app-sidebar-link-icon {

@@ -71,6 +71,14 @@
                         <RadzenIcon Icon="logout" class="app-mobile-link-icon" />
                         <span>Odjavi se</span>
                     </a>
+                    
+                    <form action="Account/Logout" method="post">
+                        <AntiforgeryToken/>
+                        <button type="submit" class="app-mobile-link app-mobile-link-danger">
+                            <RadzenIcon Icon="logout" class="app-mobile-link-icon" />
+                            <span>Odjavi se</span>
+                        </button>
+                    </form>
                 </Authorized>
 
                 <NotAuthorized>

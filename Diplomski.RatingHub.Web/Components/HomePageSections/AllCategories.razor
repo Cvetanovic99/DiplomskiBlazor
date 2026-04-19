@@ -1,0 +1,19 @@
+﻿<div class="all-categories-section">
+    <div class="all-categories-header">
+        <h3 class="all-categories-title">Sve kategorije</h3>
+        <p class="all-categories-subtitle">
+            Pregled svih kategorija i podkategorija.
+        </p>
+    </div>
+
+    <div class="all-categories-scroll">
+        <RadzenTree Data="@Categories"
+                    Expand="@OnExpand"
+                    Change="@OnChange"
+                    class="all-categories-tree">
+            <RadzenTreeLevel 
+                TextProperty="@nameof(CategoryTreeItem.Name)"
+                HasChildren=@(e => (e as CategoryTreeItem).HasChildren) />
+        </RadzenTree>
+    </div>
+</div>
