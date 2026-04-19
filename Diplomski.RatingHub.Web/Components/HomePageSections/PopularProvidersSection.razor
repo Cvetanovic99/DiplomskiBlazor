@@ -1,0 +1,258 @@
+﻿@using Radzen
+@using Radzen.Blazor
+
+<section class="popular-providers-section">
+    <div class="popular-providers-shell">
+        <div class="popular-providers-divider"></div>
+
+        <div class="popular-providers-header">
+            <div class="popular-providers-badge">
+                <RadzenIcon Icon="workspace_premium" class="popular-providers-badge-icon" />
+                <span>Izdvojeni pruzaoci usluga</span>
+            </div>
+
+            <h2 class="popular-providers-title">Najpopularniji izbori po kategorijama</h2>
+            <p class="popular-providers-subtitle">
+                Pogledajte proverene kompanije i majstore koje korisnici najcesce pregledaju i najbolje ocenjuju.
+            </p>
+        </div>
+
+        @foreach (var group in ProviderGroups)
+        {
+            <div class="provider-group-block">
+                <div class="provider-group-header">
+                    <div class="provider-group-heading">
+                        <div class="provider-group-title-wrap">
+                            <div class="provider-group-icon-wrap">
+                                <RadzenIcon Icon="@group.Icon" class="provider-group-icon" />
+                            </div>
+
+                            <div>
+                                <h3 class="provider-group-title">@group.Title</h3>
+                                <p class="provider-group-description">@group.Description</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <a href="@($"/categories/{group.Slug}")" class="provider-group-link">
+                        <div class="provider-group-link-texts">
+                            <span class="provider-group-link-title">Pogledaj kategoriju</span>
+                            <span class="provider-group-link-subtitle">Sve iz oblasti @group.Title</span>
+                        </div>
+                        <RadzenIcon Icon="arrow_forward" class="provider-group-link-icon" />
+                    </a>
+                </div>
+
+                <!-- Desktop: 3 kartice po slide-u -->
+                <div class="d-none d-lg-block">
+                    <RadzenCarousel Auto="false"
+                                    AllowNavigation="true"
+                                    AllowPaging="true"
+                                    class="provider-carousel">
+                        <Items>
+                            @foreach (var slide in ChunkProviders(group.Providers, 3))
+                            {
+                                <RadzenCarouselItem>
+                                    <div class="provider-slide-grid provider-slide-grid-3">
+                                        @foreach (var provider in slide)
+                                        {
+                                            <div class="provider-card">
+                                                <div class="provider-card-image-wrap">
+                                                    @if (!string.IsNullOrWhiteSpace(provider.ImageUrl))
+                                                    {
+                                                        <img src="@provider.ImageUrl" alt="@provider.Name" class="provider-card-image" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="provider-card-image-placeholder">
+                                                            <RadzenIcon Icon="business" class="provider-card-placeholder-icon" />
+                                                        </div>
+                                                    }
+                                                </div>
+
+                                                <div class="provider-card-body">
+                                                    <div class="provider-card-name">@provider.Name</div>
+
+                                                    <div class="provider-card-description">
+                                                        @provider.Description
+                                                    </div>
+
+                                                    <div class="provider-card-rating-row">
+                                                        <div class="provider-rating-box">
+                                                            <div class="provider-rating-stars" style="@GetStarsFillStyle(provider.Rating)">
+                                                                <div class="provider-rating-stars-base">★★★★★</div>
+                                                                <div class="provider-rating-stars-fill">★★★★★</div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="provider-card-rating-summary">
+                                                            <RadzenIcon Icon="reviews" class="provider-card-rating-summary-icon" />
+                                                            <span class="provider-card-rating-value">@provider.Rating.ToString("0.0")</span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="provider-card-location">
+                                                        <RadzenIcon Icon="location_on" class="provider-card-location-icon" />
+                                                        <span>@provider.Address</span>
+                                                    </div>
+
+                                                    <div class="provider-card-actions">
+                                                        <button type="button"
+                                                                class="provider-card-btn"
+                                                                @onclick="() => NavigateToProvider(provider)">
+                                                            Vidi detaljnije
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                </RadzenCarouselItem>
+                            }
+                        </Items>
+                    </RadzenCarousel>
+                </div>
+
+                <!-- Tablet: 2 kartice po slide-u -->
+                <div class="d-none d-md-block d-lg-none">
+                    <RadzenCarousel Auto="false"
+                                    AllowNavigation="true"
+                                    AllowPaging="true"
+                                    class="provider-carousel">
+                        <Items>
+                            @foreach (var slide in ChunkProviders(group.Providers, 2))
+                            {
+                                <RadzenCarouselItem>
+                                    <div class="provider-slide-grid provider-slide-grid-2">
+                                        @foreach (var provider in slide)
+                                        {
+                                            <div class="provider-card">
+                                                <div class="provider-card-image-wrap">
+                                                    @if (!string.IsNullOrWhiteSpace(provider.ImageUrl))
+                                                    {
+                                                        <img src="@provider.ImageUrl" alt="@provider.Name" class="provider-card-image" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="provider-card-image-placeholder">
+                                                            <RadzenIcon Icon="business" class="provider-card-placeholder-icon" />
+                                                        </div>
+                                                    }
+                                                </div>
+
+                                                <div class="provider-card-body">
+                                                    <div class="provider-card-name">@provider.Name</div>
+
+                                                    <div class="provider-card-description">
+                                                        @provider.Description
+                                                    </div>
+
+                                                    <div class="provider-card-rating-row">
+                                                        <div class="provider-rating-box">
+                                                            <div class="provider-rating-stars" style="@GetStarsFillStyle(provider.Rating)">
+                                                                <div class="provider-rating-stars-base">★★★★★</div>
+                                                                <div class="provider-rating-stars-fill">★★★★★</div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="provider-card-rating-summary">
+                                                            <RadzenIcon Icon="reviews" class="provider-card-rating-summary-icon" />
+                                                            <span class="provider-card-rating-value">@provider.Rating.ToString("0.0")</span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="provider-card-location">
+                                                        <RadzenIcon Icon="location_on" class="provider-card-location-icon" />
+                                                        <span>@provider.Address</span>
+                                                    </div>
+
+                                                    <div class="provider-card-actions">
+                                                        <button type="button"
+                                                                class="provider-card-btn"
+                                                                @onclick="() => NavigateToProvider(provider)">
+                                                            Vidi detaljnije
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                </RadzenCarouselItem>
+                            }
+                        </Items>
+                    </RadzenCarousel>
+                </div>
+
+                <!-- Mobile: 1 kartica po slide-u -->
+                <div class="d-block d-md-none">
+                    <RadzenCarousel Auto="false"
+                                    AllowNavigation="true"
+                                    AllowPaging="true"
+                                    class="provider-carousel">
+                        <Items>
+                            @foreach (var slide in ChunkProviders(group.Providers, 1))
+                            {
+                                <RadzenCarouselItem>
+                                    <div class="provider-slide-grid provider-slide-grid-1">
+                                        @foreach (var provider in slide)
+                                        {
+                                            <div class="provider-card">
+                                                <div class="provider-card-image-wrap">
+                                                    @if (!string.IsNullOrWhiteSpace(provider.ImageUrl))
+                                                    {
+                                                        <img src="@provider.ImageUrl" alt="@provider.Name" class="provider-card-image" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="provider-card-image-placeholder">
+                                                            <RadzenIcon Icon="business" class="provider-card-placeholder-icon" />
+                                                        </div>
+                                                    }
+                                                </div>
+
+                                                <div class="provider-card-body">
+                                                    <div class="provider-card-name">@provider.Name</div>
+
+                                                    <div class="provider-card-description">
+                                                        @provider.Description
+                                                    </div>
+
+                                                    <div class="provider-card-rating-row">
+                                                        <div class="provider-rating-box">
+                                                            <div class="provider-rating-stars" style="@GetStarsFillStyle(provider.Rating)">
+                                                                <div class="provider-rating-stars-base">★★★★★</div>
+                                                                <div class="provider-rating-stars-fill">★★★★★</div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="provider-card-rating-summary">
+                                                            <RadzenIcon Icon="reviews" class="provider-card-rating-summary-icon" />
+                                                            <span class="provider-card-rating-value">@provider.Rating.ToString("0.0")</span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="provider-card-location">
+                                                        <RadzenIcon Icon="location_on" class="provider-card-location-icon" />
+                                                        <span>@provider.Address</span>
+                                                    </div>
+
+                                                    <div class="provider-card-actions">
+                                                        <button type="button"
+                                                                class="provider-card-btn"
+                                                                @onclick="() => NavigateToProvider(provider)">
+                                                            Vidi detaljnije
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                </RadzenCarouselItem>
+                            }
+                        </Items>
+                    </RadzenCarousel>
+                </div>
+            </div>
+        }
+    </div>
+</section>
