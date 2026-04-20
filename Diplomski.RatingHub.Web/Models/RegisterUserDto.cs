@@ -27,7 +27,7 @@ public class RegisterUserDto
         }
     }
 
-    private bool IsEmail(string value)
+    public static bool IsEmail(string value)
     {
         try
         {
@@ -40,7 +40,7 @@ public class RegisterUserDto
         }
     }
     
-    private bool IsPhone(string value)
+    public static bool IsPhone(string value)
     {
         return Regex.IsMatch(value, @"^06[0-9]{7,8}$");
     }
