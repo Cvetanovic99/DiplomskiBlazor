@@ -2,6 +2,6 @@
 
 public static class Roles
 {
-    public static readonly string Administrator = "Admin";
-    public static readonly string RegularUser = "User";
+    public const string Administrator = "Admin";
+    public const string RegularUser = "User";
 }

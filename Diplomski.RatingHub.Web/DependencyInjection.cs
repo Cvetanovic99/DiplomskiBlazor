@@ -16,6 +16,7 @@ public static class DependencyInjection
         services.AddScoped<ICityDataService, CityDataService>();
         services.AddScoped<IAccountDataService, AccountDataService>();
         services.AddScoped<IUserProfileDataService, UserProfileDataService>();
+        services.AddScoped<ICategoryDataService, CategoryDataService>();
         
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
@@ -51,6 +52,7 @@ public static class DependencyInjection
                 options.Password.RequireUppercase = false;
                 options.Password.RequiredLength = 8;
             })
+            .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddSignInManager()
             .AddDefaultTokenProviders();

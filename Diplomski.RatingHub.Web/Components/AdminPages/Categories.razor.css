@@ -1,0 +1,192 @@
+﻿.categories-page {
+    min-height: 100vh;
+    padding: 24px;
+    background: #ffffff;
+    box-sizing: border-box;
+}
+
+.categories-main-section,
+.categories-secondary-section {
+    background: #f5f6f8;
+    border: 1px solid #dbe1e8;
+    border-radius: 18px;
+    padding: 24px;
+    box-sizing: border-box;
+    box-shadow:
+            0 1px 2px rgba(16, 24, 40, 0.04),
+            0 8px 24px rgba(16, 24, 40, 0.05);
+}
+
+.categories-secondary-section {
+    margin-top: 24px;
+}
+
+.section-header {
+    margin-bottom: 18px;
+}
+
+.section-header h1,
+.section-header h2 {
+    margin: 0;
+    color: #1f2a37;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.section-header h1 {
+    font-size: 1.95rem;
+}
+
+.section-header h2 {
+    font-size: 1.55rem;
+}
+
+.section-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+}
+
+.categories-search-wrap {
+    flex: 1;
+    min-width: 320px;
+    max-width: 560px;
+}
+
+::deep .categories-search-input,
+::deep input.categories-search-input,
+::deep .categories-search-wrap .rz-textbox {
+    width: 100% !important;
+    height: 52px !important;
+    border: 1px solid #d5dbe5 !important;
+    border-radius: 14px !important;
+    background: #ffffff !important;
+    padding: 0 16px !important;
+    font-size: 1rem !important;
+    font-weight: 500 !important;
+    color: #1f2937 !important;
+    box-sizing: border-box !important;
+    appearance: none;
+    -webkit-appearance: none;
+    box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04) !important;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease !important;
+}
+
+::deep .categories-search-input::placeholder,
+::deep input.categories-search-input::placeholder,
+::deep .categories-search-wrap .rz-textbox::placeholder {
+    color: #94a3b8 !important;
+    font-weight: 400 !important;
+}
+
+::deep .categories-search-input:focus,
+::deep input.categories-search-input:focus,
+::deep .categories-search-wrap .rz-textbox:focus {
+    border-color: #3b82f6 !important;
+    background: #ffffff !important;
+    box-shadow:
+            0 0 0 4px rgba(59, 130, 246, 0.10),
+            0 1px 2px rgba(16, 24, 40, 0.04) !important;
+}
+
+::deep .categories-add-btn {
+    height: 50px !important;
+    border-radius: 14px !important;
+    padding: 0 18px !important;
+    font-size: 0.85rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.3px;
+    background: #3b82f6 !important;
+    border: 1px solid #3b82f6 !important;
+    box-shadow: 0 8px 18px rgba(59, 130, 246, 0.18);
+}
+
+::deep .categories-add-btn:hover {
+    background: #2563eb !important;
+    border-color: #2563eb !important;
+}
+
+.grid-responsive-wrap {
+    width: 100%;
+}
+
+::deep .categories-grid {
+    width: 100%;
+}
+
+::deep .categories-grid .rz-grid-table,
+::deep .categories-grid table {
+    background: #ffffff;
+}
+
+.ellipsis-text {
+    display: inline-block;
+    max-width: 240px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+}
+
+.grid-actions {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+}
+
+.section-divider {
+    height: 1px;
+    margin: 24px 0;
+    background: #d5dde7;
+    border-radius: 999px;
+    opacity: 0.95;
+}
+
+@media (max-width: 768px) {
+    .categories-page {
+        padding: 16px;
+    }
+
+    .categories-main-section,
+    .categories-secondary-section {
+        padding: 16px;
+        border-radius: 14px;
+    }
+
+    .section-header h1 {
+        font-size: 1.6rem;
+    }
+
+    .section-header h2 {
+        font-size: 1.3rem;
+    }
+
+    .section-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .categories-search-wrap {
+        min-width: 100%;
+        max-width: 100%;
+    }
+
+    ::deep .categories-add-btn {
+        width: 100%;
+    }
+
+    ::deep .categories-grid .rz-data-grid-data-table,
+    ::deep .categories-grid .rz-grid-table,
+    ::deep .categories-grid table {
+        min-width: 760px;
+    }
+
+    ::deep .categories-grid .rz-data-grid-scrollable-wrapper,
+    ::deep .categories-grid .rz-datatable-scrollable-wrapper,
+    ::deep .categories-grid .rz-data-grid-data {
+        overflow-x: auto;
+    }
+}

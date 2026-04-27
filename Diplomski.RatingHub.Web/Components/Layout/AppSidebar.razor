@@ -1,45 +1,54 @@
-﻿<AuthorizeView>
-    <Authorized>
+﻿@using Diplomski.RatingHub.Domain.Constants
+<AuthorizeView>
+    <Authorized Context="authContext">
         <aside class="app-sidebar @(IsExpanded ? "expanded" : "collapsed") d-none d-md-flex">
             <nav class="app-sidebar-nav">
-                <a href="/dashboard" class="app-sidebar-link" title="Kontrolna tabla">
-                    <RadzenIcon Icon="dashboard" class="app-sidebar-link-icon" />
-                    <span class="app-sidebar-link-text">Kontrolna tabla</span>
-                </a>
+                <AuthorizeView Roles="@Roles.RegularUser">
+                    <Authorized Context="userContext">
+                        <a href="/dashboard" class="app-sidebar-link" title="Kontrolna tabla">
+                            <RadzenIcon Icon="dashboard" class="app-sidebar-link-icon"/>
+                            <span class="app-sidebar-link-text">Kontrolna tabla</span>
+                        </a>
 
-                <a href="/my-reviews" class="app-sidebar-link" title="Moje ocene">
-                    <RadzenIcon Icon="reviews" class="app-sidebar-link-icon" />
-                    <span class="app-sidebar-link-text">Moje ocene</span>
-                </a>
+                        <a href="/my-reviews" class="app-sidebar-link" title="Moje ocene">
+                            <RadzenIcon Icon="reviews" class="app-sidebar-link-icon"/>
+                            <span class="app-sidebar-link-text">Moje ocene</span>
+                        </a>
 
-                <a href="/my-companies" class="app-sidebar-link" title="Moje firme">
-                    <RadzenIcon Icon="business" class="app-sidebar-link-icon" />
-                    <span class="app-sidebar-link-text">Moje firme</span>
-                </a>
+                        <a href="/my-companies" class="app-sidebar-link" title="Moje firme">
+                            <RadzenIcon Icon="business" class="app-sidebar-link-icon"/>
+                            <span class="app-sidebar-link-text">Moje firme</span>
+                        </a>
 
-                <a href="/companies/create" class="app-sidebar-link" title="Dodaj firmu">
-                    <RadzenIcon Icon="add_business" class="app-sidebar-link-icon" />
-                    <span class="app-sidebar-link-text">Dodaj firmu</span>
-                </a>
+                        <a href="/companies/create" class="app-sidebar-link" title="Dodaj firmu">
+                            <RadzenIcon Icon="add_business" class="app-sidebar-link-icon"/>
+                            <span class="app-sidebar-link-text">Dodaj firmu</span>
+                        </a>
 
-                <a href="/profile" class="app-sidebar-link" title="Profil">
-                    <RadzenIcon Icon="person" class="app-sidebar-link-icon" />
-                    <span class="app-sidebar-link-text">Profil</span>
-                </a>
+                        <a href="/profile" class="app-sidebar-link" title="Profil">
+                            <RadzenIcon Icon="person" class="app-sidebar-link-icon"/>
+                            <span class="app-sidebar-link-text">Profil</span>
+                        </a>
+                    </Authorized>
+                </AuthorizeView>
 
-                <a href="/categories" class="app-sidebar-link" title="Kategorije">
-                    <RadzenIcon Icon="category" class="app-sidebar-link-icon" />
-                    <span class="app-sidebar-link-text">Kategorije</span>
-                </a>
+                <AuthorizeView Roles="@Roles.Administrator">
+                    <Authorized Context="adminContext">
+                        <a href="/categories" class="app-sidebar-link" title="Kategorije">
+                            <RadzenIcon Icon="category" class="app-sidebar-link-icon"/>
+                            <span class="app-sidebar-link-text">Kategorije</span>
+                        </a>
+                    </Authorized>
+                </AuthorizeView>
 
                 <form action="Account/Logout" method="post">
                     <AntiforgeryToken/>
                     <button type="submit" class="app-sidebar-link app-sidebar-link-danger">
-                        <RadzenIcon Icon="logout" class="app-sidebar-link-icon" />
+                        <RadzenIcon Icon="logout" class="app-sidebar-link-icon"/>
                         <span class="app-sidebar-link-text">Odjavi se</span>
                     </button>
                 </form>
-                
+
             </nav>
         </aside>
     </Authorized>

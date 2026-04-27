@@ -1,0 +1,143 @@
+﻿@page "/Categories"
+
+@using Diplomski.RatingHub.Application.UseCases.Categories.Queries
+@using Diplomski.RatingHub.Domain.Constants
+@using Microsoft.AspNetCore.Authorization
+@inherits Diplomski.RatingHub.Web.Components.Shared.PortalComponentBase
+
+@attribute [Authorize(Roles = Roles.Administrator)]
+
+<PageTitle>Kategorije</PageTitle>
+
+<div class="categories-page">
+    
+    <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" Visible="@(IsLoading)"/>
+    
+    <div class="categories-main-section">
+        <div class="section-header">
+            <h1>Kategorije</h1>
+        </div>
+
+        <div class="section-toolbar">
+            <div class="categories-search-wrap">
+                <RadzenTextBox @bind-Value="_filterValue"
+                               Name="CategorySearch"
+                               Placeholder="Pretrazite kategorije po nazivu..."
+                               class="categories-search-input"
+                               Style="width: 100%;"
+                               @oninput="@Search"/>
+            </div>
+
+            <RadzenButton Text="Dodaj kategoriju"
+                          Icon="add"
+                          class="categories-add-btn"
+                          Click="@OpenAddCategoryDialog"/>
+        </div>
+
+        <div class="grid-responsive-wrap">
+            <RadzenDataGrid @ref="_categoriesGrid"
+                            Data="_categories"
+                            LoadData="@LoadCategories"
+                            TItem="CategoryDto"
+                            AllowPaging="true"
+                            AllowSorting="true"
+                            AllowFiltering="false"
+                            PageSize="10"
+                            Count="@_categoriesCount"
+                            class="categories-grid">
+                <Columns>
+                    <RadzenDataGridColumn TItem="CategoryDto" Property="Name" Title="Naziv" Width="25%"/>
+                    <RadzenDataGridColumn TItem="CategoryDto" Title="Roditelj" Width="20%">
+                        <Template Context="item">
+                            @if (item.ParentName is not null)
+                            {
+                                <span class="ellipsis-text">@item.ParentName</span>
+                            }
+                            else
+                            {
+                                <RadzenIcon Style="cursor: pointer"
+                                            MouseEnter="@(args => ShowTooltip(args, "Top kategorija", TooltipPosition.Top))"
+                                            Icon="cancel"
+                                            IconStyle="IconStyle.Danger"/>
+                            }
+                        </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="CategoryDto" Property="CompaniesCount" Title="Broj kompanija" Width="18%"/>
+
+                    <RadzenDataGridColumn TItem="CategoryDto" Property="Keywords" Title="Kljucne reci" Width="27%" Sortable="false">
+                        @* <Template Context="item"> *@
+                        @*     <span class="ellipsis-text" title="@item.KeywordsDisplayFull"> *@
+                        @*         @item.KeywordsDisplayShort *@
+                        @*     </span> *@
+                        @* </Template> *@
+                    </RadzenDataGridColumn>
+
+                    <RadzenDataGridColumn TItem="CategoryDto" Title="Akcije" Width="10%" Sortable="false" Filterable="false" TextAlign="TextAlign.Center">
+                        <Template Context="item">
+                            <div class="grid-actions">
+                                <RadzenButton Icon="edit" Size="ButtonSize.Small" ButtonStyle="ButtonStyle.Light"
+                                              Click="@(args => OpenEditCategoryDialog(item))"/>
+                                <RadzenButton Icon="delete" Size="ButtonSize.Small" ButtonStyle="ButtonStyle.Danger"
+                                              Click="@(args => DeleteCategory(item))"/>
+                            </div>
+                        </Template>
+                    </RadzenDataGridColumn>
+                </Columns>
+            </RadzenDataGrid>
+        </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <div class="categories-secondary-section">
+        <div class="section-header">
+            <h2>Predlozi korisnika za nove kategorije</h2>
+        </div>
+
+        <div class="grid-responsive-wrap">
+            <RadzenDataGrid Data="@Suggestions"
+                            TItem="CategorySuggestionRowVm"
+                            AllowPaging="true"
+                            AllowSorting="true"
+                            AllowFiltering="false"
+                            PageSize="10"
+                            class="categories-grid">
+                <Columns>
+                    <RadzenDataGridColumn TItem="CategorySuggestionRowVm" Property="Name" Title="Naziv" Width="180px"/>
+
+                    <RadzenDataGridColumn TItem="CategorySuggestionRowVm" Property="Description" Title="Opis" Width="280px">
+                        <Template Context="item">
+                            <span class="ellipsis-text" title="@item.Description">
+                                @item.Description
+                            </span>
+                        </Template>
+                    </RadzenDataGridColumn>
+
+                    <RadzenDataGridColumn TItem="CategorySuggestionRowVm" Property="Status" Title="Status" Width="120px"/>
+
+                    <RadzenDataGridColumn TItem="CategorySuggestionRowVm" Property="CreatedAt" Title="Datum predlaganja" Width="170px">
+                        <Template Context="item">
+                            @item.CreatedAt.ToString("dd.MM.yyyy")
+                        </Template>
+                    </RadzenDataGridColumn>
+
+                    <RadzenDataGridColumn TItem="CategorySuggestionRowVm" Title="Akcije" Width="130px" Sortable="false" Filterable="false" TextAlign="TextAlign.Center">
+                        <Template Context="item">
+                            <div class="grid-actions">
+                                <RadzenButton Icon="edit"
+                                              Size="ButtonSize.Small"
+                                              ButtonStyle="ButtonStyle.Light"
+                                              Click="@(args => OpenEditSuggestionDialog(item))"/>
+                                <RadzenButton Icon="delete"
+                                              Size="ButtonSize.Small"
+                                              ButtonStyle="ButtonStyle.Danger"
+                                              Click="@(args => DeleteSuggestion(item))"/>
+                            </div>
+                        </Template>
+                    </RadzenDataGridColumn>
+                </Columns>
+            </RadzenDataGrid>
+        </div>
+    </div>
+
+</div>

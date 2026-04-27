@@ -1,6 +1,8 @@
 ﻿@inherits LayoutComponentBase
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
+<RadzenComponents />
+
 <div class="app-layout @(GetSidebarLayoutClass())">
     <AppHeader OnToggleDesktopSidebar="ToggleDesktopSidebar" />
     <AppSidebar IsExpanded="sidebarExpanded" />
