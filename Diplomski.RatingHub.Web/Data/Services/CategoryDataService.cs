@@ -9,16 +9,30 @@ using MediatR;
 
 namespace Diplomski.RatingHub.Web.Data.Services;
 
-public class CategoryDataService(IMediator mediator) : DataServiceBase(mediator), ICategoryDataService
+public class CategoryDataService(IServiceScopeFactory serviceScopeFactory) : DataServiceBase(serviceScopeFactory), ICategoryDataService
 {
     public async Task<IPaginatedList<CategoryDto>> GetCategories(string filterValue, QueryArgs queryArgs)
     {
         return await Send(new GetCategoriesQuery { FilterValue = filterValue, QueryArgs = queryArgs });
     }
 
-    public Task<IPaginatedList<object>> GetNewCategorySuggestions(QueryArgs queryArgs)
+    public async Task<IPaginatedList<NewCategorySuggestionDto>> GetNewCategorySuggestions(QueryArgs queryArgs)
     {
-        throw new NotImplementedException();
+        return await Send(new GetNewCategorySuggestionsQuery { QueryArgs = queryArgs });
+    }
+
+    public async Task EditNewCategorySuggestion(NewCategorySuggestionDto newCategorySuggestionDto)
+    {
+        await Send(new EditNewCategorySuggestionCommand
+        {
+            NewCategorySuggestionId = newCategorySuggestionDto.Id,
+            Status = newCategorySuggestionDto.Status
+        });
+    }
+
+    public async Task DeleteCategoryNewSuggestion(int categoryNewSuggestionId)
+    {
+        await Send(new DeleteNewCategorySuggestionCommand { NewCategorySuggestionId = categoryNewSuggestionId });
     }
 
     public async Task CreateCategory(CreateCategoryDto createCategoryDto)
@@ -28,9 +42,31 @@ public class CategoryDataService(IMediator mediator) : DataServiceBase(mediator)
             Name = createCategoryDto.Name,
             Slug = createCategoryDto.Slug,
             SortOrder = createCategoryDto.SortOrder,
+            Icon = createCategoryDto.Icon,
+            ShowOnHomePage = createCategoryDto.ShowOnHomePage,
             ParentId = createCategoryDto.ParentId,
             Keywords = createCategoryDto.Keywords,
             RatingCriteria = createCategoryDto.RatingCriteria
         });
+    }
+    
+    public async Task EditCategory(CategoryDto categoryDto)
+    {
+        await Send(new EditCategoryCommand
+        {
+            CategoryId = categoryDto.Id,
+            Name = categoryDto.Name,
+            Slug = categoryDto.Slug,
+            SortOrder = categoryDto.SortOrder,
+            Icon = categoryDto.Icon,
+            ShowOnHomePage = categoryDto.ShowOnHomePage,
+            Keywords = categoryDto.Keywords,
+            RatingCriteria = categoryDto.RatingCriteria
+        });
+    }
+
+    public async Task DeleteCategory(int categoryId)
+    {
+        await Send(new DeleteCategoryCommand { CategoryId = categoryId });
     }
 }

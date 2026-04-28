@@ -1,0 +1,20 @@
+﻿@inherits Diplomski.RatingHub.Web.Components.Shared.PortalComponentBase 
+<EditForm Model="Model" OnValidSubmit="SaveAsync" FormName="edit-category-suggestion-form">
+    <DataAnnotationsValidator/>
+
+    <RadzenRow Gap="16px">
+        <RadzenColumn Size="12" SizeMD="6">
+            <div class="form-field">
+                <label>Status</label>
+                <RadzenDropDown @bind-Value="Model.Status" Style="width:100%;" Placeholder="Izaberi..."
+                                Data="@NewCategorySuggestionsFilterValues.CategorySuggestionStatuses"/>
+                
+            </div>
+        </RadzenColumn>
+    </RadzenRow>
+
+    <div class="dialog-actions">
+        <RadzenButton Text="Odustani" ButtonStyle="ButtonStyle.Light" Click="@Cancel" type="button"/>
+        <RadzenButton Text="Azuriraj" Icon="save" ButtonStyle="ButtonStyle.Primary" ButtonType="ButtonType.Submit" IsBusy="IsLoading" BusyText="Obrada"/>
+    </div>
+</EditForm>

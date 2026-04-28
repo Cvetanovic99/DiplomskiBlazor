@@ -6,7 +6,7 @@ using MediatR;
 
 namespace Diplomski.RatingHub.Web.Data.Services;
 
-public class UserProfileDataService(IMediator mediator) : DataServiceBase(mediator), IUserProfileDataService
+public class UserProfileDataService(IServiceScopeFactory serviceScopeFactory) : DataServiceBase(serviceScopeFactory), IUserProfileDataService
 {
     public async Task<UserProfileDto> CreateUserProfile(CreateUserProfileDto createUserProfileDto)
     {

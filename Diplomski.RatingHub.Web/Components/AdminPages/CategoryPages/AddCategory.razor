@@ -8,11 +8,6 @@
         <div class="parent-category-card">
             <div class="parent-category-label">Roditeljska kategorija</div>
             <div class="parent-category-name">@ParentCategory.Name</div>
-
-            @if (!string.IsNullOrWhiteSpace(ParentCategory.Slug))
-            {
-                <div class="parent-category-meta">Slug: @ParentCategory.Slug</div>
-            }
         </div>
     }
 
@@ -42,15 +37,37 @@
                 </div>
             </RadzenColumn>
 
-            <RadzenColumn Size="12" SizeMD="6">
+            <RadzenColumn Size="12" SizeMD="4">
                 <div class="form-field">
-                    <label>Sort order</label>
+                    <label>Redosled prikaza</label>
                     <RadzenNumeric @bind-Value="Model.SortOrder"
                                    Name="SortOrder"
                                    Min="0"
                                    Step="1"
                                    Style="width: 100%;" />
                     <ValidationMessage For="@(() => Model.SortOrder)" class="validation-error" />
+                </div>
+            </RadzenColumn>
+            
+            <RadzenColumn Size="12" SizeMD="4">
+                <div class="form-field">
+                    <label>Ikonica 
+                        <RadzenLink Path="https://fonts.google.com/icons?icon.set=Material+Symbols" Icon="arrow_outward" 
+                                    Style="color: #0a53be; margin-left:5px" Text="Pronadji ikonice" target="_blank" />
+                    </label>
+                    <RadzenTextBox @bind-Value="Model.Icon"
+                                   Name="Icon"
+                                   Placeholder="npr. home_repair_service"
+                                   Style="width: 100%;" />
+                </div>
+            </RadzenColumn>
+            
+            <RadzenColumn Size="12" SizeMD="4">
+                <div class="form-field" style="text-align: center">
+                    <label>Prikazi medju popularnim</label>
+                    <div style="width: 100%; text-align: center;" >
+                        <RadzenCheckBox @bind-Value="@Model.ShowOnHomePage" TValue="bool" />
+                    </div>
                 </div>
             </RadzenColumn>
         </RadzenRow>

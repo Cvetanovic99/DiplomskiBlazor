@@ -4,7 +4,8 @@ namespace Diplomski.RatingHub.Domain.Models;
 
 public class NewCategorySuggestion : EntityBase
 {
-    public required string Text { get; set; }
+    public required string Name { get; set; }
+    public string? Text { get; set; }
     public NewCategorySuggestionStatus Status { get; set; }
     
     public int? ParentCategoryId { get; set; }

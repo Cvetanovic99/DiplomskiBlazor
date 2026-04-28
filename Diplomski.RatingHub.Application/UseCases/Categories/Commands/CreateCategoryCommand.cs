@@ -13,6 +13,8 @@ public class CreateCategoryCommand : IRequest<Unit>
     public required string Name { get; set; }
     public required string Slug { get; set; }
     public int SortOrder { get; set; }
+    public string? Icon { get; set; }
+    public bool ShowOnHomePage { get; set; }
     public int? ParentId  {get; set; }
     public List<CreateCategoryKeywordDto>? Keywords { get; set; } 
     public List<CreateRatingCriterionDto>? RatingCriteria { get; set; }
@@ -66,6 +68,8 @@ public class CreateCategoryCommandHandler : IRequestHandler<CreateCategoryComman
             Name = request.Name,
             Slug = request.Slug,
             SortOrder = request.SortOrder,
+            Icon = request.Icon,
+            ShowOnHomePage = request.ShowOnHomePage,
         };
         
         if (request.ParentId is not null)

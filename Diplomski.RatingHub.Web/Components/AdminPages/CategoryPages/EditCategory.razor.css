@@ -1,0 +1,138 @@
+﻿.add-category-dialog {
+    padding: 6px 4px 0 4px;
+}
+
+.dialog-header {
+    margin-bottom: 18px;
+}
+
+.dialog-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1f2a37;
+}
+
+.parent-category-card {
+    margin-bottom: 20px;
+    padding: 16px 18px;
+    border: 1px solid #dbe1e8;
+    border-radius: 14px;
+    background: #f8fafc;
+}
+
+.parent-category-label {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #64748b;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.parent-category-name {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.parent-category-meta {
+    margin-top: 4px;
+    font-size: 0.9rem;
+    color: #6b7280;
+}
+
+.form-field {
+    margin-bottom: 16px;
+}
+
+.form-field label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #374151;
+}
+
+.section-block {
+    margin-top: 14px;
+    padding-top: 14px;
+}
+
+.section-block-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+}
+
+.section-block-header h3 {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+::deep .small-add-btn {
+    border-radius: 12px !important;
+    font-size: 0.84rem !important;
+    font-weight: 600 !important;
+    padding: 0 14px !important;
+}
+
+.table-wrap {
+    width: 100%;
+    overflow-x: auto;
+}
+
+::deep .dialog-grid {
+    min-width: 100%;
+}
+
+::deep .dialog-grid table,
+::deep .dialog-grid .rz-grid-table {
+    min-width: 560px;
+    background: #ffffff;
+}
+
+.grid-actions {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+}
+
+.dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+}
+
+::deep .validation-error {
+    color: #b54747 !important;
+    font-size: 0.82rem;
+    margin-top: 4px;
+    display: block;
+}
+
+@media (max-width: 768px) {
+    .dialog-header h2 {
+        font-size: 1.3rem;
+    }
+
+    .parent-category-card {
+        padding: 14px;
+    }
+
+    .dialog-actions {
+        flex-direction: column-reverse;
+        align-items: stretch;
+    }
+
+    .dialog-actions ::deep .rz-button {
+        width: 100%;
+    }
+}

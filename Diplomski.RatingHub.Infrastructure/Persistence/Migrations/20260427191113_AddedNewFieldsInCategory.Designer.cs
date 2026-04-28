@@ -4,6 +4,7 @@ using Diplomski.RatingHub.Infrastructure.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Diplomski.RatingHub.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260427191113_AddedNewFieldsInCategory")]
+    partial class AddedNewFieldsInCategory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1659,10 +1662,6 @@ namespace Diplomski.RatingHub.Infrastructure.Persistence.Migrations
                     b.Property<DateTime?>("Modified")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int?>("ParentCategoryId")
                         .HasColumnType("int");
 
@@ -1670,6 +1669,7 @@ namespace Diplomski.RatingHub.Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Text")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -1862,17 +1862,12 @@ namespace Diplomski.RatingHub.Infrastructure.Persistence.Migrations
                     b.Property<int>("RatingCriterionId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("RatingCriterionId1")
-                        .HasColumnType("int");
-
                     b.Property<int>("ReviewId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("RatingCriterionId");
-
-                    b.HasIndex("RatingCriterionId1");
 
                     b.HasIndex("ReviewId", "RatingCriterionId")
                         .IsUnique();
@@ -2435,10 +2430,6 @@ namespace Diplomski.RatingHub.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Diplomski.RatingHub.Domain.Models.RatingCriterion", null)
-                        .WithMany("ReviewGrades")
-                        .HasForeignKey("RatingCriterionId1");
-
                     b.HasOne("Diplomski.RatingHub.Domain.Models.Review", "Review")
                         .WithMany("Grades")
                         .HasForeignKey("ReviewId")
@@ -2562,11 +2553,6 @@ namespace Diplomski.RatingHub.Infrastructure.Persistence.Migrations
             modelBuilder.Entity("Diplomski.RatingHub.Domain.Models.CompanyResponse", b =>
                 {
                     b.Navigation("Images");
-                });
-
-            modelBuilder.Entity("Diplomski.RatingHub.Domain.Models.RatingCriterion", b =>
-                {
-                    b.Navigation("ReviewGrades");
                 });
 
             modelBuilder.Entity("Diplomski.RatingHub.Domain.Models.Review", b =>

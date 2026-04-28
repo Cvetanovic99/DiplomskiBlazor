@@ -6,7 +6,7 @@ using MediatR;
 
 namespace Diplomski.RatingHub.Web.Data.Services;
 
-public class CityDataService(IMediator mediator) : DataServiceBase(mediator), ICityDataService
+public class CityDataService(IServiceScopeFactory serviceScopeFactory) : DataServiceBase(serviceScopeFactory), ICityDataService
 {
     public async Task<IPaginatedList<CityDto>> GetCities(string filterValue, QueryArgs queryArgs)
     {

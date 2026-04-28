@@ -1,33 +1,30 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Diplomski.RatingHub.Application.UseCases.Categories.Queries;
+﻿using Diplomski.RatingHub.Application.UseCases.Categories.Queries;
 using Diplomski.RatingHub.Web.Data.Interfaces;
 using Diplomski.RatingHub.Web.Models;
 using Microsoft.AspNetCore.Components;
 using Radzen.Blazor;
 
-namespace Diplomski.RatingHub.Web.Components.AdminPages;
+namespace Diplomski.RatingHub.Web.Components.AdminPages.CategoryPages;
 
-public partial class AddCategory
+public partial class EditCategory
 {
-    [Parameter] public CategoryDto? ParentCategory { get; set; }
+    [Parameter] public CategoryDto? Model { get; set; }
     
     [Inject] protected ICategoryDataService CategoryDataService { get; set; } = null!;
 
-    protected CreateCategoryDto Model { get; set; } = new();
-
-    protected RadzenDataGrid<CreateCategoryKeywordDto> KeywordsGrid = null!;
-    protected RadzenDataGrid<CreateRatingCriterionDto> CriteriaGrid = null!;
+    protected RadzenDataGrid<CategoryKeywordDto> KeywordsGrid = null!;
+    protected RadzenDataGrid<RatingCriterionDto> CriteriaGrid = null!;
 
     private bool IsKeywordNew = false;
-    private CreateCategoryKeywordDto? originalKeyword;
+    private CategoryKeywordDto? originalKeyword;
     private bool IsCriterionNew = false;
-    private CreateRatingCriterionDto? originalCriterion;
+    private RatingCriterionDto? originalCriterion;
 
     protected async Task AddKeywordRow()
     {
         if (!KeywordsGrid.IsValid) return;
         
-        var item = new CreateCategoryKeywordDto();
+        var item = new CategoryKeywordDto();
         Model.Keywords.Add(item);
         IsKeywordNew = true;
         
@@ -35,11 +32,11 @@ public partial class AddCategory
         
     }
 
-    protected async Task EditKeyword(CreateCategoryKeywordDto item)
+    protected async Task EditKeyword(CategoryKeywordDto item)
     {
         if (!KeywordsGrid.IsValid) return;
 
-        originalKeyword = new CreateCategoryKeywordDto
+        originalKeyword = new CategoryKeywordDto
         {
             Keyword = item.Keyword
         };
@@ -47,19 +44,19 @@ public partial class AddCategory
         await KeywordsGrid.EditRow(item);
     }
 
-    protected async Task RemoveKeyword(CreateCategoryKeywordDto item)
+    protected async Task RemoveKeyword(CategoryKeywordDto item)
     {
         Model.Keywords.Remove(item);
         await KeywordsGrid.Reload();
     }
 
-    protected async Task SaveKeyword(CreateCategoryKeywordDto item)
+    protected async Task SaveKeyword(CategoryKeywordDto item)
     {
         IsKeywordNew = false;
         await KeywordsGrid.UpdateRow(item);
     }
 
-    protected void CancelKeywordEdit(CreateCategoryKeywordDto item)
+    protected void CancelKeywordEdit(CategoryKeywordDto item)
     {
         KeywordsGrid?.CancelEditRow(item);
 
@@ -78,10 +75,9 @@ public partial class AddCategory
     protected async Task AddRatingCriteriaRow()
     {if (!KeywordsGrid.IsValid) return;
         
-        var item = new CreateRatingCriterionDto
+        var item = new RatingCriterionDto
         {
-            IsActive = true,
-            SortOrder = Model.RatingCriteria.Count + 1
+            IsActive = true
         };
         Model.RatingCriteria.Add(item);
         IsCriterionNew = true;
@@ -89,11 +85,11 @@ public partial class AddCategory
         await CriteriaGrid.InsertRow(item);
     }
 
-    protected async Task EditCriterion(CreateRatingCriterionDto item)
+    protected async Task EditCriterion(RatingCriterionDto item)
     {
         if (!CriteriaGrid.IsValid) return;
 
-        originalCriterion = new CreateRatingCriterionDto
+        originalCriterion = new RatingCriterionDto
         {
             Name = item.Name,
             SortOrder = item.SortOrder,
@@ -103,20 +99,20 @@ public partial class AddCategory
         await CriteriaGrid.EditRow(item);
     }
 
-    protected async Task RemoveCriterion(CreateRatingCriterionDto item)
+    protected async Task RemoveCriterion(RatingCriterionDto item)
     {
         Model.RatingCriteria.Remove(item);
         await KeywordsGrid.Reload();
     }
 
-    protected async Task SaveCriterion(CreateRatingCriterionDto item)
+    protected async Task SaveCriterion(RatingCriterionDto item)
     {
         IsCriterionNew = false;
         await CriteriaGrid.UpdateRow(item);
         
     }
 
-    protected void CancelCriterionEdit(CreateRatingCriterionDto item)
+    protected void CancelCriterionEdit(RatingCriterionDto item)
     {
         CriteriaGrid?.CancelEditRow(item);
 
@@ -142,34 +138,8 @@ public partial class AddCategory
 
     protected async Task SaveAsync()
     {
-        
-        // var dto = new CreateCategoryDto
-        // {
-        //     
-        //     Name = Model.Name,
-        //     Slug = Model.Slug,
-        //     SortOrder = Model.SortOrder,
-        //     ParentId = ParentCategory?.Id,
-        //     Keywords = Model.Keywords
-        //         .Where(x => !string.IsNullOrWhiteSpace(x.Keyword))
-        //         .Select(x => new CreateCategoryKeywordDto
-        //         {
-        //             Keyword = x.Keyword.Trim()
-        //         })
-        //         .ToList(),
-        //     RatingCriteria = Model.RatingCriteria
-        //         .Where(x => !string.IsNullOrWhiteSpace(x.Name))
-        //         .Select(x => new CreateRatingCriterionDto
-        //         {
-        //             Name = x.Name.Trim(),
-        //             SortOrder = x.SortOrder,
-        //             IsActive = x.IsActive
-        //         })
-        //         .ToList()
-        // };
-        
         var result = await InvokeDataServiceMethod(() =>
-                CategoryDataService.CreateCategory(Model), successMessage: "Uspesno ste kreirali kategoriju");
+                CategoryDataService.EditCategory(Model), successMessage: "Uspesno ste azurirali kategoriju");
         if (!result) return;
         
         DialogService.Close(true);

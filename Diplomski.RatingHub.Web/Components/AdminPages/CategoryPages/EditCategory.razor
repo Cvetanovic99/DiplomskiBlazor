@@ -1,0 +1,233 @@
+﻿@using Diplomski.RatingHub.Application.UseCases.Categories.Queries
+@inherits Diplomski.RatingHub.Web.Components.Shared.PortalComponentBase
+
+<div class="add-category-dialog">
+    
+    @if (Model is not null)
+    {
+        <EditForm Model="Model" OnValidSubmit="SaveAsync" FormName="add-category-form">
+            <DataAnnotationsValidator/>
+
+            <RadzenRow Gap="16px">
+                <RadzenColumn Size="12" SizeMD="6">
+                    <div class="form-field">
+                        <label>Naziv</label>
+                        <RadzenTextBox @bind-Value="Model.Name"
+                                       Name="Name"
+                                       Placeholder="Unesite naziv kategorije"
+                                       Style="width: 100%;"/>
+                        <ValidationMessage For="@(() => Model.Name)" class="validation-error"/>
+                    </div>
+                </RadzenColumn>
+
+                <RadzenColumn Size="12" SizeMD="6">
+                    <div class="form-field">
+                        <label>Slug</label>
+                        <RadzenTextBox @bind-Value="Model.Slug"
+                                       Name="Slug"
+                                       Placeholder="npr. frizeri-i-saloni"
+                                       Style="width: 100%;"/>
+                        <ValidationMessage For="@(() => Model.Slug)" class="validation-error"/>
+                    </div>
+                </RadzenColumn>
+
+                <RadzenColumn Size="12" SizeMD="6">
+                    <div class="form-field">
+                        <label>Sort order</label>
+                        <RadzenNumeric @bind-Value="Model.SortOrder"
+                                       Name="SortOrder"
+                                       Min="0"
+                                       Step="1"
+                                       Style="width: 100%;"/>
+                        <ValidationMessage For="@(() => Model.SortOrder)" class="validation-error"/>
+                    </div>
+                </RadzenColumn>
+                
+                <RadzenColumn Size="12" SizeMD="4">
+                    <div class="form-field">
+                        <label>Ikonica 
+                            <RadzenLink Path="https://fonts.google.com/icons?icon.set=Material+Symbols" Icon="arrow_outward" 
+                                        Style="color: #0a53be; margin-left:5px" Text="Pronadji ikonice" target="_blank" />
+                        </label>
+                        <RadzenTextBox @bind-Value="Model.Icon"
+                                       Name="Icon"
+                                       Placeholder="npr. home_repair_service"
+                                       Style="width: 100%;" />
+                    </div>
+                </RadzenColumn>
+            
+                <RadzenColumn Size="12" SizeMD="4">
+                    <div class="form-field" style="text-align: center">
+                        <label>Prikazi medju popularnim</label>
+                        <div style="width: 100%; text-align: center;" >
+                            <RadzenCheckBox @bind-Value="@Model.ShowOnHomePage" TValue="bool" />
+                        </div>
+                    </div>
+                </RadzenColumn>
+            </RadzenRow>
+
+            <div class="section-block">
+                <div class="section-block-header">
+                    <h3>Kljucne reci</h3>
+                    <RadzenButton Text="Dodaj kljucnu rec"
+                                  Icon="add"
+                                  ButtonStyle="ButtonStyle.Primary"
+                                  class="small-add-btn"
+                                  Click="@AddKeywordRow"
+                                  type="button"/>
+                </div>
+
+                <div class="table-wrap">
+                    <RadzenDataGrid @ref="KeywordsGrid"
+                                    Data="@Model.Keywords"
+                                    TItem="CategoryKeywordDto"
+                                    AllowPaging="true"
+                                    PageSize="3"
+                                    AllowSorting="false"
+                                    AllowFiltering="false"
+                                    EditMode="DataGridEditMode.Single"
+                                    class="dialog-grid">
+                        <Columns>
+                            <RadzenDataGridColumn TItem="CategoryKeywordDto" Property="Keyword" Title="Kljucna rec">
+                                <Template Context="item">
+                                    @item.Keyword
+                                </Template>
+                                <EditTemplate Context="item">
+                                    <RadzenTextBox @bind-Value="item.Keyword" Placeholder="Unesite kljucnu rec"
+                                                   Style="width:100%;" Name="Keyword"/>
+                                    <RadzenRequiredValidator Text="Morate uneti rec" Component="Keyword" Style="display: block;"/>
+                                </EditTemplate>
+                            </RadzenDataGridColumn>
+
+                            <RadzenDataGridColumn TItem="CategoryKeywordDto" Title="Akcije" Width="120px" TextAlign="TextAlign.Center">
+                                <Template Context="item">
+                                    <div class="grid-actions">
+                                        <RadzenButton Icon="edit"
+                                                      Size="ButtonSize.Small"
+                                                      ButtonStyle="ButtonStyle.Light"
+                                                      Click="@(args => EditKeyword(item))"
+                                                      type="button"/>
+                                        <RadzenButton Icon="delete"
+                                                      Size="ButtonSize.Small"
+                                                      ButtonStyle="ButtonStyle.Danger"
+                                                      Click="@(args => RemoveKeyword(item))"
+                                                      type="button"/>
+                                    </div>
+                                </Template>
+                                <EditTemplate Context="item">
+                                    <div class="grid-actions">
+                                        <RadzenButton Icon="check"
+                                                      Size="ButtonSize.Small"
+                                                      ButtonStyle="ButtonStyle.Success"
+                                                      Click="@(args => SaveKeyword(item))"
+                                                      type="button"/>
+                                        <RadzenButton Icon="close"
+                                                      Size="ButtonSize.Small"
+                                                      ButtonStyle="ButtonStyle.Light"
+                                                      Click="@(args => CancelKeywordEdit(item))"
+                                                      type="button"/>
+                                    </div>
+                                </EditTemplate>
+                            </RadzenDataGridColumn>
+                        </Columns>
+                    </RadzenDataGrid>
+                </div>
+            </div>
+
+            <div class="section-block">
+                <div class="section-block-header">
+                    <h3>Kriterijumi ocenjivanja</h3>
+                    <RadzenButton Text="Dodaj kriterijum"
+                                  Icon="add"
+                                  ButtonStyle="ButtonStyle.Primary"
+                                  class="small-add-btn"
+                                  Click="@AddRatingCriteriaRow"
+                                  type="button"/>
+                </div>
+
+                <div class="table-wrap">
+                    <RadzenDataGrid @ref="CriteriaGrid"
+                                    Data="@Model.RatingCriteria"
+                                    TItem="RatingCriterionDto"
+                                    AllowPaging="true"
+                                    PageSize="3"
+                                    AllowSorting="false"
+                                    AllowFiltering="false"
+                                    EditMode="DataGridEditMode.Single"
+                                    class="dialog-grid">
+                        <Columns>
+                            <RadzenDataGridColumn TItem="RatingCriterionDto" Property="Name" Title="Naziv">
+                                <Template Context="item">
+                                    @item.Name
+                                </Template>
+                                <EditTemplate Context="item">
+                                    <RadzenTextBox @bind-Value="item.Name" Placeholder="Naziv kriterijuma" Name="CriterionName" Style="width:100%;"/>
+                                    <RadzenRequiredValidator Text="Morate uneti rec" Component="CriterionName" Style="display: block;"/>
+                                </EditTemplate>
+                            </RadzenDataGridColumn>
+
+                            <RadzenDataGridColumn TItem="RatingCriterionDto" Property="SortOrder" Title="Sort" Width="110px">
+                                <Template Context="item">
+                                    @item.SortOrder
+                                </Template>
+                                <EditTemplate Context="item">
+                                    <RadzenNumeric @bind-Value="item.SortOrder" Min="0" Step="1" Style="width:100%;"/>
+                                </EditTemplate>
+                            </RadzenDataGridColumn>
+
+                            <RadzenDataGridColumn TItem="RatingCriterionDto" Property="IsActive" Title="Aktivan" Width="120px">
+                                <Template Context="item">
+                                    @(item.IsActive ? "Da" : "Ne")
+                                </Template>
+                                <EditTemplate Context="item">
+                                    <RadzenCheckBox @bind-Value="item.IsActive" TValue="bool"/>
+                                </EditTemplate>
+                            </RadzenDataGridColumn>
+
+                            <RadzenDataGridColumn TItem="RatingCriterionDto" Title="Akcije" Width="120px" TextAlign="TextAlign.Center">
+                                <Template Context="item">
+                                    <div class="grid-actions">
+                                        <RadzenButton Icon="edit"
+                                                      Size="ButtonSize.Small"
+                                                      ButtonStyle="ButtonStyle.Light"
+                                                      Click="@(args => EditCriterion(item))"
+                                                      type="button"/>
+                                        <RadzenButton Icon="delete"
+                                                      Size="ButtonSize.Small"
+                                                      ButtonStyle="ButtonStyle.Danger"
+                                                      Click="@(args => RemoveCriterion(item))"
+                                                      type="button"/>
+                                    </div>
+                                </Template>
+                                <EditTemplate Context="item">
+                                    <div class="grid-actions">
+                                        <RadzenButton Icon="check"
+                                                      Size="ButtonSize.Small"
+                                                      ButtonStyle="ButtonStyle.Success"
+                                                      Click="@(args => SaveCriterion(item))"
+                                                      type="button"/>
+                                        <RadzenButton Icon="close"
+                                                      Size="ButtonSize.Small"
+                                                      ButtonStyle="ButtonStyle.Light"
+                                                      Click="@(args => CancelCriterionEdit(item))"
+                                                      type="button"/>
+                                    </div>
+                                </EditTemplate>
+                            </RadzenDataGridColumn>
+                        </Columns>
+                    </RadzenDataGrid>
+                </div>
+            </div>
+
+            <div class="dialog-actions">
+                <RadzenButton Text="Odustani" ButtonStyle="ButtonStyle.Light" Click="@Cancel" type="button"/>
+                <RadzenButton Text="Azuriraj kategoriju" Icon="save" ButtonStyle="ButtonStyle.Primary" ButtonType="ButtonType.Submit" IsBusy="IsLoading" BusyText="Obrada"/>
+            </div>
+        </EditForm>
+    }
+    else
+    {
+        <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate"/>
+    }
+
+</div>

@@ -17,7 +17,6 @@ namespace Diplomski.RatingHub.Web.Data.Services;
 
 public class AccountDataService : DataServiceBase, IAccountDataService
 {
-    private readonly IMediator _mediator;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IEmailNotificationService _emailNotificationService;
     private readonly IUserProfileDataService _userProfileDataService;
@@ -27,9 +26,8 @@ public class AccountDataService : DataServiceBase, IAccountDataService
         UserManager<ApplicationUser> userManager,
         IEmailNotificationService emailNotificationService,
         IUserProfileDataService userProfileDataService,
-        ISmsNotificationService smsNotificationService) : base(mediator)
+        ISmsNotificationService smsNotificationService,IServiceScopeFactory serviceScopeFactory) : base(serviceScopeFactory)
     {
-        _mediator = mediator;
         _userManager = userManager;
         _emailNotificationService = emailNotificationService;
         _userProfileDataService = userProfileDataService;

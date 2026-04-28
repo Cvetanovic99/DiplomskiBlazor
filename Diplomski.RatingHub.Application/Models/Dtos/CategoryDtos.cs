@@ -12,6 +12,8 @@ public class CreateCategoryDto
     [Required(ErrorMessage = "Unesite slug")]
     public string Slug { get; set; }
     public int SortOrder { get; set; }
+    public string? Icon { get; set; }
+    public bool ShowOnHomePage { get; set; }
     public int? ParentId  {get; set; }
     public List<CreateCategoryKeywordDto> Keywords { get; set; } = new();
     public List<CreateRatingCriterionDto> RatingCriteria { get; set; } = new();

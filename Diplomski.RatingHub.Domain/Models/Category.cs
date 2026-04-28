@@ -5,6 +5,8 @@ public class Category : EntityBase
     public required string Name { get; set; }
     public required string Slug { get; set; }
     public int SortOrder { get; set; }
+    public string? Icon { get; set; }
+    public bool ShowOnHomePage { get; set; }
     
     public int? ParentId  {get; set; }
     public Category? Parent { get; set; }

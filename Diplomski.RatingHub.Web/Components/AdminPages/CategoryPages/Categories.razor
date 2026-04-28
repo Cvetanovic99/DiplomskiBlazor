@@ -2,6 +2,7 @@
 
 @using Diplomski.RatingHub.Application.UseCases.Categories.Queries
 @using Diplomski.RatingHub.Domain.Constants
+@using Diplomski.RatingHub.Domain.Enums
 @using Microsoft.AspNetCore.Authorization
 @inherits Diplomski.RatingHub.Web.Components.Shared.PortalComponentBase
 
@@ -64,12 +65,12 @@
                     </RadzenDataGridColumn>
                     <RadzenDataGridColumn TItem="CategoryDto" Property="CompaniesCount" Title="Broj kompanija" Width="18%"/>
 
-                    <RadzenDataGridColumn TItem="CategoryDto" Property="Keywords" Title="Kljucne reci" Width="27%" Sortable="false">
-                        @* <Template Context="item"> *@
-                        @*     <span class="ellipsis-text" title="@item.KeywordsDisplayFull"> *@
-                        @*         @item.KeywordsDisplayShort *@
-                        @*     </span> *@
-                        @* </Template> *@
+                    <RadzenDataGridColumn TItem="CategoryDto" Title="Kljucne reci" Width="27%" Sortable="false">
+                        <Template Context="item">
+                            <span class="ellipsis-text">
+                                @(string.Join(",", item.Keywords.Select(k => k.Keyword)))
+                            </span>
+                        </Template>
                     </RadzenDataGridColumn>
 
                     <RadzenDataGridColumn TItem="CategoryDto" Title="Akcije" Width="10%" Sortable="false" Filterable="false" TextAlign="TextAlign.Center">
@@ -77,6 +78,9 @@
                             <div class="grid-actions">
                                 <RadzenButton Icon="edit" Size="ButtonSize.Small" ButtonStyle="ButtonStyle.Light"
                                               Click="@(args => OpenEditCategoryDialog(item))"/>
+                                <RadzenButton Icon="add" Size="ButtonSize.Small" ButtonStyle="ButtonStyle.Primary"
+                                              MouseEnter="@(args => ShowTooltip(args, "Dodaj podkategoriju", TooltipPosition.Top))"
+                                              Click="@(args => OpenAddSubcategoryDialog(item))"/>
                                 <RadzenButton Icon="delete" Size="ButtonSize.Small" ButtonStyle="ButtonStyle.Danger"
                                               Click="@(args => DeleteCategory(item))"/>
                             </div>
@@ -95,33 +99,72 @@
         </div>
 
         <div class="grid-responsive-wrap">
-            <RadzenDataGrid Data="@Suggestions"
-                            TItem="CategorySuggestionRowVm"
+            <RadzenDataGrid @ref="_categorySuggestionsGrid"
+                            LoadData="@LoadCategorySuggestions"
+                            Data="@_categorySuggestions"
+                            TItem="NewCategorySuggestionDto"
                             AllowPaging="true"
                             AllowSorting="true"
-                            AllowFiltering="false"
+                            AllowFiltering="true"
+                            FilterMode="FilterMode.Simple"
                             PageSize="10"
+                            Count="@_categoriySuggestionsCount"
                             class="categories-grid">
                 <Columns>
-                    <RadzenDataGridColumn TItem="CategorySuggestionRowVm" Property="Name" Title="Naziv" Width="180px"/>
-
-                    <RadzenDataGridColumn TItem="CategorySuggestionRowVm" Property="Description" Title="Opis" Width="280px">
+                    <RadzenDataGridColumn TItem="NewCategorySuggestionDto" Property="Name" Title="Naziv" Width="15%"/>
+                    <RadzenDataGridColumn TItem="NewCategorySuggestionDto" Property="SuggestedParent" Title="Preporucen roditelj" Width="15%">
                         <Template Context="item">
-                            <span class="ellipsis-text" title="@item.Description">
-                                @item.Description
+                            @if (string.IsNullOrEmpty(item.SuggestedParent))
+                            {
+                                <RadzenIcon Style="cursor: pointer"
+                                            MouseEnter="@(args => ShowTooltip(args, "Nema preporuke", TooltipPosition.Top))"
+                                            Icon="cancel"
+                                            IconStyle="IconStyle.Danger"/>
+                            }
+                            else
+                            {
+                                <span class="ellipsis-text">@item.SuggestedParent</span>
+                            }
+                        </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="NewCategorySuggestionDto" Property="Text" Title="Opis" Width="40%">
+                        <Template Context="item">
+                            <span class="ellipsis-text" title="@item.Text">
+                                @item.Text
                             </span>
                         </Template>
                     </RadzenDataGridColumn>
 
-                    <RadzenDataGridColumn TItem="CategorySuggestionRowVm" Property="Status" Title="Status" Width="120px"/>
-
-                    <RadzenDataGridColumn TItem="CategorySuggestionRowVm" Property="CreatedAt" Title="Datum predlaganja" Width="170px">
+                    <RadzenDataGridColumn TItem="NewCategorySuggestionDto" Property="Status" Title="Status" 
+                                          Width="10%" TextAlign="TextAlign.Center"
+                                          FilterOperator="FilterOperator.Equals" Filterable="true">
+                        <FilterTemplate>
+                            <RadzenDropDown @bind-Value="_selectedSuggestionStatus" Style="width:100%;" Placeholder="Izaberi..."
+                                            Data="@NewCategorySuggestionsFilterValues.CategorySuggestionStatuses"
+                                            Change="@OnSuggestionStatusFilterChanged"
+                                            AllowClear="true" />
+                        </FilterTemplate>
                         <Template Context="item">
-                            @item.CreatedAt.ToString("dd.MM.yyyy")
+                            @if (item.Status is NewCategorySuggestionStatus.Pending)
+                            {
+                                <RadzenIcon Style="cursor: pointer" Icon="hourglass_top" IconStyle="IconStyle.Info" MouseEnter="@(args => ShowTooltip(args, "Neobradjen", TooltipPosition.Top))"/>
+                            }
+                            else if (item.Status is NewCategorySuggestionStatus.Dismissed)
+                            {
+                                <RadzenIcon Style="cursor: pointer" Icon="x_circle" IconStyle="IconStyle.Danger" MouseEnter="@(args => ShowTooltip(args, "Ignorisan", TooltipPosition.Top))"/>
+                            }
+                            else
+                            {
+                                <RadzenIcon Style="cursor: pointer" Icon="bookmark_check" IconStyle="IconStyle.Success" MouseEnter="@(args => ShowTooltip(args, "Obradjen", TooltipPosition.Top))"/>
+                            }
                         </Template>
                     </RadzenDataGridColumn>
-
-                    <RadzenDataGridColumn TItem="CategorySuggestionRowVm" Title="Akcije" Width="130px" Sortable="false" Filterable="false" TextAlign="TextAlign.Center">
+                    <RadzenDataGridColumn TItem="NewCategorySuggestionDto" Property="Created" Title="Kreirano" Width="10%">
+                        <Template Context="item">
+                            @item.Created.ToString("dd.MM.yyyy")
+                        </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="NewCategorySuggestionDto" Title="Akcije" Width="10%" Sortable="false" Filterable="false" TextAlign="TextAlign.Center">
                         <Template Context="item">
                             <div class="grid-actions">
                                 <RadzenButton Icon="edit"

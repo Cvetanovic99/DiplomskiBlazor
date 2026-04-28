@@ -44,6 +44,7 @@ public class GetCategoriesQueryHandler : IRequestHandler<GetCategoriesQuery, IPa
         var categorySpecification = new Specification<Category>(
             c => c.Name.Contains(request.FilterValue) ||
                  c.Keywords.Any(k => k.Keyword.Contains(request.FilterValue)));
+            //.AddInclude(c =>c.Companies);
 
         
         return await _categoryRepository.GetAndProjectAsPaginatedList<CategoryDto>(categorySpecification, request.QueryArgs);
@@ -57,9 +58,11 @@ public class CategoryDto : IMapFrom<Category>
     public required string Slug { get; set; }
     public int SortOrder { get; set; }
     public int CompaniesCount { get; set; }
-    
+    public string? Icon { get; set; }
+    public bool ShowOnHomePage { get; set; }
     public string? ParentName { get; set; }
-    public string? Keywords { get; set; }
+    public List<CategoryKeywordDto> Keywords { get; set; } = new();
+    public List<RatingCriterionDto> RatingCriteria { get; set; } = new();
 
     public void Mapping(Profile profile)
     {
@@ -67,11 +70,39 @@ public class CategoryDto : IMapFrom<Category>
             .ForMember(dest => dest.ParentName,
                 options => options.MapFrom((src) =>
                     src.Parent.Name))
-            .ForMember(dest => dest.Keywords,
-                options => options.MapFrom((src) =>
-                    string.Join(",", src.Keywords.Select(k => k.Keyword))))
             .ForMember(dest => dest.CompaniesCount,
                 options => options.MapFrom((src) =>
                     src.Companies.Count));
+    }
+}
+
+public class CategoryKeywordDto : IMapFrom<CategoryKeyword>
+{
+    public int Id { get; set; }
+    public string Keyword { get; set; } = null!;
+    
+    public int CategoryId { get; set; }
+
+    public void Mapping(Profile profile)
+    {
+        profile.CreateMap<CategoryKeyword, CategoryKeywordDto>()
+            .ReverseMap();
+    }
+}
+
+public class RatingCriterionDto : IMapFrom<RatingCriterion>
+{
+    public int? Id { get; set; }
+    public string Name { get; set; } = null!;
+    public int SortOrder { get; set; } 
+    public bool IsActive { get; set; }
+    public bool ContainsReview { get; set; }
+    
+    public void Mapping(Profile profile)
+    {
+        profile.CreateMap<RatingCriterion, RatingCriterionDto>()
+            .ForMember(dest => dest.ContainsReview,
+                options => options.MapFrom((src) =>
+                    src.ReviewGrades.Any()));
     }
 }
