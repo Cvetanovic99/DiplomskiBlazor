@@ -6,8 +6,8 @@ public class Review : EntityBase
     public decimal OverallScore { get; set; }
     public bool IsAnonymousReview { get; set; }
     
-    public int  ReviewerId { get; set; }
-    public UserProfile Reviewer { get; set; } =  null!;
+    public int?  ReviewerId { get; set; }
+    public UserProfile? Reviewer { get; set; }
     public int CompanyId { get; set; }
     public Company Company { get; set; } = null!;
     public CompanyResponse? CompanyResponse { get; set; }

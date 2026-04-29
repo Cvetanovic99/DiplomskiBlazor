@@ -1,0 +1,75 @@
+﻿.reports-page {
+    padding: 24px;
+    background: #ffffff;
+}
+
+.reports-main-section {
+    background: #f5f6f8;
+    border: 1px solid #dbe1e8;
+    border-radius: 18px;
+    padding: 24px;
+}
+
+/* TOOLBAR */
+.section-toolbar {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.reports-search-wrap {
+    flex: 1;
+    min-width: 260px;
+    width: 30%;
+}
+
+/* SEARCH kao categories */
+::deep .reports-search-input {
+    width: 100% !important;
+    height: 48px !important;
+    border-radius: 12px !important;
+    padding: 0 14px !important;
+    font-size: 0.95rem !important;
+}
+
+/* dropdown */
+::deep .reports-dropdown {
+    height: 48px !important;
+    border-radius: 12px !important;
+}
+
+/* GRID */
+.grid-responsive-wrap {
+    width: 100%;
+}
+
+::deep .reports-grid table {
+    background: #ffffff;
+}
+
+/* ACTIONS */
+.grid-actions {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+}
+
+.action-btn {
+    width: 32px;
+    height: 32px;
+}
+
+/* MOBILE SCROLL */
+@media (max-width: 768px) {
+
+    ::deep .reports-grid table {
+        min-width: 700px;
+    }
+
+    ::deep .reports-grid .rz-data-grid-data,
+    ::deep .reports-grid .rz-data-grid-scrollable-wrapper {
+        overflow-x: auto;
+    }
+}

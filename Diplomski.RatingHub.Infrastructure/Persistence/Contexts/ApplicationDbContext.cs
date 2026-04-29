@@ -40,6 +40,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         modelBuilder.Entity<ReviewGrade>(ConfigureReviewGrade);
         modelBuilder.Entity<Category>(ConfigureCategory);
         modelBuilder.Entity<RatingCriterion>(ConfigureRatingCriterion);
+        modelBuilder.Entity<CategoryKeyword>(ConfigureCategoryKeyword);
+        modelBuilder.Entity<NewCategorySuggestion>(ConfigureNewCategorySuggestion);
         
         modelBuilder.SeedCities();
         modelBuilder.SeedIdentityRoles();

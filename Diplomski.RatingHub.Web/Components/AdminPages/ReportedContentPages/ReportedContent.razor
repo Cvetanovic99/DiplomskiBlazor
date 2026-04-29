@@ -1,0 +1,116 @@
+﻿@page "/reportedContent"
+@using Diplomski.RatingHub.Application.UseCases.ReportedContents.Queries
+@using Diplomski.RatingHub.Domain.Enums
+@inherits Diplomski.RatingHub.Web.Components.Shared.PortalComponentBase
+
+<div class="reports-page">
+
+    <div class="reports-main-section">
+
+        <div class="section-header">
+            <h2>Prijavljeni sadržaj</h2>
+        </div>
+
+        <div class="section-toolbar">
+
+            <div class="reports-search-wrap">
+                <RadzenTextBox @bind-Value="_search"
+                               Placeholder="Pretraži prijave..."
+                               class="reports-search-input"
+                               @oninput="Search"/>
+            </div>
+
+            <RadzenDropDown TValue="ReportedContentEntityType?"
+                            @bind-Value="_selectedType"
+                            Data="@Enum.GetValues(typeof(ReportedContentEntityType))"
+                            Placeholder="Tip sadržaja"
+                            class="reports-dropdown"
+                            Change="@OnFilterChanged" 
+                            AllowClear="true"/>
+            
+            <RadzenDropDown TValue="ReportedContentStatus?"
+                            @bind-Value="_selectedStatus"
+                            Data="@Enum.GetValues(typeof(ReportedContentStatus))"
+                            Placeholder="Status"
+                            class="reports-dropdown"
+                            Change="@OnFilterChanged" 
+                            AllowClear="true"/>
+
+        </div>
+
+        <div class="grid-responsive-wrap">
+            <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" Visible="@(IsLoading)"/>
+            <RadzenDataGrid @ref="_grid"
+                            Data="_data"
+                            LoadData="@LoadData"
+                            Count="_count"
+                            TItem="ReportedContentDto"
+                            AllowPaging="true"
+                            PageSize="20"
+                            AllowSorting="true"
+                            class="reports-grid">
+
+                <Columns>
+
+                    <RadzenDataGridColumn Property="Title" Title="Naslov"/>
+
+                    <RadzenDataGridColumn Property="ReportedEntityType" Title="Tip"/>
+
+                    <RadzenDataGridColumn Property="Status" Title="Status" TextAlign="TextAlign.Center">
+                        <Template Context="item">
+                            @if (item.Status is ReportedContentStatus.Pending)
+                            {
+                                <RadzenIcon Style="cursor: pointer" Icon="hourglass_top" IconStyle="IconStyle.Info" MouseEnter="@(args => ShowTooltip(args, "Neobradjen", TooltipPosition.Top))"/>
+                            }
+                            else if (item.Status is ReportedContentStatus.Dismissed)
+                            {
+                                <RadzenIcon Style="cursor: pointer" Icon="x_circle" IconStyle="IconStyle.Danger" MouseEnter="@(args => ShowTooltip(args, "Ignorisan", TooltipPosition.Top))"/>
+                            }
+                            else
+                            {
+                                <RadzenIcon Style="cursor: pointer" Icon="bookmark_check" IconStyle="IconStyle.Success" MouseEnter="@(args => ShowTooltip(args, "Obradjen", TooltipPosition.Top))"/>
+                            }
+                        </Template>
+                    </RadzenDataGridColumn>
+
+                    <RadzenDataGridColumn Property="Created" Title="Datum" TextAlign="TextAlign.Center">
+                        <Template Context="item">
+                            @item.Created.ToString("dd.MM.yyyy")
+                        </Template>
+                    </RadzenDataGridColumn>
+
+                    <RadzenDataGridColumn Title="Akcije" TextAlign="TextAlign.Center">
+                        <Template Context="item">
+                            <div class="grid-actions">
+
+
+                                <RadzenButton Icon="visibility"
+                                              Size="ButtonSize.Small"
+                                              ButtonStyle="ButtonStyle.Light"
+                                              class="action-btn"
+                                              Click="@(() => OpenDetails(item))"/>
+
+
+                                <RadzenButton Icon="edit"
+                                              Size="ButtonSize.Small"
+                                              ButtonStyle="ButtonStyle.Primary"
+                                              class="action-btn"
+                                              Click="@(() => OpenEdit(item))"/>
+
+                                <RadzenButton Icon="delete"
+                                              Size="ButtonSize.Small"
+                                              ButtonStyle="ButtonStyle.Danger"
+                                              class="action-btn"
+                                              Click="@(() => Delete(item))"/>
+
+                            </div>
+                        </Template>
+                    </RadzenDataGridColumn>
+
+                </Columns>
+
+            </RadzenDataGrid>
+        </div>
+
+    </div>
+</div>

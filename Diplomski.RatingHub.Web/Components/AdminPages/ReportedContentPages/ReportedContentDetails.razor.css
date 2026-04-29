@@ -1,0 +1,74 @@
+﻿.details-dialog {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.details-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+}
+
+/* LINK */
+.details-link {
+    font-size: 0.9rem;
+    color: #3b82f6;
+    text-decoration: underline;
+    width: fit-content;
+}
+
+/* REASON */
+.details-reason {
+    background: #f5f6f8;
+    padding: 12px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+}
+
+/* 🔴 DANGER ZONE */
+.danger-zone {
+    margin-top: 10px;
+    padding: 14px;
+    border: 1px solid #f3caca;
+    background: #fff5f5;
+    border-radius: 12px;
+}
+
+.danger-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #b91c1c;
+    margin-bottom: 10px;
+}
+
+/* BUTTON manji i lepši */
+.delete-btn {
+    width: auto;
+    padding: 8px 16px !important;
+    font-size: 0.85rem !important;
+    border-radius: 10px !important;
+}
+
+/* CONFIRM */
+.delete-confirm {
+    margin-top: 10px;
+    padding: 14px;
+    border: 1px solid #f3caca;
+    background: #fff1f1;
+    border-radius: 12px;
+}
+
+.delete-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+@media (max-width: 576px) {
+    .delete-actions {
+        flex-direction: column;
+    }
+}

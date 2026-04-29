@@ -17,6 +17,7 @@ public static class DependencyInjection
         services.AddScoped<IAccountDataService, AccountDataService>();
         services.AddScoped<IUserProfileDataService, UserProfileDataService>();
         services.AddScoped<ICategoryDataService, CategoryDataService>();
+        services.AddScoped<IReportedContentDataService, ReportedContentDataService>();
         
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 

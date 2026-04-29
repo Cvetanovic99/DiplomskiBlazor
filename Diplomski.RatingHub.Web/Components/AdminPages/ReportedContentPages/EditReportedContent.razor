@@ -1,0 +1,30 @@
+﻿@using Diplomski.RatingHub.Domain.Enums
+@inherits Diplomski.RatingHub.Web.Components.Shared.PortalComponentBase
+
+<div class="edit-dialog">
+
+    <div class="form-group">
+        <label>Status</label>
+
+        <RadzenDropDown TValue="ReportedContentStatus"
+                        @bind-Value="Model.Status"
+                        Data="@Enum.GetValues(typeof(ReportedContentStatus))"
+                        Style="width:100%" />
+    </div>
+
+    <div class="edit-actions">
+
+        <RadzenButton Text="Sačuvaj"
+                      Icon="save"
+                      ButtonStyle="ButtonStyle.Primary"
+                      Click="@Save" 
+                      IsBusy="IsLoading" BusyText="Obrada"/>
+
+        <RadzenButton Text="Odustani"
+                      Icon="close"
+                      ButtonStyle="ButtonStyle.Light"
+                      Click="@Cancel" />
+
+    </div>
+
+</div>

@@ -1,0 +1,54 @@
+﻿@inherits Diplomski.RatingHub.Web.Components.Shared.PortalComponentBase
+
+<div class="details-dialog">
+
+    <h2 class="details-title">@Model.Title</h2>
+
+    <a href="@Model.ContentUrl" target="_blank" class="details-link">
+        Pogledaj objavu
+    </a>
+
+    <div class="details-reason">
+        @Model.Reason
+    </div>
+
+    @if (!_confirmDelete)
+    {
+        <div class="danger-zone">
+
+            <div class="danger-title">
+                Obrišite prijavljenu objavu
+            </div>
+
+            <RadzenButton Text="Obriši objavu"
+                          Icon="delete"
+                          ButtonStyle="ButtonStyle.Danger"
+                          class="delete-btn"
+                          Click="@(() => _confirmDelete = true)" />
+
+        </div>
+    }
+    else
+    {
+        <div class="delete-confirm">
+
+            <div class="danger-title">
+                Da li ste sigurni da želite da obrišete ovu objavu?
+            </div>
+
+            <div class="delete-actions">
+                <RadzenButton Text="Da"
+                              Icon="check"
+                              ButtonStyle="ButtonStyle.Danger"
+                              Click="@Delete" />
+
+                <RadzenButton Text="Odustani"
+                              Icon="close"
+                              ButtonStyle="ButtonStyle.Light"
+                              Click="@(() => _confirmDelete = false)" />
+            </div>
+
+        </div>
+    }
+
+</div>
