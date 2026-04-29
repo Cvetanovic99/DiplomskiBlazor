@@ -3,6 +3,7 @@ using Diplomski.RatingHub.Application.Exceptions;
 using Diplomski.RatingHub.Application.Interfaces.Repositories;
 using Diplomski.RatingHub.Application.Mapping;
 using Diplomski.RatingHub.Application.Specifications;
+using Diplomski.RatingHub.Application.UseCases.UserProfiles.Queries;
 using Diplomski.RatingHub.Domain.Models;
 using FluentValidation;
 using MediatR;
@@ -14,6 +15,9 @@ public class CreateUserProfileCommand : IRequest<UserProfileDto>
     public required string IdentityUserId { get; set; }
     public required string Name { get; set; } 
     public required string Surname { get; set; }
+
+    public string? PhoneNumber { get; set; }
+    public string? Email { get; set; }
 }
 
 public class CreateUserProfileCommandValidator : AbstractValidator<CreateUserProfileCommand>
@@ -50,19 +54,13 @@ public class CreateUserProfileCommandHandler : IRequestHandler<CreateUserProfile
         {
             IdentityUserId = request.IdentityUserId,
             Name = request.Name,
-            Surname = request.Surname
+            Surname = request.Surname,
+            PhoneNumber = request.PhoneNumber,
+            Email = request.Email
         };
         
         await _userProfileRepository.Insert(userProfile);
         
         return _mapper.Map<UserProfileDto>(userProfile);
     }
-}
-
-public class UserProfileDto : IMapFrom<UserProfile>
-{
-    public int Id { get; set; }
-    public required string IdentityUserId { get; set; }
-    public required string Name { get; set; } 
-    public required string Surname { get; set; }
 }

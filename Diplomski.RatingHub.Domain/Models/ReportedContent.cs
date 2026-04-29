@@ -8,6 +8,7 @@ public class ReportedContent : EntityBase
     public required string Reason { get; set; }
     public required string ReportedEntityType { get; set; }
     public int ReportedEntityId { get; set; }
+    public string? ContactEmail  { get; set; }
     public ReportedContentStatus Status { get; set; }
     public required string ContentUrl { get; set; }
     

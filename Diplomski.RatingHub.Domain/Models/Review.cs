@@ -5,7 +5,7 @@ public class Review : EntityBase
     public required string Comment { get; set; }
     public decimal OverallScore { get; set; }
     public bool IsAnonymousReview { get; set; }
-    
+    public string? AnonymousEditIdentifier { get; set; }
     public int?  ReviewerId { get; set; }
     public UserProfile? Reviewer { get; set; }
     public int CompanyId { get; set; }

@@ -7,4 +7,5 @@ public interface IEmailNotificationService
     Task SendAsync(EmailMessage message, CancellationToken ct = default);
     Task SendConfirmationLinkAsync(string email, string confirmationLink);
     Task SendResetPasswordLinkAsync(string email, string link);
+    Task SendCompanyVerificationRulesAsync(string email, string identifier, string companyName);
 }

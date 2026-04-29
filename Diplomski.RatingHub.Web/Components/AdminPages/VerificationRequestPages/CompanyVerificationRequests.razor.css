@@ -1,9 +1,9 @@
-﻿.reports-page {
+﻿.verification-page {
     padding: 24px;
     background: #ffffff;
 }
 
-.reports-main-section {
+.verification-section {
     background: #f5f6f8;
     border: 1px solid #dbe1e8;
     border-radius: 18px;
@@ -25,15 +25,15 @@
     flex-wrap: wrap;
 }
 
-.reports-search-wrap {
+.verification-search-wrap {
     flex: 1;
     min-width: 280px;
 }
 
-/* ✅ SEARCH INPUT — ISTI KAO CATEGORIES */
-::deep .reports-search-input,
-::deep input.reports-search-input,
-::deep .reports-search-wrap .rz-textbox {
+/* ✅ SEARCH INPUT — IDENTIČAN KAO CATEGORIES */
+::deep .verification-search-input,
+::deep input.verification-search-input,
+::deep .verification-search-wrap .rz-textbox {
     width: 100% !important;
     height: 48px !important;
     border-radius: 14px !important;
@@ -47,12 +47,12 @@
     transition: all 0.2s ease !important;
 }
 
-::deep .reports-search-input::placeholder {
+::deep .verification-search-input::placeholder {
     color: #94a3b8 !important;
     font-weight: 400 !important;
 }
 
-::deep .reports-search-input:focus {
+::deep .verification-search-input:focus {
     border-color: #3b82f6 !important;
     box-shadow:
             0 0 0 4px rgba(59, 130, 246, 0.10),
@@ -60,7 +60,7 @@
 }
 
 /* DROPDOWN */
-::deep .reports-dropdown {
+::deep .verification-dropdown {
     height: 48px !important;
     border-radius: 14px !important;
 }
@@ -70,7 +70,7 @@
     width: 100%;
 }
 
-::deep .reports-grid table {
+::deep .verification-grid table {
     background: #ffffff;
 }
 
@@ -80,19 +80,14 @@
     gap: 6px;
 }
 
-.action-btn {
-    width: 32px;
-    height: 32px;
-}
-
 /* MOBILE */
 @media (max-width: 768px) {
 
-    .reports-page {
+    .verification-page {
         padding: 16px;
     }
 
-    .reports-main-section {
+    .verification-section {
         padding: 16px;
         border-radius: 14px;
     }
@@ -102,16 +97,16 @@
         align-items: stretch;
     }
 
-    .reports-search-wrap {
+    .verification-search-wrap {
         min-width: 100%;
     }
 
-    ::deep .reports-grid table {
+    ::deep .verification-grid table {
         min-width: 720px;
     }
 
-    ::deep .reports-grid .rz-data-grid-data,
-    ::deep .reports-grid .rz-data-grid-scrollable-wrapper {
+    ::deep .verification-grid .rz-data-grid-data,
+    ::deep .verification-grid .rz-data-grid-scrollable-wrapper {
         overflow-x: auto;
     }
 }

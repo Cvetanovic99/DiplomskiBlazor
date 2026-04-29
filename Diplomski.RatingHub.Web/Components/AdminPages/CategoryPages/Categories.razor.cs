@@ -208,58 +208,5 @@ public partial class Categories
             "odbijen" => "status-rejected",
             _ => "status-default"
         };
-
-    private void ShowSuccess(string message)
-    {
-        NotificationService.Notify(new NotificationMessage
-        {
-            Severity = NotificationSeverity.Success,
-            Summary = "Uspeh",
-            Detail = message,
-            Duration = 3000
-        });
-    }
-
-    public class CategoryRowVm
-    {
-        public Guid Id { get; set; }
-        public string Name { get; set; } = string.Empty;
-        public int CompaniesCount { get; set; }
-        public IEnumerable<string> Keywords { get; set; } = Enumerable.Empty<string>();
-
-        public string KeywordsDisplayFull => string.Join(", ", Keywords);
-
-        public string KeywordsDisplayShort
-        {
-            get
-            {
-                var full = string.Join(", ", Keywords);
-                return full.Length <= 45 ? full : $"{full[..45]}...";
-            }
-        }
-    }
-
-    public class CategorySuggestionRowVm
-    {
-        public Guid Id { get; set; }
-        public string Name { get; set; } = string.Empty;
-        public string Description { get; set; } = string.Empty;
-        public string Status { get; set; } = string.Empty;
-        public DateTime CreatedAt { get; set; }
-    }
-
-    public class CategoryUpsertVm
-    {
-        public Guid? Id { get; set; }
-        public string Name { get; set; } = string.Empty;
-        public List<string> Keywords { get; set; } = new();
-    }
-
-    public class CategorySuggestionEditVm
-    {
-        public Guid Id { get; set; }
-        public string Name { get; set; } = string.Empty;
-        public string Description { get; set; } = string.Empty;
-        public string Status { get; set; } = string.Empty;
-    }
+    
 }

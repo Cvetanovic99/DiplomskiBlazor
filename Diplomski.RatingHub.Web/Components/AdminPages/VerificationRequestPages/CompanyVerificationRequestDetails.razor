@@ -1,0 +1,186 @@
+﻿@using Diplomski.RatingHub.Domain.Enums
+@inherits Diplomski.RatingHub.Web.Components.Shared.PortalComponentBase
+
+<div class="verification-details">
+
+    <!-- HEADER -->
+    <div class="details-header">
+
+        <div class="identifier-row">
+            <RadzenIcon Icon="vpn_key" class="info-icon" />
+            <span class="identifier-label">Identifikator zahteva:</span>
+            <span class="identifier-value">@Model.Identifier</span>
+        </div>
+
+    </div>
+
+    <!-- STATUS -->
+    <div class="status-row">
+
+        @if (!_editStatus)
+        {
+            <div class="status-display">
+                <span class="status-badge status-@Model.Status.ToString().ToLower()">
+                    @Model.Status
+                </span>
+
+                <RadzenButton Icon="edit"
+                              Size="ButtonSize.Small"
+                              ButtonStyle="ButtonStyle.Light"
+                              Click="@(() => _editStatus = true)" />
+            </div>
+        }
+        else
+        {
+            <div class="status-edit">
+                <RadzenDropDown TValue="CompanyVerificationRequestStatus"
+                                @bind-Value="_newStatus"
+                                Data="@Enum.GetValues(typeof(CompanyVerificationRequestStatus))"
+                                Style="width:180px" />
+
+                <RadzenButton Icon="check" Size="ButtonSize.Small"
+                              ButtonStyle="ButtonStyle.Primary"
+                              Click="@UpdateStatus" 
+                              IsBusy="IsLoading"/>
+
+                <RadzenButton Icon="close" Size="ButtonSize.Small"
+                              ButtonStyle="ButtonStyle.Light"
+                              Click="@CancelEditStatus" />
+            </div>
+        }
+    </div>
+
+    <!-- OPŠTI PODACI -->
+    <div class="card">
+        <div class="info-grid">
+
+            <div>
+                <div class="info-inline">
+                    <RadzenIcon Icon="mail" class="info-icon" />
+                    <span class="label">Email:</span>
+                    <span class="value">@Model.ContactEmail</span>
+                </div>
+            </div>
+
+            <div>
+                <div class="info-inline">
+                    <RadzenIcon Icon="schedule" class="info-icon" />
+                    <span class="label">Kreirano:</span>
+                    <span class="value">@Model.Created.ToString("dd.MM.yyyy")</span>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="description-box">
+            @Model.Description
+        </div>
+    </div>
+
+    <!-- USER + COMPANY -->
+    <div class="dual-grid">
+
+        <!-- USER -->
+        <div class="card">
+            <h3>Korisnik</h3>
+
+            <div class="user-section">
+                <img src="@GetUserImage()" class="user-image" />
+
+                <div>
+                    <div><span class="label">Ime:</span> <span class="value">@Model.UserFullName</span></div>
+                    <div><span class="label">Kontakt:</span> <span class="value">@Model.UserVerifier</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- COMPANY -->
+        <div class="card">
+            <h3>Kompanija</h3>
+
+            <div><span class="label">Naziv:</span> <span class="value">@Model.CompanyName</span></div>
+            <div><span class="label">Kontakt:</span> <span class="value">@Model.CompanyVerifier</span></div>
+            <div><span class="label">Adresa:</span> <span class="value">@Model.CompanyFullAddress</span></div>
+            <div class="info-inline">
+                <RadzenIcon Icon="link" class="info-icon" />
+                <span class="label">Link:</span>
+
+                <a href="@Model.CompanyUrl"
+                   target="_blank"
+                   class="company-link">
+                    Vidi kompaniju
+                </a>
+            </div>
+
+        </div>
+
+    </div>
+    
+    <div class="actions">
+
+        <RadzenButton Text="Zatvori"
+                      Icon="close"
+                      Size="ButtonSize.Medium"
+                      ButtonStyle="ButtonStyle.Light"
+                      Click="@Close" />
+
+        <RadzenButton Text="Verifikuj"
+                      Icon="check_circle"
+                      Size="ButtonSize.Medium"
+                      ButtonStyle="ButtonStyle.Success"
+                      Click="@(() => _confirmVerify = true)" />
+
+        <RadzenButton Text="Kontakt"
+                      Icon="mail"
+                      Size="ButtonSize.Medium"
+                      ButtonStyle="ButtonStyle.Primary"
+                      Click="@(() => _contactMode = true)" />
+
+    </div>
+
+    <!-- VERIFY CONFIRM -->
+    @if (_confirmVerify)
+    {
+        <div class="confirm-box">
+            <p>Da li ste sigurni da želite da verifikujete kompaniju?</p>
+
+            <RadzenButton Text="Verifikuj"
+                          Size="ButtonSize.Small"
+                          ButtonStyle="ButtonStyle.Success"
+                          Click="@VerifyCompany" 
+                          IsBusy="IsLoading"
+                          BusyText="Obrada"/>
+
+            <RadzenButton Text="Odustani"
+                          Size="ButtonSize.Small"
+                          ButtonStyle="ButtonStyle.Light"
+                          Click="@(() => _confirmVerify = false)" />
+        </div>
+    }
+
+    <!-- CONTACT -->
+    @if (_contactMode)
+    {
+        <div class="confirm-box">
+            <p>Pošalji uputstva korisniku?</p>
+
+            <RadzenTextBox @bind-Value="_contactEmail"
+                           Style="width:100%" />
+
+            <div class="confirm-actions">
+                <RadzenButton Text="Pošalji"
+                              Size="ButtonSize.Small"
+                              ButtonStyle="ButtonStyle.Primary"
+                              Click="@SendEmail" 
+                              IsBusy="IsLoading"
+                              BusyText="Slanje"/>
+
+                <RadzenButton Text="Odustani"
+                              Size="ButtonSize.Small"
+                              ButtonStyle="ButtonStyle.Light"
+                              Click="@(() => _contactMode = false)" />
+            </div>
+        </div>
+    }
+
+</div>

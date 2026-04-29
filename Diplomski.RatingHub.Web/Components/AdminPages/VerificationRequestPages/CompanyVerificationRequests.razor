@@ -1,5 +1,5 @@
-﻿@page "/reportedContent"
-@using Diplomski.RatingHub.Application.UseCases.ReportedContents.Queries
+﻿@page "/companyVerificationRequests"
+@using Diplomski.RatingHub.Application.UseCases.CompanyVerifications.Queries
 @using Diplomski.RatingHub.Domain.Constants
 @using Diplomski.RatingHub.Domain.Enums
 @using Microsoft.AspNetCore.Authorization
@@ -7,68 +7,64 @@
 
 @attribute [Authorize(Roles = Roles.Administrator)]
 
-<div class="reports-page">
+<div class="verification-page">
 
-    <div class="reports-main-section">
+    <div class="verification-section">
 
         <div class="section-header">
-            <h2>Prijavljeni sadržaj</h2>
+            <h2>Zahtevi za verifikaciju</h2>
         </div>
 
         <div class="section-toolbar">
 
-            <div class="reports-search-wrap">
+            <div class="verification-search-wrap">
                 <RadzenTextBox @bind-Value="_search"
-                               Placeholder="Pretraži prijave..."
-                               class="reports-search-input"
-                               @oninput="Search"/>
+                               Placeholder="Pretraži po emailu ili kompaniji..."
+                               class="verification-search-input"
+                               @oninput="Search" />
             </div>
 
-            <RadzenDropDown TValue="ReportedContentEntityType?"
-                            @bind-Value="_selectedType"
-                            Data="@Enum.GetValues(typeof(ReportedContentEntityType))"
-                            Placeholder="Tip sadržaja"
-                            class="reports-dropdown"
-                            Change="@OnFilterChanged" 
-                            AllowClear="true"/>
-            
-            <RadzenDropDown TValue="ReportedContentStatus?"
-                            @bind-Value="_selectedStatus"
-                            Data="@Enum.GetValues(typeof(ReportedContentStatus))"
+            <RadzenDropDown TValue="CompanyVerificationRequestStatus?"
+                            @bind-Value="_status"
+                            Data="@Enum.GetValues(typeof(CompanyVerificationRequestStatus))"
                             Placeholder="Status"
-                            class="reports-dropdown"
-                            Change="@OnFilterChanged" 
-                            AllowClear="true"/>
+                            class="verification-dropdown"
+                            Change="@OnFilterChanged"
+                            AllowClear="true" />
 
         </div>
 
         <div class="grid-responsive-wrap">
-            <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" Visible="@(IsLoading)"/>
+            <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" Visible="@(IsLoading)" />
             <RadzenDataGrid @ref="_grid"
                             Data="_data"
-                            LoadData="@LoadData"
                             Count="_count"
-                            TItem="ReportedContentDto"
+                            Sortable="true"
+                            LoadData="@LoadData"
+                            TItem="CompanyVerificationRequestDto"
                             AllowPaging="true"
                             PageSize="20"
-                            AllowSorting="true"
-                            class="reports-grid">
+                            class="verification-grid">
 
                 <Columns>
 
-                    <RadzenDataGridColumn Property="Title" Title="Naslov"/>
+                    <RadzenDataGridColumn Sortable="false" Property="CompanyName" Title="Kompanija" />
 
-                    <RadzenDataGridColumn Property="ReportedEntityType" Title="Tip"/>
+                    <RadzenDataGridColumn Sortable="false" Property="ContactEmail" Title="Email" />
 
-                    <RadzenDataGridColumn Property="Status" Title="Status" TextAlign="TextAlign.Center">
+                    <RadzenDataGridColumn Sortable="false" Property="Status" Title="Status" TextAlign="TextAlign.Center">
                         <Template Context="item">
-                            @if (item.Status is ReportedContentStatus.Pending)
+                            @if (item.Status is CompanyVerificationRequestStatus.Pending)
                             {
                                 <RadzenIcon Style="cursor: pointer" Icon="hourglass_top" IconStyle="IconStyle.Info" MouseEnter="@(args => ShowTooltip(args, "Neobradjen", TooltipPosition.Top))"/>
                             }
-                            else if (item.Status is ReportedContentStatus.Dismissed)
+                            else if (item.Status is CompanyVerificationRequestStatus.Dismissed)
                             {
                                 <RadzenIcon Style="cursor: pointer" Icon="x_circle" IconStyle="IconStyle.Danger" MouseEnter="@(args => ShowTooltip(args, "Ignorisan", TooltipPosition.Top))"/>
+                            }
+                            else if (item.Status is CompanyVerificationRequestStatus.AcctionTaken)
+                            {
+                                <RadzenIcon Style="cursor: pointer" Icon="start" IconStyle="IconStyle.Primary" MouseEnter="@(args => ShowTooltip(args, "Obradjuje se", TooltipPosition.Top))"/>
                             }
                             else
                             {
@@ -85,36 +81,31 @@
 
                     <RadzenDataGridColumn Title="Akcije" TextAlign="TextAlign.Center">
                         <Template Context="item">
-                            <div class="grid-actions">
 
+                            <div class="grid-actions">
 
                                 <RadzenButton Icon="visibility"
                                               Size="ButtonSize.Small"
                                               ButtonStyle="ButtonStyle.Light"
-                                              class="action-btn"
-                                              Click="@(() => OpenDetails(item))"/>
-
-
-                                <RadzenButton Icon="edit"
-                                              Size="ButtonSize.Small"
-                                              ButtonStyle="ButtonStyle.Primary"
-                                              class="action-btn"
-                                              Click="@(() => OpenEdit(item))"/>
+                                              Click="@(() => OpenDetails(item))" />
 
                                 <RadzenButton Icon="delete"
                                               Size="ButtonSize.Small"
                                               ButtonStyle="ButtonStyle.Danger"
-                                              class="action-btn"
-                                              Click="@(() => Delete(item))"/>
+                                              Click="@(() => Delete(item))" />
 
                             </div>
+
                         </Template>
                     </RadzenDataGridColumn>
 
                 </Columns>
 
             </RadzenDataGrid>
+
         </div>
 
     </div>
+
 </div>
+    

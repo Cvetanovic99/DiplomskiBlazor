@@ -28,6 +28,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<ReviewImage> ReviewImages { get; set; }
     public DbSet<UserImage> UserImages { get; set; }
     public DbSet<UserProfile> UserProfiles { get; set; }
+    public DbSet<CompanyVerificationRequest> CompanyVerificationRequests { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -79,10 +80,10 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
     private void ConfigureCompany(EntityTypeBuilder<Company> builder)
     {
-        builder.HasOne(c => c.Creator)
-            .WithMany(u => u.CreatedCompanies)
-            .HasForeignKey(c => c.CreatorId)
-            .OnDelete(DeleteBehavior.Restrict);
+        // builder.HasOne(c => c.Creator)
+        //     .WithMany(u => u.CreatedCompanies)
+        //     .HasForeignKey(c => c.CreatorId)
+        //     .OnDelete(DeleteBehavior.Restrict);
         
         builder.HasOne(c => c.Owner)
             .WithMany(u => u.OwningCompanies)

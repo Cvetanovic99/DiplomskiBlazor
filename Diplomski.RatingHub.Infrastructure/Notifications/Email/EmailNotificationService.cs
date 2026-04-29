@@ -17,6 +17,9 @@ internal sealed class EmailNotificationService : IEmailNotificationService
     
     public Task SendResetPasswordLinkAsync(string email, string link)
         => SendAsync(EmailTemplates.ResetPassword(email, link));
+    
+    public Task SendCompanyVerificationRulesAsync(string email, string identifier, string companyName)
+        => SendAsync(EmailTemplates.CompanyVerificationRules(email, identifier, companyName));
 
     public Task SendAsync(EmailMessage message, CancellationToken ct = default)
         => _brevo.SendTransactionalEmailAsync(message, ct);

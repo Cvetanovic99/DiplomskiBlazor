@@ -1,4 +1,5 @@
 ﻿using Diplomski.RatingHub.Application.UseCases.UserProfiles.Commands;
+using Diplomski.RatingHub.Application.UseCases.UserProfiles.Queries;
 using Diplomski.RatingHub.Web.Models;
 
 namespace Diplomski.RatingHub.Web.Data.Interfaces;

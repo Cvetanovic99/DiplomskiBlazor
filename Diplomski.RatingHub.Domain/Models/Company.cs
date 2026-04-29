@@ -7,15 +7,19 @@ public class Company : EntityBase
     public string? Description { get; set; }
     public string? Location { get; set; } //Maybe village name
     public required string Street { get; set; }
-    public required string Number { get; set; }
+    public required string HouseNumber { get; set; }
+    public required string Verifier { get; set; }//Phonenumber or Email
+    public bool IsEmailVerifier { get; set; }//Is email, if not then it's phonenumber
     public double? Latitude { get; set; }
     public double? Longitude { get; set; }
     public bool IsAnonymousCreator { get; set; }
-
-    public int CreatorId { get; set; }
-    public UserProfile Creator { get; set; } = null!;
-    public int OwnerId { get; set; }
-    public UserProfile Owner { get; set; } = null!;
+    public bool IsVerified { get; set; }//Is verified with video-admin
+    public string? AnonymousEditIdentifier { get; set; }//If someone create company anonymously and whant to edit
+    public string? ClaimCompanyIdentifier { get; set; }//When someone whant to claim company using this identifier-code
+    //public int CreatorId { get; set; }
+    //public UserProfile Creator { get; set; } = null!;
+    public int? OwnerId { get; set; }
+    public UserProfile? Owner { get; set; }
     public int CategoryId { get; set; }
     public Category Category { get; set; } = null!;
     public int CityId { get; set; }
@@ -25,4 +29,5 @@ public class Company : EntityBase
     public ICollection<CompanyRatingAggregate> CompanyRatingAggregates { get; set; } = new List<CompanyRatingAggregate>();
     public ICollection<Review> Reviews { get; set; } = new List<Review>();
     public ICollection<CompanyResponse> Responses { get; set; } = new List<CompanyResponse>();
+    public ICollection<CompanyVerificationRequest> VerificationRequests { get; set; } = new List<CompanyVerificationRequest>();
 }

@@ -25,6 +25,28 @@ public static class EmailTemplates
                        """
         );
 
+    public static EmailMessage CompanyVerificationRules(string toEmail, string identifier, string companyName) =>
+        new(
+            To: new EmailRecipient(toEmail),
+            Subject: $"Zahtev za potvrdu kompanije: #{identifier} na platformi 'Kriterijum'",
+            HtmlBody: $"""
+                           <p>Hvala na zapocetom procesu verifikacije vase kompanije.</p>
+                           <p>Nakon verifikacije korisnici ce imati vise poverenje u informacije o vasoj kompaniji.</p>
+                           <p>Odgovorom na ovaj mail nam prosledite video zapis kojim cemo da utvrdimo da ste vi pravi vlasnik kompanije:{companyName}</p>
+                           <p>Ako ste registrovana firma mozete snimiti:</p>
+                           <p>  1. APR obrazac o firmi.</p>
+                           <p>  2. Ako radite sa fizickim licima, fiskalnu kasu i racune koje ste izdavali</p>
+                           <p>  3. Racun za struju ili komunalne usluge na ime firme.</p>
+                           <p>  4. Izadjite ispred firme i snimite natpis.</p>
+                           <p>Ako nemate registrovanu firmu mozete snimiti:</p>
+                           <p>  1. Alat kojim obavaljate vasu delatnost.</p>
+                           <p>  2. Prostorije u kojima obavaljate delatnost.</p>
+                           <p>  3. Dokument kao dokaz o vasem imenu i prezimenu.</p>
+                           <p>  4. Snimite naziv ulice i broj objekta gde radite</p>
+                           <p>Nakon sto utvrdimo validnost podataka vasa kompanija ce biti verifikovana. Ako je utvdjivanje otezano preko video snimaka mozete biti zakazan video poziv.</p>
+                       """
+        );
+    
     public static EmailMessage ConfirmToken(string token) =>//Just for testing purposes
         new(
             To: new EmailRecipient("cvetanovicgoran99@gmail.com"),

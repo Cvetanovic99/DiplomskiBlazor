@@ -10,6 +10,6 @@ public class Notification : EntityBase
     
     public int RecipientId { get; set; }
     public UserProfile Recipient { get; set; } = null!;
-    public int ActorId { get; set; }
-    public UserProfile Actor { get; set; } = null!;
+    public int? ActorId { get; set; }
+    public UserProfile? Actor { get; set; } = null!;
 }

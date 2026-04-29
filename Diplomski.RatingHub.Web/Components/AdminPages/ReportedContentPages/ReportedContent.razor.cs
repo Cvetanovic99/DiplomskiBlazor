@@ -72,7 +72,12 @@ public partial class ReportedContent
 
     private async Task Delete(ReportedContentDto item)
     {
-        var confirm = await DialogService.Confirm("Da li želite da obrišete prijavu?", "Potvrda");
+        var confirm = await DialogService.Confirm("Da li želite da obrišete prijavu?", "Potvrda", 
+            new ConfirmOptions
+        {
+            OkButtonText = "Obrisi",
+            CancelButtonText = "Odustani",
+        });
 
         if (confirm is true)
         {
