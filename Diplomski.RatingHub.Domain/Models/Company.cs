@@ -13,6 +13,7 @@ public class Company : EntityBase
     public double? Latitude { get; set; }
     public double? Longitude { get; set; }
     public bool IsAnonymousCreator { get; set; }
+    public string? CompanyPib { get; set; }//If company is registered
     public bool IsVerified { get; set; }//Is verified with video-admin
     public string? AnonymousEditIdentifier { get; set; }//If someone create company anonymously and whant to edit
     public string? ClaimCompanyIdentifier { get; set; }//When someone whant to claim company using this identifier-code

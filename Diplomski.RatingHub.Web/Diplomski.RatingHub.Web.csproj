@@ -22,7 +22,6 @@
 
     <ItemGroup>
       <Folder Include="Services\Interfaces\" />
-      <Folder Include="wwwroot\images\companyImages\" />
     </ItemGroup>
 
 </Project>

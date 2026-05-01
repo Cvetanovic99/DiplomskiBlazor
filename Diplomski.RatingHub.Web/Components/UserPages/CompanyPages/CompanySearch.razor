@@ -1,0 +1,197 @@
+﻿@page "/company-search"
+@inherits Diplomski.RatingHub.Web.Components.Shared.PortalComponentBase
+
+<section class="search-section">
+
+    <div class="search-shell">
+
+        <div class="search-card">
+
+            <!-- HEADER -->
+            <div class="search-header">
+                <div class="search-badge">
+                    <RadzenIcon Icon="business" class="search-badge-icon" />
+                    <span>Pretraga kompanija</span>
+                </div>
+
+                <h2 class="search-title">
+                    Pretražite već kreirane kompanije u sistemu
+                </h2>
+
+                <p class="search-subtitle">
+                    Proverite da li je komapanija koju želite da ocenite već kreirana.
+                    Unesite prvo najbliži grad kompanije koju tražite, a zatim pretražite kompanije po nazivu, opisu ili PIB-u ako je kompanija registrovana.
+                </p>
+            </div>
+
+            <!-- FORM -->
+            <RadzenTemplateForm TItem="object"  Data="@this" Submit="@OnSubmit">
+
+                <div class="search-form">
+
+                    <div class="search-inputs">
+
+                        <!-- CITY -->
+                        <div class="search-field">
+
+                            <label class="search-label search-label-with-icon">
+                                <span>Grad</span>
+                                <RadzenIcon Icon="location_on" class="search-label-icon" />
+                            </label>
+
+                            <RadzenAutoComplete Name="City"
+                                                @bind-Value="_addressText"
+                                                Data="@_addresses"
+                                                TextProperty="Name"
+                                                Placeholder="Npr. Niš, Beograd..."
+                                                Class="search-autocomplete"
+                                                MinLength="2"
+                                                LoadData="@LoadAddresses"
+                                                Change="@OnAddressChanged">
+
+                                <Template Context="c">
+                                    @if (c.Name == MoreText)
+                                    {
+                                        <div class="more-item">@c.Name</div>
+                                    }
+                                    else
+                                    {
+                                        <div>@c.Name</div>
+                                    }
+                                </Template>
+
+                            </RadzenAutoComplete>
+
+                            <RadzenRequiredValidator Component="City"
+                                                     Text="Izaberite grad" />
+
+                        </div>
+
+                        <!-- COMPANY -->
+                        <div class="search-field">
+
+                            <label class="search-label search-label-with-icon">
+                                <span>Kompanija</span>
+                                <RadzenIcon Icon="apartment" class="search-label-icon" />
+                            </label>
+
+                            <RadzenAutoComplete Name="Company"
+                                                @bind-Value="_companyText"
+                                                Data="@_companies"
+                                                TextProperty="Name"
+                                                Disabled="@(_selectedAddress == null)"
+                                                Placeholder="Unesite naziv kompanije..."
+                                                Class="search-autocomplete"
+                                                MinLength="1"
+                                                LoadData="@LoadCompanies"
+                                                Change="@OnCompanyChanged">
+
+                                <Template Context="c">
+
+                                    @if (c.Name == MoreText)
+                                    {
+                                        <div class="more-item">@c.Name</div>
+                                    }
+                                    else
+                                    {
+                                        <div class="company-item">
+
+                                            <img src="@(string.IsNullOrEmpty(c.ProfileImagePath)
+                                                          ? "/images/companyImages/genericCompanyImage.png"
+                                                          : c.ProfileImagePath)"
+                                                 class="company-img" />
+
+                                            <div class="company-info">
+
+                                                <!-- NAZIV -->
+                                                <div class="company-name-row">
+                                                    <span class="label">Naziv:</span>
+                                                    <span class="company-name">@c.Name</span>
+                                                </div>
+
+                                                <!-- META -->
+                                                <div class="company-meta">
+
+                                                    <!-- PREUZETA -->
+                                                    <div class="meta-item">
+                                                        <span class="label">Preuzeta:</span>
+
+                                                        @if (c.HasOwner)
+                                                        {
+                                                            <RadzenIcon Icon="check_circle" IconStyle="IconStyle.Success" class="icon-success" />
+                                                        }
+                                                        else
+                                                        {
+                                                            <RadzenIcon Icon="cancel" IconStyle="IconStyle.Danger" class="icon-danger" />
+                                                        }
+                                                    </div>
+
+                                                    <!-- PIB -->
+                                                    <div class="meta-item">
+                                                        <span class="label">PIB:</span>
+
+                                                        @if (!string.IsNullOrWhiteSpace(c.CompanyPib))
+                                                        {
+                                                            <span class="pib-value">@c.CompanyPib</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <RadzenIcon Icon="cancel" IconStyle="IconStyle.Danger" class="icon-danger" />
+                                                        }
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                    }
+
+                                </Template>
+
+                            </RadzenAutoComplete>
+
+                            <RadzenRequiredValidator Component="Company"
+                                                     Text="Izaberite kompaniju" />
+
+                        </div>
+
+                    </div>
+
+                    <!-- BUTTON -->
+                    <div class="search-actions">
+                        <RadzenButton Text="Prikaži kompaniju"
+                                      Icon="search"
+                                      ButtonType="ButtonType.Submit"
+                                      Class="search-btn" />
+                    </div>
+
+                </div>
+
+            </RadzenTemplateForm>
+
+            <!-- CTA -->
+            <div class="search-cta">
+                <span>Nisi pronašao željenu kompaniju?</span>
+
+                <RadzenButton Text="Kreiraj kompaniju"
+                              Icon="add_business"
+                              Style="margin-left: 10px"
+                              Click="@GoToCreateCompany"
+                              Size="ButtonSize.Small"
+                              Shade="Shade.Light"
+                              ButtonStyle="ButtonStyle.Light"/>
+            </div>
+
+            <!-- BACK -->
+            <div class="search-back">
+                <div class="back-link" @onclick="GoHome">
+                    <span>← Povratak na početnu stranicu</span>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>                

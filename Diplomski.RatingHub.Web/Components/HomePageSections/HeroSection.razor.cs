@@ -8,5 +8,5 @@ public partial class HeroSection : ComponentBase
     private RadzenCarousel? carousel;
 
     [Parameter] public string SearchSectionId { get; set; } = "home-search-section";
-    [Parameter] public string CreateCompanyUrl { get; set; } = "/companies/create";
+    [Parameter] public string CreateCompanyUrl { get; set; } = "/company-search";
 }

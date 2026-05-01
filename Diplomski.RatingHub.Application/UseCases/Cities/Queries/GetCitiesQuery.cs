@@ -37,7 +37,9 @@ public class GetCitiesQueryHandler : IRequestHandler<GetCitiesQuery, IPaginatedL
     public async Task<IPaginatedList<CityDto>> Handle(GetCitiesQuery request, CancellationToken cancellationToken)
     {
         var citySpecification = new Specification<City>(
-            c => c.Name.Contains(request.FilterValue));
+            c => c.Name.StartsWith(request.FilterValue) ||
+                 c.Name.Contains(request.FilterValue))
+            .ApplyOrderBy(c => c.Name.StartsWith(request.FilterValue) ? 0 : 1);
         
         return await _cityRepository.GetAndProjectAsPaginatedList<CityDto>(citySpecification, request.QueryArgs);
     }
@@ -49,11 +51,4 @@ public class CityDto : IMapFrom<City>
     public required string Name { get; set; } 
     public double Latitude { get; set; }
     public double Longitude { get; set; }
-    
-    public void Mapping(Profile profile)
-    {
-        profile.CreateMap<City, CityDto>()
-            .ForMember(dest => dest.Id,
-                options => options.MapFrom((src) => src.Id));
-    }
 }

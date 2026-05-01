@@ -12,6 +12,7 @@ public class PortalComponentBase : ComponentBase
     [Inject] protected DialogService DialogService { get; set; }
     [Inject] protected NotificationService NotificationService { get; set; }
     [Inject] protected TooltipService TooltipService { get; set; }
+    [Inject] protected NavigationManager NavigationManager { get; set; }
     
     protected bool IsLoading { get; set; }
     
