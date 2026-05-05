@@ -4,6 +4,8 @@ using Diplomski.RatingHub.Infrastructure.Persistence.Contexts;
 using Diplomski.RatingHub.Web.Components.Account;
 using Diplomski.RatingHub.Web.Data.Interfaces;
 using Diplomski.RatingHub.Web.Data.Services;
+using Diplomski.RatingHub.Web.Services;
+using Diplomski.RatingHub.Web.Services.Interfaces;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 
@@ -11,7 +13,7 @@ namespace Diplomski.RatingHub.Web;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddWeb(this IServiceCollection services)
+    public static IServiceCollection AddWeb(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddScoped<ICityDataService, CityDataService>();
         services.AddScoped<IAccountDataService, AccountDataService>();
@@ -26,6 +28,8 @@ public static class DependencyInjection
         AddAuthenticationSupport(services);
         
         services.AddScoped<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
+        
+        AddHttpClient(services, configuration);
         
         return services;
     }
@@ -59,5 +63,14 @@ public static class DependencyInjection
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddSignInManager()
             .AddDefaultTokenProviders();
+    }
+
+    private static void AddHttpClient(IServiceCollection services, IConfiguration configuration)
+    {
+        var apiUrl = configuration.GetConnectionString("ApiUrl") ??
+                               throw new InvalidOperationException("Connection string 'ApiUrl' not found.");
+
+        services
+            .AddHttpClient<IHttpService, HttpService>(client => client.BaseAddress = new Uri(apiUrl));
     }
 }

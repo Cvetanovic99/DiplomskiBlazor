@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Diplomski.RatingHub.Web.Components;
 using Diplomski.RatingHub.Web.Components.Account;
+using Diplomski.RatingHub.Web.Endpoints;
 using Radzen;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,7 +22,7 @@ builder.Services.AddRadzenComponents();
 
 builder.Services.AddInfrastructure();
 builder.Services.AddApplication();
-builder.Services.AddWeb();
+builder.Services.AddWeb(builder.Configuration);
 
 
 var app = builder.Build();
@@ -49,5 +50,6 @@ app.MapRazorComponents<App>()
 
 // Add additional endpoints required by the Identity /Account Razor components.
 app.MapAdditionalIdentityEndpoints();
+app.MapFileUploadEndpoints();
 
 app.Run();

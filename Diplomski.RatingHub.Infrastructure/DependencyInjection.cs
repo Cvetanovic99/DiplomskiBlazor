@@ -1,6 +1,7 @@
 ﻿using System.Net.Http.Headers;
 using Diplomski.RatingHub.Application.Interfaces.Notifications;
 using Diplomski.RatingHub.Application.Interfaces.Repositories;
+using Diplomski.RatingHub.Application.Interfaces.Storage;
 using Diplomski.RatingHub.Infrastructure.Auth.Models;
 using Diplomski.RatingHub.Infrastructure.Auth.Stores;
 using Diplomski.RatingHub.Infrastructure.Notifications.Email;
@@ -9,6 +10,7 @@ using Diplomski.RatingHub.Infrastructure.Notifications.Sms;
 using Diplomski.RatingHub.Infrastructure.Notifications.Sms.Models;
 using Diplomski.RatingHub.Infrastructure.Persistence.Contexts;
 using Diplomski.RatingHub.Infrastructure.Persistence.Repositories;
+using Diplomski.RatingHub.Infrastructure.Storage;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -34,7 +36,9 @@ public static class DependencyInjection
         }
         
         services.AddScoped(typeof(IDatabaseRepository<>), typeof(DatabaseRepository<>));
+        services.AddScoped<ICategoryRepository, CategoryRepository>();
         services.AddScoped<IUserConfirmation<ApplicationUser>, UserConfirmationStore>();
+        services.AddScoped<IFileService, FileService>();
         AddEmailNotification(services, configuration);
         AddSmsNotification(services, configuration);
         

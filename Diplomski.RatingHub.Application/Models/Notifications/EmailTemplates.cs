@@ -47,6 +47,20 @@ public static class EmailTemplates
                        """
         );
     
+    public static EmailMessage NotificationAboutCompanyCreation(string toEmail, string companyName, string claimCompanyIdentifier) =>
+        new(
+            To: new EmailRecipient(toEmail),
+            Subject: $"Obavestenje o vasoj komaniji: {companyName} na platformi 'Kriterijum'",
+            HtmlBody: $"""
+                           <p>Na nasoj platformi je kreirana vasa kompanija {companyName}.</p>
+                           <p>Od sada ce ljudi kojima ste pruzili usluge moci da ostave misljenje o saradnji sa vama</p>
+                           <p>Ukoliko zelite mozete preuzeti vlasnistvo nad kompanijom i takodje verifikovati vlasnistvo</p>
+                           <p>Sve sto je potrebno da uradite je da kreirate profil na nasoj platformi <a href="http://localhost:5141">Kriterijum</a></p>
+                           <p>Nakon kreiranja profila na stranici "Moje kompanije" ubacite ovaj kod: {claimCompanyIdentifier} i klikom na dugme "Preuzmi kompaniju" bicete u mogucnosti da editujete podatke o vasoj kompaniji i odgovarati na komentare.</p>
+                           <p>Ako vi niste vlasnik kompanije {companyName} zanemarite ovu poruku.</p>
+                       """
+        );
+    
     public static EmailMessage ConfirmToken(string token) =>//Just for testing purposes
         new(
             To: new EmailRecipient("cvetanovicgoran99@gmail.com"),

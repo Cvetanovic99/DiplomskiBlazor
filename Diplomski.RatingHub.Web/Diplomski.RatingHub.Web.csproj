@@ -20,8 +20,4 @@
       <ProjectReference Include="..\Diplomski.RatingHub.Infrastructure\Diplomski.RatingHub.Infrastructure.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Services\Interfaces\" />
-    </ItemGroup>
-
 </Project>

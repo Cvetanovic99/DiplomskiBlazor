@@ -20,6 +20,9 @@ internal sealed class EmailNotificationService : IEmailNotificationService
     
     public Task SendCompanyVerificationRulesAsync(string email, string identifier, string companyName)
         => SendAsync(EmailTemplates.CompanyVerificationRules(email, identifier, companyName));
+    
+    public Task NotifyOwnerAboutCompanyCreationAsync(string email, string companyName, string claimCompanyIdentifier)
+        => SendAsync(EmailTemplates.NotificationAboutCompanyCreation(email, companyName,  claimCompanyIdentifier));
 
     public Task SendAsync(EmailMessage message, CancellationToken ct = default)
         => _brevo.SendTransactionalEmailAsync(message, ct);

@@ -7,4 +7,5 @@ public interface ISmsNotificationService
     Task SendConfirmationToken(string toPhoneNUmber, string token, CancellationToken ct = default);
     Task SendConfirmationTokenWithEmail(string token);
     Task SendResetPasswordTokenWithEmail(string token);
+    Task NotifyOwnerAboutCompanyCreationWithEmail(string companyName, string claimCompanyIdentifier);
 }

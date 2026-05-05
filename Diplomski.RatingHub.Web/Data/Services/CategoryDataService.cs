@@ -16,6 +16,11 @@ public class CategoryDataService(IServiceScopeFactory serviceScopeFactory) : Dat
         return await Send(new GetCategoriesQuery { FilterValue = filterValue, QueryArgs = queryArgs });
     }
 
+    public async Task<IEnumerable<CategoryWithBreadCrumbDto>> GetCategoriesWithBreadCrumb(string filterValue, int take)
+    {
+        return await Send(new GetCategoriesWithBreadCrumbQuery { FilterValue = filterValue, Take = take });
+    }
+
     public async Task<IPaginatedList<NewCategorySuggestionDto>> GetNewCategorySuggestions(QueryArgs queryArgs)
     {
         return await Send(new GetNewCategorySuggestionsQuery { QueryArgs = queryArgs });

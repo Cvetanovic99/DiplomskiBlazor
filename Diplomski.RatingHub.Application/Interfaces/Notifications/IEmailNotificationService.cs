@@ -8,4 +8,5 @@ public interface IEmailNotificationService
     Task SendConfirmationLinkAsync(string email, string confirmationLink);
     Task SendResetPasswordLinkAsync(string email, string link);
     Task SendCompanyVerificationRulesAsync(string email, string identifier, string companyName);
+    Task NotifyOwnerAboutCompanyCreationAsync(string email, string companyName, string claimCompanyIdentifier);
 }

@@ -1,0 +1,21 @@
+﻿@inherits PortalComponentBase
+
+<div class="map-dialog">
+
+    <!-- MAP -->
+    <div id="@_mapId" class="map-container"></div>
+
+    <!-- ACTIONS -->
+    <div class="map-actions">
+        <RadzenButton Text="Odustani"
+                      ButtonStyle="ButtonStyle.Light"
+                      Click="@Close" />
+
+        <RadzenButton Text="Izaberi"
+                      Icon="check"
+                      ButtonStyle="ButtonStyle.Primary"
+                      Disabled="@(!_hasSelection)"
+                      Click="@Confirm" />
+    </div>
+
+</div>

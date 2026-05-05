@@ -1,0 +1,233 @@
+﻿@page "/createCompany"
+
+@using Diplomski.RatingHub.Web.Models
+@inherits Diplomski.RatingHub.Web.Components.Shared.PortalComponentBase
+
+<section class="create-company-page">
+
+    <div class="create-company-shell">
+        <div class="create-company-card">
+
+            <!-- HEADER -->
+            <div class="create-company-header">
+                <div class="create-company-badge">
+                    <RadzenIcon Icon="business" />
+                    <span>Kreiranje kompanije</span>
+                </div>
+
+                <h2>Kreirajte novu kompaniju</h2>
+                <p>Unesite sve podatke o kompaniji</p>
+            </div>
+
+            <RadzenTemplateForm TItem="CreateCompanyDto" Data="@Model" Submit="@HandleSubmit">
+
+                <RadzenRow Gap="18px">
+
+                    <!-- NAME -->
+                    <RadzenColumn Size="12" SizeMD="6">
+                        <label class="form-label">
+                            <RadzenIcon Icon="badge" /> Naziv
+                        </label>
+                        <RadzenTextBox Name="Name" @bind-Value="Model.Name" Style="width:100%" />
+                        <RadzenRequiredValidator Component="Name" Text="Obavezno" />
+                    </RadzenColumn>
+
+                    <!-- VERIFIER -->
+                    <RadzenColumn Size="12" SizeMD="6">
+                        <label class="form-label">
+                            <RadzenIcon Icon="mail" /> Kontakt
+                        </label>
+                        <RadzenTextBox Name="Verifier" @bind-Value="Model.Verifier" Style="width:100%" Placeholder="Email ili 06..."/>
+                        <RadzenRequiredValidator Component="Verifier" Text="Obavezno" />
+                        <RadzenCustomValidator Validator="@ValidateVerifier" Component="Verifier" Text="Email ili broj nije ispravan" />
+                    </RadzenColumn>
+
+                    <!-- DESCRIPTION -->
+                    <RadzenColumn Size="12">
+                        <label class="form-label">
+                            <RadzenIcon Icon="description" /> Opis
+                        </label>
+                        <RadzenTextArea Name="Description" @bind-Value="Model.Description" Style="width:100%" Placeholder="Par reci o pruzaocu usluga"/>
+                        <RadzenRequiredValidator Component="Description" Text="Obavezno" />
+                    </RadzenColumn>
+
+                    <!-- CITY -->
+                    <RadzenColumn Size="12" SizeMD="6">
+                        <label class="form-label">
+                            <RadzenIcon Icon="location_city" /> Grad
+                        </label>
+
+                        <RadzenAutoComplete
+                            Name="City"
+                            Data="@_cities"
+                            TextProperty="Name"
+                            @bind-Value="_selectedCityText"
+                            LoadData="@LoadCities"
+                            Change="@OnCityChanged"
+                            Style="width:100%" 
+                            Placeholder="Npr. Nis"/>
+
+                        <RadzenCustomValidator Component="City"
+                                               Validator="@(()=> Model.CityId != 0)"
+                                               Text="Izaberite grad" />
+                    </RadzenColumn>
+
+                    <!-- CATEGORY -->
+                    <RadzenColumn Size="12" SizeMD="6">
+                        <label class="form-label">
+                            <RadzenIcon Icon="category" /> Kategorija
+                        </label>
+
+                        <RadzenAutoComplete
+                            Name="Category"
+                            @bind-Value="_selectedCategoryText"
+                            TextProperty="Name"
+                            Data="@_categories"
+                            LoadData="@LoadCategories"
+                            Change="@OnCategoryChanged"
+                            Style="width:100%"
+                            Placeholder="Npr. Lepota i zdravlje">
+
+                            <Template Context="c">
+                                <div class="category-item">
+                                    <div class="category-name">@c.Name</div>
+                                    <div class="category-path">@c.FullPath</div>
+                                </div>
+                            </Template>
+
+                        </RadzenAutoComplete>
+
+                        <RadzenCustomValidator Component="Category"
+                                               Validator="@(()=> Model.CategoryId != 0)"
+                                               Text="Izaberite kategoriju" />
+                    </RadzenColumn>
+
+                    
+                    <RadzenColumn Size="12" SizeMD="8">
+                        <label class="form-label">
+                            <RadzenIcon Icon="road" /> Ulica
+                        </label>
+                        <RadzenTextBox Name="Street" @bind-Value="Model.Street" Placeholder="Npr. Svetosavska" Style="width:100%" />
+                        <RadzenRequiredValidator Component="Street" Text="Obavezno" />
+                    </RadzenColumn>
+
+                    <RadzenColumn Size="12" SizeMD="4">
+                        <label class="form-label">
+                            <RadzenIcon Icon="home" /> Kucni Broj
+                        </label>
+                        <RadzenTextBox Name="HouseNumber" @bind-Value="Model.HouseNumber" Placeholder="Npr. 35/4"Style="width:100%" />
+                        <RadzenRequiredValidator Component="HouseNumber" Text="Obavezno" />
+                    </RadzenColumn>
+
+                   
+                    <RadzenColumn Size="12">
+                        <div class="mapbutton-wrapper">
+                            @if (Model.Latitude != 0.0)
+                            {
+                                <RadzenIcon Icon="check_circle" IconStyle="IconStyle.Success" Style="cursor: pointer"
+                                            MouseEnter="@(args => ShowTooltip(args, "Lokacija je izabrana", TooltipPosition.Top))"/>
+                            }
+                            <RadzenButton Text="Izaberi Lokaciju na mapi"
+                                          Icon="map"
+                                          Class="@(Model.Latitude == 0.0 ? "map-error" : "")"
+                                          Click="@OpenMap"
+                                          Style="background: #b33930"/>
+                            
+                        </div>
+
+                        <RadzenNumeric TValue="double" Name="Latitude"
+                                       @bind-Value="Model.Latitude"
+                                       Style="display:none" />
+
+                        <RadzenNumeric TValue="double" Name="Longitude"
+                                       @bind-Value="Model.Longitude"
+                                       Style="display:none" />
+
+                        <RadzenCustomValidator Component="Latitude"
+                                               Validator="@(()=> Model.Latitude != 0 && Model.Longitude != 0)"
+                                               Text="Izaberite lokaciju" />
+                    </RadzenColumn>
+
+                    
+                    <RadzenColumn Size="12" Style="margin-top: 15px">
+                        
+                        <div class="upload-box">
+
+                            <label class="upload-btn">
+                                <RadzenIcon Icon="upload" />
+                                Dodaj slike
+                                <InputFile OnChange="HandleFiles" multiple hidden />
+                            </label>
+
+                            <div class="upload-area">
+
+                                @if (!_images.Any())
+                                {
+                                    <div style="display: flex"><RadzenIcon Icon="image" /> <span>Dodajte slike</span></div>
+                                    <div><span>Izaberite maksimalno 10 slika</span></div>
+                                }
+
+                                @foreach (var img in _images)
+                                {
+                                    <div class="img-card">
+                                        <img src="@img.Path" />
+
+                                        <button type="button" @onclick="() => RemoveImage(img)">
+                                            <RadzenIcon Icon="close" Style="align-self: center"/>
+                                        </button>
+
+                                        @if (img.IsProfile)
+                                        {
+                                            <span class="profile-badge">Profilna</span>
+                                        }
+                                    </div>
+                                }
+
+                            </div>
+
+                        </div>
+
+                    </RadzenColumn>
+
+                </RadzenRow>
+
+                <!-- ACTIONS -->
+                <div class="form-actions">
+
+                    <RadzenButton Text="Vrati se nazad"
+                                  Icon="arrow_back"
+                                  ButtonStyle="ButtonStyle.Light"
+                                  Click="@GoBack" />
+
+                    <RadzenButton Text="Sačuvaj kompaniju"
+                                  Icon="save"
+                                  ButtonStyle="ButtonStyle.Primary"
+                                  Type="submit" 
+                                  IsBusy="IsLoading" BusyText="Kreiranje"/>
+                </div>
+
+            </RadzenTemplateForm>
+
+        </div>
+    </div>
+
+</section>
+
+@code
+{
+    private RenderFragment GetEditAnonymousIdentifierText(string anonymousEditIdentifier)
+    {
+        return __builder =>
+        {
+            <text>
+                <p style="display: flex; gap: 5px">Kompanija je uspesno kreirana. <RadzenIcon Icon="check_circle" IconStyle="IconStyle.Success"/></p>
+                <p>Koristite sledeći kod za kasnije azururanje kompanije:</p>
+                <p style="font-weight: bold; font-size: 1.2em; user-select: all; cursor: pointer; background: #f0f0f0; padding: 10px;
+                    border-radius: 5px;">@anonymousEditIdentifier</p>
+                <p style="display:flex; color: #a31313;"><RadzenIcon Icon="error" IconStyle="IconStyle.Danger" Style="margin-right: 5px"/> 
+                    Sačuvajte ovaj kod pre nego sto nastavite dalje, jer vise nece biti prikazan.
+                 Azuriranje komapnije ce biti moguce dok ne bude preuzeta od strane vlasnika.</p>
+            </text>
+        };
+    }
+}

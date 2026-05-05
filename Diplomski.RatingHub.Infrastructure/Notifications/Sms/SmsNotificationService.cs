@@ -20,6 +20,10 @@ internal sealed class SmsNotificationService : ISmsNotificationService
     public Task SendResetPasswordTokenWithEmail(string token)//This is only because sms sender doesn't work
     => _emailNotificationService.SendAsync(EmailTemplates.ResetPasswordToken(token));
 
+    public Task NotifyOwnerAboutCompanyCreationWithEmail(string companyName, string claimCompanyIdentifier)
+        => _emailNotificationService.SendAsync(
+            EmailTemplates.NotificationAboutCompanyCreation("cvetanovicgoran99@gmail.com", companyName, claimCompanyIdentifier));
+
     public Task SendConfirmationToken(string toPhoneNUmber, string token, CancellationToken ct = default)
         => _client.SendSmsAsync(SmsTemplates.ConfirmPhoneNumber(toPhoneNUmber, token), ct);
 }
