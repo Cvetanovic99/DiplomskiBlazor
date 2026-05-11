@@ -1,0 +1,54 @@
+﻿@inherits PortalComponentBase
+
+<RadzenTemplateForm Data="@_model" TItem="SuggestCategoryModel" Submit="@OnSubmit">
+
+    <div class="suggest-dialog">
+
+        <div class="suggest-content">
+            
+            <!-- NAZIV -->
+            <div class="form-group">
+                <label class="form-label">
+                    <RadzenIcon Icon="badge" />
+                    Naziv:
+                </label>
+
+                <RadzenTextBox @bind-Value="_model.Name"
+                               Name="Name"
+                               Style="width:100%" />
+
+                <RadzenRequiredValidator Component="Name"
+                                         Text="Naziv je obavezan"
+                                         Style="position: relative" />
+            </div>
+
+            <!-- OPIS -->
+            <div class="form-group">
+                <label class="form-label">
+                    <RadzenIcon Icon="description" />
+                    Opis:
+                </label>
+
+                <RadzenTextArea @bind-Value="_model.Description"
+                                Rows="4"
+                                Style="width:100%" />
+            </div>
+
+        </div>
+
+        <!-- ACTIONS -->
+        <div class="dialog-actions">
+            <RadzenButton Text="Odustani"
+                          ButtonStyle="ButtonStyle.Light"
+                          Click="@OnCancel" />
+
+            <RadzenButton Text="Pošalji"
+                          ButtonType="ButtonType.Submit"
+                          ButtonStyle="ButtonStyle.Primary" 
+                          IsBusy="IsLoading"
+                          BusyText="Slanje"/>
+        </div>
+
+    </div>
+
+</RadzenTemplateForm>

@@ -64,6 +64,8 @@
                             @bind-Value="_selectedCityText"
                             LoadData="@LoadCities"
                             Change="@OnCityChanged"
+                            SelectedItem="_selectedCityText"
+                            SelectedItemChanged="@OnCitySelected"
                             Style="width:100%" 
                             Placeholder="Npr. Nis"/>
 
@@ -85,6 +87,8 @@
                             Data="@_categories"
                             LoadData="@LoadCategories"
                             Change="@OnCategoryChanged"
+                            SelectedItem="_selectedCategoryText"
+                            SelectedItemChanged="@OnCategorySelected"
                             Style="width:100%"
                             Placeholder="Npr. Lepota i zdravlje">
 
@@ -119,8 +123,19 @@
                         <RadzenRequiredValidator Component="HouseNumber" Text="Obavezno" />
                     </RadzenColumn>
 
-                   
-                    <RadzenColumn Size="12">
+                    <RadzenColumn Size="12" SizeMD="6">
+                        <label class="form-label">
+                            <RadzenIcon Icon="link" /> Link do stranice
+                        </label>
+                        <RadzenTextBox Name="PublicPageUrl" @bind-Value="Model.PublicPageUrl" Style="width:100%" Placeholder="Web sajt, instagram, facebook ..."/>
+                        <RadzenCustomValidator Component="PublicPageUrl" Validator="@ValidatePublicPageUrl" Text="Link nije ispravan" />
+                    </RadzenColumn>
+                    
+                    <RadzenColumn Size="12" SizeMD="6">
+                        <label class="form-label">
+                            <RadzenIcon Icon="add_location_alt" /> Lokacija kompanije
+                        </label>
+                        
                         <div class="mapbutton-wrapper">
                             @if (Model.Latitude != 0.0)
                             {
@@ -132,20 +147,20 @@
                                           Class="@(Model.Latitude == 0.0 ? "map-error" : "")"
                                           Click="@OpenMap"
                                           Style="background: #b33930"/>
-                            
+
                         </div>
 
                         <RadzenNumeric TValue="double" Name="Latitude"
                                        @bind-Value="Model.Latitude"
-                                       Style="display:none" />
+                                       Style="display:none"/>
 
                         <RadzenNumeric TValue="double" Name="Longitude"
                                        @bind-Value="Model.Longitude"
-                                       Style="display:none" />
+                                       Style="display:none"/>
 
                         <RadzenCustomValidator Component="Latitude"
-                                               Validator="@(()=> Model.Latitude != 0 && Model.Longitude != 0)"
-                                               Text="Izaberite lokaciju" />
+                                               Validator="@(() => Model.Latitude != 0 && Model.Longitude != 0)"
+                                               Text="Izaberite lokaciju"/>
                     </RadzenColumn>
 
                     
@@ -202,7 +217,7 @@
                     <RadzenButton Text="Sačuvaj kompaniju"
                                   Icon="save"
                                   ButtonStyle="ButtonStyle.Primary"
-                                  Type="submit" 
+                                  ButtonType="ButtonType.Submit"
                                   IsBusy="IsLoading" BusyText="Kreiranje"/>
                 </div>
 

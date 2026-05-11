@@ -1,4 +1,5 @@
-﻿using Diplomski.RatingHub.Application.Exceptions;
+﻿using Diplomski.RatingHub.Application.Enums;
+using Diplomski.RatingHub.Application.Exceptions;
 using Diplomski.RatingHub.Application.Interfaces.Models;
 using Diplomski.RatingHub.Application.Interfaces.Notifications;
 using Diplomski.RatingHub.Application.Models;
@@ -54,6 +55,7 @@ public class CompanyDataService : DataServiceBase, ICompanyDataService
                 HouseNumber =   createCompanyDto.HouseNumber,
                 Verifier =  createCompanyDto.Verifier,
                 IsEmailVerifier = createCompanyDto.IsEmailVerifier,
+                PublicPageUrl = createCompanyDto.PublicPageUrl,
                 Latitude =   createCompanyDto.Latitude,
                 Longitude =    createCompanyDto.Longitude,
                 CompanyPib =  createCompanyDto.CompanyPib,
@@ -86,6 +88,7 @@ public class CompanyDataService : DataServiceBase, ICompanyDataService
                 HouseNumber =   createCompanyDto.HouseNumber,
                 Verifier =  createCompanyDto.Verifier,
                 IsEmailVerifier = createCompanyDto.IsEmailVerifier,
+                PublicPageUrl = createCompanyDto.PublicPageUrl,
                 Latitude =   createCompanyDto.Latitude,
                 Longitude =    createCompanyDto.Longitude,
                 CompanyPib =  createCompanyDto.CompanyPib,
@@ -96,6 +99,32 @@ public class CompanyDataService : DataServiceBase, ICompanyDataService
                 ClaimCompanyIdentifier = null,//It's already created by owner
                 AnonymousEditIdentifier = null//Owner will be able to edit
             });
+    }
+
+    public async Task<IPaginatedList<FilteredCompanyDto>> GetFilteredCompanies(int cityId, int categoryId, string filterValue, double overallRatingGrade,
+        QueryArgs queryArgs, CompanyClaimStatusFilterOptions claimStatus,
+        CompanyVerificationStatusFilterOptions verificationStatus)
+    {
+        return await Send(new GetFilteredCompaniesQuery
+        {
+            CityId = cityId,
+            CategoryId = categoryId,
+            FilterValue = filterValue,
+            OverallRatingGrade = overallRatingGrade,
+            QueryArgs = queryArgs,
+            ClaimStatus = claimStatus,
+            VerificationStatus = verificationStatus
+        });
+    }
+
+    public async Task<IEnumerable<PopularCompanyDto>> GetPopularCompanies(int cityId, int categoryId, int take)
+    {
+        return await Send(new GetPopularCompaniesQuery
+        {
+            CityId = cityId,
+            CategoryId = categoryId,
+            Take = take
+        });
     }
 
     private async Task NotifyOwnerAboutCompanyCreation(CreateCompanyDto createCompanyDto)

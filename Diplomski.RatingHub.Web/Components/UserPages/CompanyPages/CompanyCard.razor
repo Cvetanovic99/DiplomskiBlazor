@@ -1,0 +1,112 @@
+﻿@inherits Diplomski.RatingHub.Web.Components.Shared.PortalComponentBase
+
+<div class="company-card">
+
+    <!-- IMAGE -->
+    <div class="company-card-image">
+        <img src="@GetMainImage()" />
+    </div>
+
+    <!-- CONTENT -->
+    <div class="company-card-content">
+
+        <h3 class="company-title">@Company.Name</h3>
+
+        <!-- RATING -->
+        <div class="company-rating">
+            <div class="provider-rating-box">
+                <div class="provider-rating-stars" style="@GetStarsFillStyle(Company.OverallAverageGrade)">
+                    <div class="provider-rating-stars-base">★★★★★</div>
+                    <div class="provider-rating-stars-fill">★★★★★</div>
+                </div>
+            </div>
+
+            <span class="rating-value">@Company.OverallAverageGrade.ToString("0.0")</span>
+            <span class="reviews">(@Company.ReviewsCount reviews)</span>
+        </div>
+
+        <!-- STATUS -->
+        <div class="company-status">
+
+            @if (Company.IsVerified)
+            {
+                <div class="status-item verified" >
+                    <RadzenIcon Icon="verified" MouseEnter="@(args=> ShowTooltip(args,"Kompanija je verifikovana na nasoj platformi", TooltipPosition.Top))"/>
+                    <span>Verifikovana</span>
+                </div>
+            }
+            else
+            {
+                <div class="status-item verified-off" >
+                    <RadzenIcon Icon="verified_off" MouseEnter="@(args => ShowTooltip(args,"Kompanija nije verifikovana na nasoj platformi", TooltipPosition.Top))"/>
+                    <span>Nije verifikovana</span>
+                </div>
+            }
+
+            @if (Company.IsClaimed)
+            {
+                <div class="status-item claimed" >
+                    <RadzenIcon Icon="person" MouseEnter="@(args => ShowTooltip(args,"Kompanija je dodeljena vlasniku", TooltipPosition.Top))" />
+                    <span>Preuzeta</span>
+                </div>
+            }
+            else
+            {
+                <div class="status-item claimed-off">
+                    <RadzenIcon Icon="person_off" MouseEnter="@(args => ShowTooltip(args,"Kompanija nije dodeljena vlasniku", TooltipPosition.Top))"/>
+                    <span>Nije preuzeta</span>
+                </div>
+            }
+
+        </div>
+
+        <!-- ADDRESS -->
+        <div class="company-address">
+            <RadzenIcon Icon="location_on" />
+            <span>@Company.City, @Company.Location, @Company.Street @Company.HouseNumber</span>
+        </div>
+
+        <!-- WEBSITE -->
+        @if (!string.IsNullOrWhiteSpace(Company.PublicPageUrl))
+        {
+            <div class="company-website">
+                <RadzenIcon Icon="link" />
+                <a href="@Company.PublicPageUrl" target="_blank">
+                    Poseti javnu stranicu kompanije
+                </a>
+            </div>
+        }
+
+        <!-- DESCRIPTION -->
+        <div class="company-description">
+            @Company.Description
+        </div>
+
+        <!-- GALLERY -->
+        @if (Company.Images?.Any() == true)
+        {
+            <div class="company-gallery">
+                @foreach (var img in Company.Images.Take(3))
+                {
+                    <img src="@img" />
+                }
+
+                @if (Company.Images.Count > 3)
+                {
+                    <div class="company-gallery-more">
+                        +@((Company.Images.Count - 3))
+                    </div>
+                }
+            </div>
+        }
+
+        <!-- ACTION -->
+        <div class="company-action">
+            <button @onclick="GoToDetails">
+                Pogledaj detaljnije →
+            </button>
+        </div>
+
+    </div>
+
+</div>

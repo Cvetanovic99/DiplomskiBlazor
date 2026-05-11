@@ -1,0 +1,33 @@
+﻿@inherits Diplomski.RatingHub.Web.Components.Shared.PortalComponentBase
+
+<div class="subcategories-dialog">
+
+    <div class="subcategories-scroll">
+
+        @if (IsLoading)
+        {
+            <RadzenProgressBar Mode="ProgressBarMode.Indeterminate" />
+        }
+        else
+        {
+            <div class="subcategory-list">
+                @foreach (var c in _subcategories)
+                {
+                    <div class="subcategory-chip"
+                         @onclick="() => SelectSubcategory(c.Id)">
+                        @c.Name
+                    </div>
+                }
+            </div>
+        }
+
+    </div>
+
+    <!-- ACTIONS -->
+    <div class="dialog-actions">
+        <RadzenButton Text="Odustani"
+                      ButtonStyle="ButtonStyle.Light"
+                      Click="@OnCancel" />
+    </div>
+
+</div>

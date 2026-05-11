@@ -4,6 +4,7 @@ public class Company : EntityBase
 {
     public required string Name { get; set; }
     public int ReviewsCount { get; set; }
+    public double OverallAverageGrade { get; set; }
     public string? Description { get; set; }
     public string? Location { get; set; } //Maybe village name
     public required string Street { get; set; }
@@ -14,6 +15,7 @@ public class Company : EntityBase
     public double? Longitude { get; set; }
     public bool IsAnonymousCreator { get; set; }
     public string? CompanyPib { get; set; }//If company is registered
+    public string? PublicPageUrl  { get; set; }//If company has some public page website, instagram, facebook
     public bool IsVerified { get; set; }//Is verified with video-admin
     public string? AnonymousEditIdentifier { get; set; }//If someone create company anonymously and whant to edit
     public string? ClaimCompanyIdentifier { get; set; }//When someone whant to claim company using this identifier-code

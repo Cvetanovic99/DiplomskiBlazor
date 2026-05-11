@@ -1,0 +1,12 @@
+﻿.map-dialog {
+    display: flex;
+    flex-direction: column;
+    height: 70vh;
+}
+
+.map-container {
+    flex: 1;
+    min-height: 350px;
+    border-radius: 12px;
+    overflow: hidden;
+}

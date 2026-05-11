@@ -1,0 +1,47 @@
+﻿@inherits Diplomski.RatingHub.Web.Components.Shared.PortalComponentBase
+
+
+<div class="filter-dialog">
+
+    <div class="filter-content">
+        
+        <div class="filter-field">
+            <label>Minimalna ocena</label>
+            <RadzenNumeric TValue="double"
+                           @bind-Value="Model.OverallAverageGrade"
+                           Min="0"
+                           Max="5"
+                           Step="0.1"
+                           Style="width:100%" />
+        </div>
+
+        <!-- CLAIM -->
+        <div class="filter-field">
+            <label>Status kompanije</label>
+            <RadzenDropDown Data="_claimOptions"
+                            @bind-Value="Model.ClaimStatus"
+                            Style="width:100%" />
+        </div>
+
+        <!-- VERIFICATION -->
+        <div class="filter-field">
+            <label>Verifikacija</label>
+            <RadzenDropDown Data="_verificationOptions"
+                            @bind-Value="Model.VerificationStatus"
+                            Style="width:100%" />
+        </div>
+
+    </div>
+
+    <!-- ACTIONS -->
+    <div class="filter-actions">
+        <RadzenButton Text="Odustani"
+                      ButtonStyle="ButtonStyle.Light"
+                      Click="@OnCancel" />
+
+        <RadzenButton Text="Primeni filtere"
+                      ButtonStyle="ButtonStyle.Primary"
+                      Click="@OnApply" />
+    </div>
+
+</div>

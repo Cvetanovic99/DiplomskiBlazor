@@ -37,6 +37,7 @@ public static class DependencyInjection
         
         services.AddScoped(typeof(IDatabaseRepository<>), typeof(DatabaseRepository<>));
         services.AddScoped<ICategoryRepository, CategoryRepository>();
+        services.AddScoped<ICompanyRepository, CompanyRepository>();
         services.AddScoped<IUserConfirmation<ApplicationUser>, UserConfirmationStore>();
         services.AddScoped<IFileService, FileService>();
         AddEmailNotification(services, configuration);

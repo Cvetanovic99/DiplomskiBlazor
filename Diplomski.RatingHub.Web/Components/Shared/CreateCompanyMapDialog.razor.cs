@@ -3,10 +3,11 @@ using Microsoft.JSInterop;
 
 namespace Diplomski.RatingHub.Web.Components.Shared;
 
-public partial class MapDialog
+public partial class CreateCompanyMapDialog : IDisposable
 {
     [Parameter] public MapDataDto CityLocation { get; set; } = default!;
     [Parameter] public MapDataDto CompanyLocation { get; set; } = default!;
+    private DotNetObjectReference<CreateCompanyMapDialog> _dotnetRef;
 
     private string _mapId = $"map-{Guid.NewGuid()}";
 
@@ -15,6 +16,7 @@ public partial class MapDialog
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+        _dotnetRef = DotNetObjectReference.Create(this);
         if (firstRender)
         {
             var initialLat = CompanyLocation.Latitude == 0.0 ? CityLocation.Latitude : CompanyLocation.Latitude;
@@ -26,7 +28,7 @@ public partial class MapDialog
                 CityLocation.Longitude,
                 initialLat,
                 initialLng,
-                DotNetObjectReference.Create(this));
+                _dotnetRef);
         }
     }
 
@@ -43,13 +45,15 @@ public partial class MapDialog
         return Task.CompletedTask;
     }
 
-    private void Close()
+    private async Task Close()
     {
+        await JSRuntime.InvokeVoidAsync("mapHelper.destroyMap", _mapId);
         DialogService.Close(null);
     }
 
-    private void Confirm()
+    private async Task Confirm()
     {
+        await JSRuntime.InvokeVoidAsync("mapHelper.destroyMap", _mapId);
         DialogService.Close(_selectedLocation);
     }
 
@@ -57,5 +61,10 @@ public partial class MapDialog
     {
         public double Latitude { get; set; }
         public double Longitude { get; set; }
+    }
+
+    public void Dispose()
+    {
+        _dotnetRef?.Dispose();
     }
 }

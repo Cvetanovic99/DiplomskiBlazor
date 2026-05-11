@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Diplomski.RatingHub.Application.Exceptions;
 using Diplomski.RatingHub.Application.Interfaces.Repositories;
+using Diplomski.RatingHub.Application.Specifications;
 using Diplomski.RatingHub.Domain.Models;
 using Diplomski.RatingHub.Web.Models;
 using FluentValidation;
@@ -63,6 +64,11 @@ public class CreateCategoryCommandHandler : IRequestHandler<CreateCategoryComman
 
     public async Task<Unit> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
     {
+        var oldCatgory = await _categoryRepository.GetSingleBySpec(
+            new Specification<Category>(c => c.Name == request.Name || c.Slug == request.Slug));
+        if (oldCatgory is not null)
+            throw new AppException("Kategorija sa istim imenom ili slugom već postoji");
+        
         var category = new Category
         {
             Name = request.Name,

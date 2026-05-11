@@ -1454,8 +1454,14 @@ namespace Diplomski.RatingHub.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<double>("OverallAverageGrade")
+                        .HasColumnType("float");
+
                     b.Property<int?>("OwnerId")
                         .HasColumnType("int");
+
+                    b.Property<string>("PublicPageUrl")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ReviewsCount")
                         .HasColumnType("int");
@@ -1525,8 +1531,8 @@ namespace Diplomski.RatingHub.Infrastructure.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<decimal>("AverageValue")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double>("AverageValue")
+                        .HasColumnType("float");
 
                     b.Property<int>("CompanyId")
                         .HasColumnType("int");

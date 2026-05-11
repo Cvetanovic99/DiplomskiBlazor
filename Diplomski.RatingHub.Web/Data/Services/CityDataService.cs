@@ -12,4 +12,9 @@ public class CityDataService(IServiceScopeFactory serviceScopeFactory) : DataSer
     {
         return await Send(new GetCitiesQuery { FilterValue = filterValue, QueryArgs = queryArgs });
     }
+
+    public async Task<CityDto> GetCityById(int cityId)
+    {
+        return await Send(new GetCityByIdQuery{ CityId = cityId });
+    }
 }

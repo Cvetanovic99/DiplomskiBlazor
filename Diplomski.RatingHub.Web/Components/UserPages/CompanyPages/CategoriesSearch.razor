@@ -1,0 +1,82 @@
+﻿@inherits Diplomski.RatingHub.Web.Components.Shared.PortalComponentBase
+
+<RadzenTemplateForm Data="@Model" TItem="SearchDto" Submit="@OnSearchClicked">
+
+    <RadzenRow Gap="0" Style="max-width:1000px; margin:auto;">
+
+        <!-- CITY -->
+        <RadzenColumn Size="12" SizeMD="5">
+
+            <div class="search-box left">
+
+                <RadzenAutoComplete
+                    Name="City"
+                    Data="@_cities"
+                    TextProperty="Name"
+                    @bind-Value="_selectedCityText"
+                    LoadData="@LoadCities"
+                    Change="@OnCityChanged"
+                    SelectedItemChanged="@OnCitySelected"
+                    SelectedItem="@_selectedCityText"
+                    Style="width:100%"
+                    Placeholder="Npr. Niš" 
+                    class="search-autocomplete"/>
+
+                <RadzenCustomValidator Component="City"
+                                       Validator="@ValidateCity"
+                                       Text="Izaberite grad" Style="display: block"/>
+
+            </div>
+
+        </RadzenColumn>
+
+        <!-- CATEGORY -->
+        <RadzenColumn Size="12" SizeMD="5">
+
+            <div class="search-box right">
+            <RadzenAutoComplete
+                    Name="Category"
+                    @bind-Value="_selectedCategoryText"
+                    TextProperty="Name"
+                    Data="@_categories"
+                    LoadData="@LoadCategories"
+                    Change="@OnCategoryChanged"
+                    SelectedItem="_selectedCategoryText"
+                    SelectedItemChanged="@OnCategorySelected"
+                    Style="width:100%"
+                    Placeholder="Npr. Lepota i zdravlje"
+                    class="search-autocomplete">
+
+                    <Template Context="c">
+                        <div class="category-item">
+                            <div class="category-name">@c.Name</div>
+                            <div class="category-path">@c.FullPath</div>
+                        </div>
+                    </Template>
+
+                </RadzenAutoComplete>
+
+            <RadzenCustomValidator Component="Category"
+                                   Validator="@ValidateCategory"
+                                   Text="Izaberite kategoriju" Style="display: block"/>
+            </div>
+
+        </RadzenColumn>
+
+        <!-- BUTTON -->
+        <RadzenColumn Size="12" SizeMD="2">
+
+            <div class="search-btn-wrapper">
+
+                <RadzenButton Icon="search"
+                              ButtonStyle="ButtonStyle.Primary"
+                              ButtonType="ButtonType.Submit"
+                              Style="width: 80%; background: linear-gradient(135deg, #6b4eff, #8f63ff); border-radius: 12px;"/>
+
+            </div>
+
+        </RadzenColumn>
+
+    </RadzenRow>
+
+</RadzenTemplateForm>

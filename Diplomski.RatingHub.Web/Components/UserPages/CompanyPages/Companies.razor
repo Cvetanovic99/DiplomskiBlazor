@@ -1,0 +1,193 @@
+﻿@page "/companies"
+@using Diplomski.RatingHub.Web.Components.HomePageSections
+@inherits Diplomski.RatingHub.Web.Components.Shared.PortalComponentBase
+
+@if (CityId is null || CategoryId is null || CityId == 0 || CategoryId == 0)
+{
+    <div class="invalid-selection-wrapper">
+
+        <div class="invalid-selection-card">
+
+            <RadzenIcon Icon="error_outline" class="invalid-icon" />
+
+            <h3>Neispravan izbor grada ili kategorije</h3>
+
+            <p>
+                Molimo vratite se na početnu stranu i izaberite validan grad i kategoriju.
+            </p>
+
+            <RadzenButton Icon="arrow_left_alt"
+                          Text="Nazad na početnu"
+                          Click="@GoToHome"
+                          class="invalid-btn" />
+
+        </div>
+
+    </div>
+}
+else
+{
+    <div class="companies-page">
+        <!-- CENTER CONTENT -->
+        <div class="content-panel">
+
+            <!-- SEARCH -->
+            <CategoriesSearch />
+
+            <!-- POPULAR -->
+            <PopularCompanies CityId="@CityId.Value" CategoryId="@CategoryId.Value"/>
+
+            <!-- 🔥 SUBCATEGORIES (NEW POSITION) -->
+            @if (_subcategories.Any())
+            {
+                <div class="subcategories-wrapper">
+
+                    <div class="subcategories-header">
+                        <div class="subcategories-header-title">
+                            <RadzenIcon Icon="category" Style="cursor:pointer; font-weight: 500; color: #7274c3;" 
+                                        MouseEnter="@(args=> ShowTooltip(args,"Podkategorije trenutno izabrane kategorije", TooltipPosition.Top))"/>
+                            <span>Podkategorije</span>
+                        </div>
+                        
+                        <button class="suggest-subcategory-btn" @onclick="OpenSuggestNewSubcategoryDialog">
+                        <RadzenIcon Icon="lightbulb_2" Style="cursor:pointer; font-size:15px;"
+                                                     MouseEnter="@(args=> ShowTooltip(args,"Predlozite novu podkategoriju", TooltipPosition.Top))"/>
+                            Predloži novu
+                        </button>
+                    
+                    </div>
+
+                    <div class="subcategory-scroll">
+
+                        @foreach (var c in _subcategories)
+                        {
+                            <div class="subcategory-chip"
+                                 @onclick="() => OnSubcategorySelected(c.Id)">
+                                @c.Name
+                            </div>
+                        }
+                        
+                        @if (_subcategoriesTotalCount > 10)
+                        {
+                            <div class="subcategory-chip show-all-chip"
+                                 @onclick="OpenAllSubcategoriesDialog">
+                                Prikaži sve
+                            </div>
+                        }
+
+                    </div>
+                </div>
+            }
+
+            <!-- MOBILE ACTIONS -->
+            <div class="mobile-actions">
+                <RadzenButton Icon="location_on" Text="Prikaži na mapi" Click="@OpenMapModal" Style="width: 100%; border-radius: 11px; background: #5c409d"
+                              MouseEnter="@(args=> ShowTooltip(args,"Prikažite sve kompanije na mapi", TooltipPosition.Top))"/>
+            </div>
+
+            <!-- BREADCRUMB -->
+            <div class="breadcrumb">
+                @for (int i=0; i<_breadcrumbs.Count; i++)
+                {
+                    var localIndex = i; 
+                    if (i != _breadcrumbs.Count - 1)
+                    {
+                        <span class="parent-breadcrumb" @onclick="() => OnBreadcrumbClicked(_breadcrumbs[localIndex].Id)"
+                              >@_breadcrumbs[i].Name</span>
+                        <span style="font-weight: 700; color: #3f3939;"> > </span>
+                    }
+                    else
+                    {
+                        <span class="current-breadcrumb">@_breadcrumbs[i].Name</span>
+                    }
+                }
+            </div>
+
+            <!-- SORT -->
+            <div class="sort-and-filter-row">
+                
+                <RadzenButton Icon="page_info" Text="Filteri" Click="@OpenFilterModal"
+                              Shade="Shade.Light"
+                              ButtonStyle="ButtonStyle.Light"
+                              Style="border-radius: 10px;"/>
+                
+                <RadzenDropDown Data="_sortingOptions"
+                                @bind-Value="_sortingOption"
+                                Change="OnSortingChange"
+                                Style="width:200px"/>
+            </div>
+
+            <!-- SEARCH INPUT -->
+            <RadzenTextBox TValue="string"
+                           Placeholder="Pretraga po PIB-u ili nazivu"
+                           @bind-Value="_companyFiltervalue"
+                           @oninput="@OnFilterChanged"
+                           Style="width:100%" 
+                           class="companies-search-input"/>
+
+            <!-- LIST -->
+            <RadzenProgressBar Value="100" ShowValue="false" 
+                               Mode="ProgressBarMode.Indeterminate" Visible="@(IsCompanyLoading)" Style="padding-top: 10px"/>
+            @if (_companies.Any())
+            {
+                <div class="company-cards-container">
+
+                    @foreach (var c in _companies)
+                    {
+                        <CompanyCard Company="c"/>
+                    }
+
+                    <RadzenPager Count="@_companiesTotalCount"
+                                 PageSize="@_pageSize"
+                                 @bind-CurrentPage="_currentPage"
+                                 PageChanged="@OnPageChanged"
+                                 ShowPagingSummary="true"
+                                 PagingSummaryFormat="@pagingSummaryFormat"
+                                 Style="padding-top: 20px"/>
+                </div>
+            }
+            else
+            {
+                <div class="no-companies-container">
+    
+                    <div class="no-companies-card">
+
+                        <div class="no-companies-icon">
+                            <RadzenIcon Icon="sentiment_dissatisfied" />
+                        </div>
+
+                        <h3>Trenutno nema kompanija za prikaz</h3>
+
+                        <p>
+                            Pokušajte sa drugim filterima ili promenite kategoriju i grad.
+                        </p>
+
+                    </div>
+
+                </div>
+            }
+
+
+            <!-- CTA -->
+            <div class="empty-cta">
+                <span>Nisi pronašao željenu kompaniju?</span>
+                <RadzenButton Text="Kreiraj kompaniju"
+                              Icon="add_business"
+                              Style="margin-left: 10px"
+                              Click="@GoToCreateCompany"
+                              Size="ButtonSize.Small"
+                              Shade="Shade.Light"
+                              ButtonStyle="ButtonStyle.Light"/>
+                @* <RadzenButton Text="KREIRAJ KOMPANIJU" Click="@GoToCreate"/> *@
+            </div>
+
+        </div>
+
+        <!-- MAP (desktop only) -->
+        <div class="map-panel">
+            <div id="map"></div>
+        </div>
+    </div>
+}
+
+<AppFooter/>

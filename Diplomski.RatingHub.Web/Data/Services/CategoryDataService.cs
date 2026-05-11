@@ -3,6 +3,7 @@ using Diplomski.RatingHub.Application.Models;
 using Diplomski.RatingHub.Application.UseCases.Categories.Commands;
 using Diplomski.RatingHub.Application.UseCases.Categories.Queries;
 using Diplomski.RatingHub.Domain.Models;
+using Diplomski.RatingHub.Web.Components.Shared;
 using Diplomski.RatingHub.Web.Data.Interfaces;
 using Diplomski.RatingHub.Web.Models;
 using MediatR;
@@ -40,12 +41,36 @@ public class CategoryDataService(IServiceScopeFactory serviceScopeFactory) : Dat
         await Send(new DeleteNewCategorySuggestionCommand { NewCategorySuggestionId = categoryNewSuggestionId });
     }
 
+    public async Task<IPaginatedList<SubcategoryDto>> GetSubcategories(int parentCategoryId, QueryArgs? queryArgs = null)
+    {
+        return await Send(new GetSubcategoriesQuery
+        {
+            ParentCategoryId = parentCategoryId, 
+            QueryArgs = queryArgs
+        });
+    }
+
+    public async Task<IEnumerable<CategoryParentDto>> GetCategoryParents(int categoryId)
+    {
+        return await  Send(new GetCategoryParentsQuery { CategoryId = categoryId });
+    }
+
+    public async Task CreateNewCategorySuggestion(SuggestCategoryModel suggestCategoryModel)
+    {
+        await Send(new CreateNewCategorySuggestionCommand
+        {
+            CategoryName = suggestCategoryModel.Name,
+            Description = suggestCategoryModel.Description,
+            ParentCategoryId = suggestCategoryModel.ParentCategoryId
+        });
+    }
+
     public async Task CreateCategory(CreateCategoryDto createCategoryDto)
     {
         await Send(new CreateCategoryCommand
         {
-            Name = createCategoryDto.Name,
-            Slug = createCategoryDto.Slug,
+            Name = createCategoryDto.Name.Trim(),
+            Slug = createCategoryDto.Slug.Trim(),
             SortOrder = createCategoryDto.SortOrder,
             Icon = createCategoryDto.Icon,
             ShowOnHomePage = createCategoryDto.ShowOnHomePage,

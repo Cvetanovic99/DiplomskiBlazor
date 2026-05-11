@@ -7,4 +7,5 @@ namespace Diplomski.RatingHub.Web.Data.Interfaces;
 public interface ICityDataService
 {
     Task<IPaginatedList<CityDto>> GetCities(string filterValue, QueryArgs queryArgs);
+    Task<CityDto> GetCityById(int cityId);
 }

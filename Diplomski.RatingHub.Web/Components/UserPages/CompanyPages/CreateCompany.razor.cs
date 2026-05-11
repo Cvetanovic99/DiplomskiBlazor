@@ -60,7 +60,7 @@ public partial class CreateCompany
         _selectedCityText = text;
 
         var selectedCity = _cities
-            .FirstOrDefault(x => x.Name == text);
+            .FirstOrDefault(x => string.Equals(x.Name, text, StringComparison.CurrentCultureIgnoreCase));
 
         Model.CityId = selectedCity?.Id ?? 0;
         StateHasChanged();
@@ -90,9 +90,19 @@ public partial class CreateCompany
         _selectedCategoryText = text;
 
         var selectedCategory = _categories
-            .FirstOrDefault(x => x.Name == text);
+            .FirstOrDefault(x => string.Equals(x.Name, text, StringComparison.CurrentCultureIgnoreCase));
 
         Model.CategoryId = selectedCategory?.Id ?? 0;
+        StateHasChanged();
+    }
+    
+    private void OnCategorySelected()
+    {
+        StateHasChanged();
+    }
+    
+    private void OnCitySelected()
+    {
         StateHasChanged();
     }
     
@@ -106,12 +116,12 @@ public partial class CreateCompany
         
         var city = _cities.FirstOrDefault(x => x.Id == Model.CityId);
         
-        var result = await DialogService.OpenAsync<MapDialog>(
+        var result = await DialogService.OpenAsync<CreateCompanyMapDialog>(
             "Izaberi lokaciju",
             new Dictionary<string, object>
             {
-                { "CityLocation", new MapDialog.MapDataDto { Latitude = city.Latitude, Longitude = city.Longitude} },
-                { "CompanyLocation", new MapDialog.MapDataDto { Latitude = Model.Latitude, Longitude = Model.Longitude } }
+                { "CityLocation", new CreateCompanyMapDialog.MapDataDto { Latitude = city.Latitude, Longitude = city.Longitude} },
+                { "CompanyLocation", new CreateCompanyMapDialog.MapDataDto { Latitude = Model.Latitude, Longitude = Model.Longitude } }
             },
             new DialogOptions
             {
@@ -119,7 +129,7 @@ public partial class CreateCompany
                 Style = "margin-top: 130px"
             });
         
-        if (result is MapDialog.MapDataDto mapResult)
+        if (result is CreateCompanyMapDialog.MapDataDto mapResult)
         {
             Model.Latitude = mapResult.Latitude;
             Model.Longitude = mapResult.Longitude;
@@ -244,5 +254,13 @@ public partial class CreateCompany
             return true;
         
         return RegisterUserDto.IsEmail(Model.Verifier) || RegisterUserDto.IsPhone(Model.Verifier);
+    }
+    
+    private bool ValidatePublicPageUrl()
+    {
+        if (Model.PublicPageUrl is null)
+            return true;
+        
+        return Model.PublicPageUrl.StartsWith("http://") || Model.PublicPageUrl.StartsWith("https://");
     }
 }

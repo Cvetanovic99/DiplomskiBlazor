@@ -1,6 +1,7 @@
 ﻿using Diplomski.RatingHub.Application.Interfaces.Models;
 using Diplomski.RatingHub.Application.Models;
 using Diplomski.RatingHub.Application.UseCases.Categories.Queries;
+using Diplomski.RatingHub.Web.Components.Shared;
 using Diplomski.RatingHub.Web.Models;
 
 namespace Diplomski.RatingHub.Web.Data.Interfaces;
@@ -15,4 +16,7 @@ public interface ICategoryDataService
     Task<IPaginatedList<NewCategorySuggestionDto>> GetNewCategorySuggestions(QueryArgs queryArgs);
     Task EditNewCategorySuggestion(NewCategorySuggestionDto newCategorySuggestionDto);
     Task DeleteCategoryNewSuggestion(int categoryNewSuggestionId);
+    Task<IPaginatedList<SubcategoryDto>> GetSubcategories(int parentCategoryId, QueryArgs? queryArgs = null);
+    Task<IEnumerable<CategoryParentDto>> GetCategoryParents(int categoryId);
+    Task CreateNewCategorySuggestion(SuggestCategoryModel suggestCategoryModel);
 }

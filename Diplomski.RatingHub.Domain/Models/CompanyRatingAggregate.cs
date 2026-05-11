@@ -3,7 +3,7 @@
 public class CompanyRatingAggregate : EntityBase
 {
     public int RatingsCount { get; set; }
-    public decimal AverageValue { get; set; }
+    public double AverageValue { get; set; }
     public int SumValue { get; set; }
     
     public int CompanyId { get; set; }

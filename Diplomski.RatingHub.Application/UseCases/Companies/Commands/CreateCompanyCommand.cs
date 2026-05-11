@@ -17,6 +17,7 @@ public class CreateCompanyCommand : IRequest<int>
     public string HouseNumber { get; set; }
     public string Verifier { get; set; }
     public bool IsEmailVerifier { get; set; }
+    public string? PublicPageUrl  { get; set; }
     public double Latitude { get; set; }
     public double Longitude { get; set; }
     public string? CompanyPib { get; set; }
@@ -130,6 +131,7 @@ public class CreateCompanyCommandHandler : IRequestHandler<CreateCompanyCommand,
             HouseNumber = request.HouseNumber,
             Verifier = request.Verifier,
             IsEmailVerifier = request.IsEmailVerifier,
+            PublicPageUrl = request.PublicPageUrl,
             Latitude = request.Latitude,
             Longitude = request.Longitude,
             CompanyPib = request.CompanyPib,

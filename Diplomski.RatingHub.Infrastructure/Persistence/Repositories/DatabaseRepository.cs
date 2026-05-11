@@ -18,7 +18,7 @@ public class DatabaseRepository<TEntity> : IDatabaseRepository<TEntity>, IDispos
     where TEntity : class, IDatabaseEntity
 {
     protected readonly ApplicationDbContext _dbContext;
-    private readonly IMapper _mapper;
+    protected readonly IMapper _mapper;
 
     public DatabaseRepository(ApplicationDbContext dbContext, IMapper mapper)
     {

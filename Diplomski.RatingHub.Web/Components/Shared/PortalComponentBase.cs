@@ -3,6 +3,7 @@ using Microsoft.JSInterop;
 using Radzen;
 using Diplomski.RatingHub.Application.Exceptions;
 using Diplomski.RatingHub.Web.Models;
+using Microsoft.AspNetCore.Components.Web;
 
 namespace Diplomski.RatingHub.Web.Components.Shared;
 
@@ -129,16 +130,33 @@ public class PortalComponentBase : ComponentBase
     {
         var message = new NotificationMessage
         {
-            //Style = "position: fixed;z-index: 1002;float: right;right: 10px;top: 80%;",
+            Style = "position: fixed;z-index: 1002;float: right;right: 15%; top: 10%;",
             Severity = severity,
-            Summary = !string.IsNullOrEmpty(summary) ? summary : severity.ToString(),
+            Summary = !string.IsNullOrEmpty(summary) ? summary : GetSummary(severity),
             Detail = detail,
             Duration = durationInMilliseconds
         };
 
         NotificationService.Notify(message);
     }
-    
+
+    private string GetSummary(NotificationSeverity severity)
+    {
+        switch (severity)
+        {
+            case NotificationSeverity.Info:
+                return "Informacija";
+            case NotificationSeverity.Warning:
+                return "Upozorenje";
+            case NotificationSeverity.Error:
+                return "Greska";
+            case NotificationSeverity.Success:
+                return "Uspesno";
+            default:
+                return severity.ToString();
+        }
+    }
+
     protected void ShowTooltip(ElementReference elementReference, string text,
         TooltipPosition position = TooltipPosition.Bottom,
         int? durationInMilliSeconds = null, string style = null, string cssClass = null)
