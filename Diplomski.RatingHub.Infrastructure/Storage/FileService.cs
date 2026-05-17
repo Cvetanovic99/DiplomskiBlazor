@@ -1,6 +1,6 @@
 ﻿using Diplomski.RatingHub.Application.Exceptions;
 using Diplomski.RatingHub.Application.Interfaces.Storage;
-using Diplomski.RatingHub.Web.Models;
+using Diplomski.RatingHub.Application.Models.Dtos;
 using Microsoft.AspNetCore.Http;
 
 namespace Diplomski.RatingHub.Infrastructure.Storage;

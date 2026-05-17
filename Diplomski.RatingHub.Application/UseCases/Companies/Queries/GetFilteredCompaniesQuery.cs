@@ -138,7 +138,7 @@ public class FilteredCompanyDto : IMapFrom<Company>
                 opt => opt.MapFrom(src => src.Images.FirstOrDefault(i => i.IsProfile).Path))
             .ForMember(dest => dest.Images, 
                 opt => opt.MapFrom(src => 
-                    src.Images.Where(i => !i.IsProfile).Select(i => i.Path).Take(3).ToList()));
+                    src.Images.Where(i => !i.IsProfile).Select(i => i.Path).Take(4).ToList()));
     }
 }
 

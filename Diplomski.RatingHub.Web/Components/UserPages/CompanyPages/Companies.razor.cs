@@ -26,7 +26,6 @@ public partial class Companies
     private bool IsCompanyLoading;
 
     private List<CategoryParentDto> _breadcrumbs = new List<CategoryParentDto>();
-        //["Lepota i szdravlje", "Frizeri", "Muski frizeri"];
     
     private string _companyFiltervalue;
     private double _minOverallAverageGradeFilterValue;
@@ -81,6 +80,9 @@ public partial class Companies
 
     private async Task LoadCompanies(int skip = 0)
     {
+        if (skip == 0)
+            _currentPage = 0;
+        
         IsCompanyLoading = true;
 
         var res = await InvokeDataServiceMethod(
@@ -248,6 +250,24 @@ public partial class Companies
         }
 
         return value;
+    }
+
+    private string GetSortingOptions(object value)
+    {
+        var option = (CompanySortingOptions)value;
+        switch (option)
+        {
+            case CompanySortingOptions.Najbolje:
+                return "Ocene opadajuce";
+            case CompanySortingOptions.Najlosije: 
+                return "Ocene rastuce";
+            case CompanySortingOptions.Najnovije:
+                return "Novije";
+            case CompanySortingOptions.Najstarije:
+                return "Starije";
+            default:
+                return "";
+        }
     }
 
     private void GoToCreateCompany()

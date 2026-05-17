@@ -8,8 +8,9 @@
 }
 
 .details-title {
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     font-weight: 700;
+    margin: 0;
 }
 
 /* LINK */
@@ -28,7 +29,7 @@
     font-size: 0.9rem;
 }
 
-/* 🔴 DANGER ZONE */
+/* DANGER ZONE */
 .danger-zone {
     margin-top: 10px;
     padding: 14px;
@@ -67,8 +68,51 @@
     margin-top: 10px;
 }
 
+
+/* Blociking Zone */
+.block-user-zone {
+    margin-top: 10px;
+    padding: 14px;
+    border: 1px solid #cae3f3;
+    background: #f5fcff;
+    border-radius: 12px;
+}
+
+.block-user-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #1c4eb9;
+    margin-bottom: 10px;
+}
+
+/* BUTTON manji i lepši */
+.block-user-btn {
+    width: auto;
+    padding: 8px 16px !important;
+    font-size: 0.85rem !important;
+    border-radius: 10px !important;
+}
+
+/* CONFIRM */
+.block-confirm {
+    margin-top: 10px;
+    padding: 14px;
+    border: 1px solid #cae3f3;
+    background: #f1f9ff;
+    border-radius: 12px;
+}
+
+.block-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
 @media (max-width: 576px) {
     .delete-actions {
+        flex-direction: column;
+    }
+    .block-actions {
         flex-direction: column;
     }
 }

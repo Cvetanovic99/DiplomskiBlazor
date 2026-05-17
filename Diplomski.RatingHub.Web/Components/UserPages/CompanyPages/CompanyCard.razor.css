@@ -106,12 +106,21 @@
     display: flex;
     align-items: center;
     gap: 4px;
-    font-weight: 600;
+    font-weight: 300;
     cursor: pointer;
+    border-radius: 5px;
+    border: 1px solid #9b9393;
+    padding: 4px;
+}
+
+.status-item-text
+{
+    color: #918c8c;
+    font-size: 13px;
+    font-weight: 400;
 }
 
 .verified {
-    
     color: #4340d2;
 }
 
@@ -131,19 +140,28 @@
 /* ADDRESS */
 .company-address {
     display: flex;
+    align-items: center;
     gap: 6px;
     color: #64748b;
+    font-size: 15px;
 }
 
 /* WEBSITE */
 .company-website {
     display: flex;
+    align-items: center;
     gap: 6px;
+    font-size: 15px;
 }
+
 
 .company-website a {
     text-decoration: underline;
-    color: #3b82f6;
+    color: #2b68cd;
+}
+
+.company-website a:hover {
+    color: #71a2f3;
 }
 
 /* DESCRIPTION */
@@ -152,7 +170,8 @@
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    color: #475569;
+    font-size: 14px;
+    color: #777474;
 }
 
 /* GALLERY */
@@ -194,9 +213,9 @@
     background: linear-gradient(135deg, #6b4eff 0%, #8f63ff 100%);
     border: none;
     padding: 8px 16px;
-    border-radius: 10px;
+    border-radius: 30px;
     color: white;
-    font-weight: 600;
+    font-weight: 300;
     cursor: pointer;
     transition: 0.2s;
 }
@@ -225,5 +244,16 @@
     {
         width: 100%;
         margin-top: 10px;
+        padding: 5px 16px;
+    }
+    .company-gallery img{
+        width: 80px;
+        height: 60px;
+    }
+    
+    .company-gallery-more
+    {
+        width: 80px;
+        height: 60px;
     }
 }

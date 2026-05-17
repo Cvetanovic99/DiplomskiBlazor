@@ -1,0 +1,378 @@
+﻿.review-card {
+    padding: 20px 0;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+/* HEADER */
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.review-user {
+    display: flex;
+    gap: 12px;
+}
+
+.avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.avatar.small {
+    width: 34px;
+    height: 34px;
+}
+
+.avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.user-info .name {
+    font-weight: 600;
+    color: #5f5d5d;
+}
+
+.verified {
+    font-size: 12px;
+}
+
+.confirmed {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    color: #22c55e;
+}
+
+.not-confirmed {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    color: #ef4444;
+}
+
+/* ACTIONS */
+.review-actions {
+    display: flex;
+    gap: 4px;
+}
+
+.action-icon {
+    cursor: pointer;
+    color: #64748b;
+    font-size: 18px;
+}
+
+.action-icon:hover {
+    color: #3b82f6;
+}
+
+.report-action-icon-wrapper
+{
+    display: flex;
+    padding: 1px;
+    border-radius: 7px;
+    background: #f8fbff;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+
+.report-action-icon-wrapper:hover {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+::deep .report-action-icon
+{
+    color: black;
+    background: #f8fbff;
+}
+
+::deep .like-action-icon
+{
+    color: #3271c3;
+    background: #f8fbff;
+}
+
+::deep .more-vert .rz-navigation-item .rz-navigation-item-wrapper .rz-navigation-item-link .rz-state-collapsed{
+    display: none !important;
+}
+::deep .more-vert .rz-navigation-item .rz-navigation-item-wrapper .rz-navigation-item-link .rz-state-expanded{
+    color: black !important;
+}
+::deep .more-vert .rz-navigation-item .rz-navigation-item-wrapper .rz-navigation-item-link .item-text{
+    display: flex !important;
+}
+
+::deep ul.more-vert {
+    list-style: none;
+    display: inline-block;
+    padding: 1px;
+    position: relative;
+    z-index: 3;
+    border-radius: 7px;
+    background: #f8fbff;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+::deep ul.more-vert:hover {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* RATING */
+.company-rating {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding-top: 10px;
+}
+
+.provider-rating-box {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 42px;
+    padding: 0 10px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(255, 245, 214, 0.95), rgba(255, 250, 234, 0.98));
+    border: 1px solid rgba(242, 205, 96, 0.28);
+}
+
+.provider-rating-stars {
+    --stars-fill: 0%;
+    position: relative;
+    display: inline-block;
+    font-size: 1.4rem;
+    line-height: 1;
+    letter-spacing: 2px;
+}
+
+.provider-rating-stars-base {
+    color: #e5e7eb;
+}
+
+.provider-rating-stars-fill {
+    color: #f4b400;
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: var(--stars-fill);
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.rating-value {
+    font-weight: 700;
+    font-size: 19px;
+}
+
+.reviews {
+    color: #64748b;
+}
+
+/* GRADES */
+.review-grades {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.grade-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 12px;
+}
+
+.grade-value {
+    font-weight: 600;
+    font-size: 18px;
+    display: flex;
+    gap: 5px;
+    color: #474545;
+}
+
+.grade-name {
+    color: #64748b;
+    font-size: 13px;
+}
+
+/* TEXT */
+.review-text {
+    margin-top: 10px;
+    line-height: 1.5;
+    color: #474545;
+}
+
+/* IMAGES */
+.review-images {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.review-images img {
+    width: 90px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.review-response-images {
+    display: flex;
+    gap: 7px;
+    margin-top: 10px;
+}
+
+.review-response-images img {
+    width: 85px;
+    height: 65px;
+    object-fit: cover;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.more-images {
+    width: 90px;
+    height: 70px;
+    background: #858383;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    cursor: pointer;
+    color: white;
+}
+
+.more-response-images {
+    width: 85px;
+    height: 65px;
+    background: #858383;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    cursor: pointer;
+    color: white; 
+}
+
+/* DATE + LIKES */
+.review-date-and-likes {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 15px;
+}
+
+.review-date {
+    font-size: 12px;
+    color: #525253;
+    background: #d7d7d7;
+    padding: 3px;
+    border-radius: 5px;
+}
+
+.review-likes {
+    margin-top: 6px;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    font-size: 13px;
+    color: #554d4d;
+}
+
+/* RESPONSE */
+.review-response-wrapper {
+    position: relative;
+    padding-left: 28px;
+    margin-top: 20px;
+}
+
+.curve-line {
+    position: absolute;
+    left: 10px;
+    top: -15px;
+    width: 16px;
+    height: 35px;
+    border-left: 2px solid #d1d5db;
+    border-bottom: 2px solid #d1d5db;
+    border-bottom-left-radius: 12px;
+}
+
+.review-response {
+    margin-top: 14px;
+    padding-left: 10px;
+}
+
+.response-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.response-user {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    color: #413f3f;
+}
+
+.response-info .name{
+    font-weight: 600;
+    color: #5f5d5d;
+    font-size: 15px;
+}
+
+.response-text {
+    margin-top: 6px;
+    line-height: 1.5;
+    color: #474545;
+    font-size: 15px;
+}
+
+.response-company-data {
+    display: flex;
+    gap: 10px;
+}
+
+.response-date{
+    font-size: 13px;
+    color: #535151;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+    .review-grades {
+        gap: 14px;
+    }
+
+    .review-images img,
+    .more-images {
+        width: 70px;
+        height: 60px;
+    }
+    
+    .review-response-images img,
+    .more-response-images{
+        width: 65px;
+        height: 55px;
+    }
+
+    .provider-rating-stars
+    {
+        font-size: 1.2rem;
+    }
+    .provider-rating-box
+    {
+        min-height: 35px;
+        padding: 0 9px;
+    }
+}

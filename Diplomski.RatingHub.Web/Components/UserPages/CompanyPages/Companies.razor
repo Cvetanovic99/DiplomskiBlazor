@@ -1,4 +1,5 @@
 ﻿@page "/companies"
+@using Diplomski.RatingHub.Application.Enums
 @using Diplomski.RatingHub.Web.Components.HomePageSections
 @inherits Diplomski.RatingHub.Web.Components.Shared.PortalComponentBase
 
@@ -37,7 +38,7 @@ else
             <!-- POPULAR -->
             <PopularCompanies CityId="@CityId.Value" CategoryId="@CategoryId.Value"/>
 
-            <!-- 🔥 SUBCATEGORIES (NEW POSITION) -->
+            <!-- SUBCATEGORIES -->
             @if (_subcategories.Any())
             {
                 <div class="subcategories-wrapper">
@@ -114,7 +115,11 @@ else
                 <RadzenDropDown Data="_sortingOptions"
                                 @bind-Value="_sortingOption"
                                 Change="OnSortingChange"
-                                Style="width:200px"/>
+                                Style="width:200px; border-radius: 8px;">
+                    <Template>
+                        @GetSortingOptions(context)
+                    </Template>
+                </RadzenDropDown>
             </div>
 
             <!-- SEARCH INPUT -->
@@ -126,8 +131,6 @@ else
                            class="companies-search-input"/>
 
             <!-- LIST -->
-            <RadzenProgressBar Value="100" ShowValue="false" 
-                               Mode="ProgressBarMode.Indeterminate" Visible="@(IsCompanyLoading)" Style="padding-top: 10px"/>
             @if (_companies.Any())
             {
                 <div class="company-cards-container">
@@ -148,23 +151,35 @@ else
             }
             else
             {
-                <div class="no-companies-container">
-    
-                    <div class="no-companies-card">
+                @if (IsCompanyLoading)
+                {
+                    <RadzenProgressBar Value="100" ShowValue="false"
+                                       Mode="ProgressBarMode.Indeterminate" Visible="@(IsCompanyLoading)" Style="padding-top: 10px"/>
+                    
+                    <RadzenText TextStyle="TextStyle.H1" Style="width: 100%; height: 100%">
+                        <RadzenSkeleton Animation="SkeletonAnimation.Wave" Style="width: 100%"/>
+                    </RadzenText>
+                }
+                else
+                {
+                    <div class="no-companies-container">
 
-                        <div class="no-companies-icon">
-                            <RadzenIcon Icon="sentiment_dissatisfied" />
+                        <div class="no-companies-card">
+
+                            <div class="no-companies-icon">
+                                <RadzenIcon Icon="sentiment_dissatisfied"/>
+                            </div>
+
+                            <h3>Trenutno nema kompanija za prikaz</h3>
+
+                            <p>
+                                Pokušajte sa drugim filterima ili promenite kategoriju i grad.
+                            </p>
+
                         </div>
 
-                        <h3>Trenutno nema kompanija za prikaz</h3>
-
-                        <p>
-                            Pokušajte sa drugim filterima ili promenite kategoriju i grad.
-                        </p>
-
                     </div>
-
-                </div>
+                }
             }
 
 

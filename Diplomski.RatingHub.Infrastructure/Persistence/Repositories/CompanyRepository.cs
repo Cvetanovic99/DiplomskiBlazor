@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Diplomski.RatingHub.Application.Exceptions;
 using Diplomski.RatingHub.Application.Interfaces.Repositories;
 using Diplomski.RatingHub.Application.Interfaces.Specifications;
 using Diplomski.RatingHub.Application.Specifications;
@@ -24,7 +25,6 @@ public class CompanyRepository : DatabaseRepository<Company>, ICompanyRepository
         {
             spec.And(c => c.CityId == cityId);
         }
-        
         
         var query = _dbContext.Set<Company>().AsQueryable();
 

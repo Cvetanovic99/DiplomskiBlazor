@@ -2,14 +2,22 @@
 
 <div class="details-dialog">
 
-    <h2 class="details-title">@Model.Title</h2>
+    <div style="display: flex; flex-direction: column; gap: 5px;">
+        
+        <h3 class="details-title">@Model.Title</h3>
 
-    <a href="@Model.ContentUrl" target="_blank" class="details-link">
-        Pogledaj objavu
-    </a>
+        <div class="details-reason">
+            @Model.Reason
+        </div>
+    </div>
+    
+    <div style="display: flex; gap: 5px;">
+        
+        <span>Link do objave: </span>
 
-    <div class="details-reason">
-        @Model.Reason
+        <a href="@Model.ContentUrl" target="_blank" class="details-link">
+            Pogledaj objavu
+        </a>
     </div>
 
     @if (!_confirmDelete)
@@ -23,6 +31,7 @@
             <RadzenButton Text="Obriši objavu"
                           Icon="delete"
                           ButtonStyle="ButtonStyle.Danger"
+                          Size="ButtonSize.Small"
                           class="delete-btn"
                           Click="@(() => _confirmDelete = true)" />
 
@@ -40,15 +49,66 @@
                 <RadzenButton Text="Da"
                               Icon="check"
                               ButtonStyle="ButtonStyle.Danger"
-                              Click="@Delete" />
+                              Click="@Delete" 
+                              Size="ButtonSize.Small"
+                              IsBusy="IsLoading"
+                              BusyText="Brisanje"/>
 
                 <RadzenButton Text="Odustani"
                               Icon="close"
                               ButtonStyle="ButtonStyle.Light"
+                              Size="ButtonSize.Small"
                               Click="@(() => _confirmDelete = false)" />
             </div>
 
         </div>
+    }
+    
+    @if (Model.ReportedUserId is not null)
+    {
+        @if (!_confirmBlockUser)
+        {
+            <div class="block-user-zone">
+
+                <div class="block-user-title">
+                    Blokirajte vlasnika objave 
+                </div>
+
+                <RadzenButton Text="Blokiraj vlasnika"
+                              Icon="block"
+                              Size="ButtonSize.Small"
+                              ButtonStyle="ButtonStyle.Primary"
+                              class="block-user-btn"
+                              Click="@(() => _confirmBlockUser = true)" />
+
+            </div>
+        }
+        else
+        {
+            <div class="block-confirm">
+
+                <div class="block-user-title">
+                    Da li ste sigurni da želite da blokirate vlasnika ove objave?
+                </div>
+
+                <div class="block-actions">
+                    <RadzenButton Text="Da"
+                                  Icon="check"
+                                  ButtonStyle="ButtonStyle.Primary"
+                                  Click="@BlockUser" 
+                                  Size="ButtonSize.Small"
+                                  IsBusy="IsLoading"
+                                  BusyText="Blokiranje"/>
+
+                    <RadzenButton Text="Odustani"
+                                  Icon="close"
+                                  Size="ButtonSize.Small"
+                                  ButtonStyle="ButtonStyle.Light"
+                                  Click="@(() => _confirmBlockUser = false)" />
+                </div>
+
+            </div>
+        }
     }
 
 </div>

@@ -2,9 +2,9 @@
 
 public class CompanyRatingAggregate : EntityBase
 {
-    public int RatingsCount { get; set; }
-    public double AverageValue { get; set; }
-    public int SumValue { get; set; }
+    public int RatingsCount { get; set; }//Number of reviews
+    public double AverageValue { get; set; }//SumValue / RatingsCount
+    public int SumValue { get; set; }//Sum of all grades
     
     public int CompanyId { get; set; }
     public Company Company { get; set; } = null!;

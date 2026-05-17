@@ -1470,6 +1470,9 @@ namespace Diplomski.RatingHub.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<double>("SumGradesValue")
+                        .HasColumnType("float");
+
                     b.Property<string>("Verifier")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -1582,9 +1585,6 @@ namespace Diplomski.RatingHub.Infrastructure.Persistence.Migrations
                     b.Property<int>("ReviewId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ReviewId1")
-                        .HasColumnType("int");
-
                     b.Property<string>("Text")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -1595,10 +1595,6 @@ namespace Diplomski.RatingHub.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("ReviewId")
                         .IsUnique();
-
-                    b.HasIndex("ReviewId1")
-                        .IsUnique()
-                        .HasFilter("[ReviewId1] IS NOT NULL");
 
                     b.ToTable("CompanyResponses");
                 });
@@ -1897,24 +1893,42 @@ namespace Diplomski.RatingHub.Infrastructure.Persistence.Migrations
                     b.Property<int>("CompanyId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("CompanyResponseId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CompanyResponseId1")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("IsAnonymousReview")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsCompanyDataTrue")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime?>("Modified")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal>("OverallScore")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double>("OverallScore")
+                        .HasColumnType("float");
+
+                    b.Property<string>("ReviewerFullName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("ReviewerId")
                         .HasColumnType("int");
 
+                    b.Property<string>("ReviewerIdentifier")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CompanyId");
+
+                    b.HasIndex("CompanyResponseId1");
 
                     b.HasIndex("ReviewerId");
 
@@ -2381,10 +2395,6 @@ namespace Diplomski.RatingHub.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Diplomski.RatingHub.Domain.Models.Review", null)
-                        .WithOne("CompanyResponse")
-                        .HasForeignKey("Diplomski.RatingHub.Domain.Models.CompanyResponse", "ReviewId1");
-
                     b.Navigation("Company");
 
                     b.Navigation("Review");
@@ -2503,12 +2513,18 @@ namespace Diplomski.RatingHub.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("Diplomski.RatingHub.Domain.Models.CompanyResponse", "CompanyResponse")
+                        .WithMany()
+                        .HasForeignKey("CompanyResponseId1");
+
                     b.HasOne("Diplomski.RatingHub.Domain.Models.UserProfile", "Reviewer")
                         .WithMany("Reviews")
                         .HasForeignKey("ReviewerId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Company");
+
+                    b.Navigation("CompanyResponse");
 
                     b.Navigation("Reviewer");
                 });
@@ -2659,8 +2675,6 @@ namespace Diplomski.RatingHub.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Diplomski.RatingHub.Domain.Models.Review", b =>
                 {
-                    b.Navigation("CompanyResponse");
-
                     b.Navigation("Grades");
 
                     b.Navigation("Images");

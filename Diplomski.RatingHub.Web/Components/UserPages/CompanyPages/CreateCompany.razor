@@ -1,6 +1,6 @@
 ﻿@page "/createCompany"
 
-@using Diplomski.RatingHub.Web.Models
+@using Diplomski.RatingHub.Application.Models.Dtos
 @inherits Diplomski.RatingHub.Web.Components.Shared.PortalComponentBase
 
 <section class="create-company-page">
@@ -106,6 +106,21 @@
                                                Text="Izaberite kategoriju" />
                     </RadzenColumn>
 
+                    <RadzenColumn Size="12" SizeMD="6">
+                        <label class="form-label">
+                            <RadzenIcon Icon="pin" /> PIB:
+                        </label>
+                        <RadzenTextBox Name="CompanyPib" @bind-Value="Model.CompanyPib" Style="width:100%" Placeholder="354354354" />
+                    </RadzenColumn>
+                    
+                    <!-- LOCATION -->
+                    <RadzenColumn Size="12" SizeMD="6">
+                        <label class="form-label">
+                            <RadzenIcon Icon="place" /> Lokacija
+                        </label>
+                        <RadzenTextBox Name="Location" @bind-Value="Model.Location" Style="width:100%" Placeholder="Selo ili Opstina" />
+                        <RadzenRequiredValidator Component="Location" Text="Obavezno" />
+                    </RadzenColumn>
                     
                     <RadzenColumn Size="12" SizeMD="8">
                         <label class="form-label">

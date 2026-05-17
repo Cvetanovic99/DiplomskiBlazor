@@ -1,5 +1,5 @@
-﻿using System.Net;
-using Diplomski.RatingHub.Application.Models;
+﻿using Diplomski.RatingHub.Application.Models;
+using Diplomski.RatingHub.Application.Models.Dtos;
 using Diplomski.RatingHub.Application.UseCases.Categories.Queries;
 using Diplomski.RatingHub.Application.UseCases.Cities.Queries;
 using Diplomski.RatingHub.Web.Components.Shared;
@@ -62,7 +62,13 @@ public partial class CreateCompany
         var selectedCity = _cities
             .FirstOrDefault(x => string.Equals(x.Name, text, StringComparison.CurrentCultureIgnoreCase));
 
-        Model.CityId = selectedCity?.Id ?? 0;
+        int cityId = selectedCity?.Id ?? 0;
+        if (Model.CityId != cityId)
+        {
+            Model.Longitude = 0.0;
+            Model.Latitude = 0.0;
+        }
+        Model.CityId = cityId;
         StateHasChanged();
     }
     
@@ -149,12 +155,14 @@ public partial class CreateCompany
         
         foreach (var file in files)
         {
-            var content = new MultipartFormDataContent();
-            var stream = file.OpenReadStream(5_000_000);
-        
-            content.Add(new StreamContent(stream), "file", file.Name);
+            var content = ProcessImage(file);
+            if (content.ExceptionOccured)
+            {
+                ShowNotification($"Slika: {file.Name} je prevelika, maksimalna velicina je '500 KB.'", NotificationSeverity.Error);
+                continue;
+            }
             
-            var response = await HttpService.UploadImage(content, _companyImageUrl);
+            var response = await HttpService.UploadImage(content.Content!, _companyImageUrl);
             if(response.ExceptionOccurred)    
             {
                 ShowNotification("Greška pri uploadu slike " + file.Name, NotificationSeverity.Error);
@@ -175,6 +183,27 @@ public partial class CreateCompany
         
             _images.First().IsProfile = true;
         }
+    }
+    
+    private ProcessImageResponse ProcessImage(IBrowserFile file)
+    {
+        var response = new ProcessImageResponse();
+        try
+        {
+            var content = new MultipartFormDataContent();
+            var stream = file.OpenReadStream(5_000_000);
+            content.Add(new StreamContent(stream), "file", file.Name);
+            
+            response.Content = content;
+            response.ExceptionOccured = false;
+        }
+        catch (Exception e)
+        {
+            response.Content = null;
+            response.ExceptionOccured = true;
+        }
+        
+        return response;
     }
 
     private async Task RemoveImage(CreateImageDto img)
@@ -206,8 +235,9 @@ public partial class CreateCompany
 
             if (!result.ExceptionOccurred)
             {
-                var res = await DialogService.Alert(GetEditAnonymousIdentifierText(result.Result!.AnonymousEditIdentifier!), "Kod za azuriranje kompanije",
-                    new AlertOptions() { OkButtonText = "Prikazi kompaniju", ShowClose = false });
+                var res = await DialogService.Alert(GetEditAnonymousIdentifierText(result.Result!.AnonymousEditIdentifier!), 
+                    "Kod za azuriranje kompanije",
+                    new AlertOptions { OkButtonText = "Prikazi kompaniju", ShowClose = false });
                 
                 if(res is true)
                     NavigationManager.NavigateTo($"/companies/{result.Result.CompanyId}");

@@ -1,7 +1,8 @@
-﻿using Diplomski.RatingHub.Application.Interfaces.Repositories;
+﻿using Diplomski.RatingHub.Application.Exceptions;
+using Diplomski.RatingHub.Application.Interfaces.Repositories;
+using Diplomski.RatingHub.Application.Models.Dtos;
 using Diplomski.RatingHub.Application.Specifications;
 using Diplomski.RatingHub.Domain.Models;
-using Diplomski.RatingHub.Web.Models;
 using FluentValidation;
 using MediatR;
 using NanoidDotNet;
@@ -102,25 +103,28 @@ public class CreateCompanyCommandHandler : IRequestHandler<CreateCompanyCommand,
 
     public async Task<int> Handle(CreateCompanyCommand request, CancellationToken cancellationToken)
     {
+        var oldCompany = await _companyRepository.GetSingleBySpec(new Specification<Company>(c => 
+            (c.Name.ToLower() == request.Name.ToLower() && c.CityId == request.CityId) || 
+            (!string.IsNullOrEmpty(request.CompanyPib) && c.CompanyPib == request.CompanyPib)));
+        if(oldCompany is not null)
+            throw new AppException("Kompanija koju pokusavate da kreirate vec postoji");
+        
         var category = await _categoryRepository.GetSingleBySpec(
             new Specification<Category>(c=> c.Id == request.CategoryId)
                 .AddInclude(c => c.RatingCriteria));
         if (category is null)
-            throw new ApplicationException("Kategorija ne postoji");
+            throw new AppException("Kategorija ne postoji");
         
         var city = await _cityRepository.GetById(request.CityId);
         if (city is null)
-            throw new ApplicationException("Grad ne postoji");
+            throw new AppException("Grad ne postoji");
         
         if (request.OwnerId.HasValue)
         {
             var owner = await _userRepository.GetById(request.OwnerId.Value);
             if (owner is null)
-                throw new ApplicationException("Vlasnik kompanije ne postoji");
+                throw new AppException("Vlasnik kompanije ne postoji");
         }
-
-        string? anonymousEditIdentifier = request.OwnerId.HasValue ? null : 
-            await Nanoid.GenerateAsync(Nanoid.Alphabets.LettersAndDigits, 15);
         
         var company = new Company
         {
@@ -173,7 +177,7 @@ public class CreateCompanyCommandHandler : IRequestHandler<CreateCompanyCommand,
     {
         if (category.RatingCriteria.Any())
         {
-            foreach (var ratingCriterion in category.RatingCriteria)
+            foreach (var ratingCriterion in category.RatingCriteria.Where(rc => rc.IsActive))
             {
                 company.CompanyRatingAggregates.Add(new CompanyRatingAggregate
                 {

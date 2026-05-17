@@ -1,4 +1,4 @@
-﻿namespace Diplomski.RatingHub.Web.Models;
+﻿namespace Diplomski.RatingHub.Application.Models.Dtos;
 
 public class UploadImageResponseDto
 {

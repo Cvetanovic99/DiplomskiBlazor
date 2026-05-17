@@ -57,6 +57,8 @@ public class ReportedContentDto : IMapFrom<ReportedContent>
     public string Title { get; set; }
     public string ContentUrl { get; set; }
     public string Reason { get; set; }
+    public int ReportedEntityId { get; set; }
+    public int? ReportedUserId { get; set; }
     public ReportedContentStatus Status { get; set; }
     public string ReportedEntityType { get; set; }
     public DateTime Created { get; set; }

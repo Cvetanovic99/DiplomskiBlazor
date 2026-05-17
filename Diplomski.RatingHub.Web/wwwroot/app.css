@@ -58,3 +58,18 @@ h1:focus {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
     text-align: start;
 }
+
+.image-gallery-dialog .rz-dialog
+{
+    display: flex !important;
+    flex-direction: column !important;
+    overflow:hidden !important;
+    padding:0 !important;
+}
+
+.image-gallery-dialog .rz-dialog-content {
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+}

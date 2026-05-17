@@ -1,4 +1,6 @@
-﻿namespace Diplomski.RatingHub.Web.Models;
+﻿using Diplomski.RatingHub.Application.Models;
+
+namespace Diplomski.RatingHub.Application.Models.Dtos;
 
 public class CreateCompanyDto
 {

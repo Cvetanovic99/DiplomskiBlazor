@@ -69,6 +69,6 @@ public class CompanyDto : IMapFrom<Company>
                 options => options.MapFrom((src) => 
                     src.Images.FirstOrDefault(i => i.IsProfile).Path))
             .ForMember(dest => dest.HasOwner,
-                options => options.MapFrom((src) => src.OwnerId != null));
+                options => options.MapFrom(src => src.OwnerId != null));
     }
 }

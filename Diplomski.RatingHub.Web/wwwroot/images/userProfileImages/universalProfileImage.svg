@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+  
+  <!-- Background circle -->
+  <circle cx="100" cy="100" r="95" fill="#f3f4f6" stroke="#c5d6f7" stroke-width="2"></circle>
+
+  <!-- Head -->
+  <circle cx="100" cy="70" r="25" fill="#b7b6b8"></circle>
+
+  <!-- Shoulders -->
+  <path d="M50 120 
+           Q100 100 150 120 
+           L150 140 
+           Q100 124 50 140 Z" fill="#b7b6b8"></path>
+
+  <!-- Text -->
+  <text x="100" y="160" text-anchor="middle" font-size="20" fill="#b7b6b8" font-family="Arial, sans-serif">
+        nema slike
+  </text>
+
+</svg>

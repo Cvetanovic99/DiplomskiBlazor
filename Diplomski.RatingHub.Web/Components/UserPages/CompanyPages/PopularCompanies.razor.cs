@@ -44,4 +44,9 @@ public partial class PopularCompanies
         var percent = (rating / 5.0) * 100;
         return $"--stars-fill: {percent}%";
     }
+    
+    private void GoToDetails(int companyId)
+    {
+        NavigationManager.NavigateTo($"/companies/{companyId}");
+    }
 }

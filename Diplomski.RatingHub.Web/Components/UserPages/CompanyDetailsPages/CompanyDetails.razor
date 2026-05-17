@@ -1,0 +1,324 @@
+﻿@page "/companies/{CompanyId:int}"
+
+@inherits Diplomski.RatingHub.Web.Components.Shared.PortalComponentBase
+
+<div class="company-container">
+
+    <!-- BREADCRUMB -->
+    <div class="breadcrumb">
+        @for (int i=0; i<_breadcrumbs.Count; i++)
+        {
+            var localIndex = i; 
+            if (i != _breadcrumbs.Count - 1)
+            {
+                <span class="parent-breadcrumb" @onclick="() => OnBreadcrumbClicked(_breadcrumbs[localIndex].Id)"
+                >@_breadcrumbs[i].Name</span>
+                <span style="font-weight: 700; color: #3f3939;"> > </span>
+            }
+            else
+            {
+                <span class="current-breadcrumb">@_breadcrumbs[i].Name</span>
+            }
+        }
+    </div>
+
+    <div class="layout">
+
+        <!-- LEFT -->
+        <div class="main">
+
+            @if (string.IsNullOrEmpty(Company.Name))
+            {
+                <RadzenText TextStyle="TextStyle.H1" Style="width: 100%">
+                    <RadzenSkeleton Animation="SkeletonAnimation.Wave" Style="width: 100%"/>
+                </RadzenText>
+            }
+            else {
+                <div class="header">
+
+                    <!-- IMAGE -->
+                    <div class="image">
+                        <img src="@GetProfileImage()"/>
+                    </div>
+
+                    <div class="info">
+
+                        <!-- NAME + ACTIONS -->
+                        <div class="top-row">
+
+                            <h1 class="company-title">
+                                @Company.Name
+                            </h1>
+                            <div class="actions">
+                                <div class="report-action-icon-wrapper">
+                                    <RadzenIcon Icon="report" IconStyle="IconStyle.Light" class="report-action-icon" @onclick="ReportCompanyClicked"
+                                                MouseEnter="@(args => ShowTooltip(args, "Prijavi pružaoca usluge", TooltipPosition.Top))"/>
+                                </div>
+                                @if (Company.OwnerId == null)
+                                {
+                                    <RadzenProfileMenu class="more-vert" Click="@OnCompanyActionsClicked" MouseEnter="@(args => ShowTooltip(args, "Ažuriraj pružaoca usluge", TooltipPosition.Top))">
+                                        <Template>
+                                            <RadzenIcon Icon="edit" IconStyle="IconStyle.Light" IconColor="black"/>
+                                        </Template>
+                                        <ChildContent>
+                                            <RadzenProfileMenuItem Text="Edituj" Icon="edit" Value="@_edit"/>
+                                            <RadzenProfileMenuItem Text="Obrisi" Icon="delete" Value="@_delete"/>
+                                        </ChildContent>
+                                    </RadzenProfileMenu>
+                                }
+                            </div>
+
+                        </div>
+
+                        <!-- RATING -->
+                        <div class="company-rating">
+                            <div class="provider-rating-box">
+                                <div class="provider-rating-stars" style="@GetStarsFillStyle(Company.OverallAverageGrade)">
+                                    <div class="provider-rating-stars-base">★★★★★</div>
+                                    <div class="provider-rating-stars-fill">★★★★★</div>
+                                </div>
+                            </div>
+
+                            <span class="rating-value">@Company.OverallAverageGrade.ToString("0.0")</span>
+                            <span class="reviews">(@Company.ReviewsCount ocena)</span>
+                        </div>
+
+                        <!-- STATUS -->
+                        <div class="company-status">
+
+                            @if (Company.IsVerified)
+                            {
+                                <div class="status-item verified">
+                                    <RadzenIcon Icon="verified" MouseEnter="@(args => ShowTooltip(args, "Pružalac usluge je verifikovan na nasoj platformi", TooltipPosition.Top))"/>
+                                    <span class="status-item-text">Verifikovana</span>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="status-item verified-off">
+                                    <RadzenIcon Icon="verified_off" MouseEnter="@(args => ShowTooltip(args, "Pružalac usluge nije verifikovana na nasoj platformi", TooltipPosition.Top))"/>
+                                    <span class="status-item-text">Nije verifikovana</span>
+                                </div>
+                            }
+
+                            @if (Company.IsClaimed)
+                            {
+                                <div class="status-item claimed">
+                                    <RadzenIcon Icon="check_circle" MouseEnter="@(args => ShowTooltip(args, "Kompanija je dodeljena vlasniku", TooltipPosition.Top))"/>
+                                    <span class="status-item-text">Preuzeta</span>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="status-item claimed-off">
+                                    <RadzenIcon Icon="cancel" MouseEnter="@(args => ShowTooltip(args, "Kompanija nije dodeljena vlasniku", TooltipPosition.Top))"/>
+                                    <span class="status-item-text">Nije preuzeta</span>
+                                </div>
+                            }
+
+                        </div>
+
+                        <!-- PIB -->
+                        @if (!string.IsNullOrEmpty(Company.CompanyPib))
+                        {
+                            <div class="main-data-row ">
+                                <label>
+                                    <span style="font-weight: 600; color: #393838">PIB:</span>
+                                    <span class="main-data-text">@Company.CompanyPib </span>
+                                </label>
+                            </div>
+                        }
+
+                        <div class="main-data-row">
+                            @if (Company.IsEmailVerifier)
+                            {
+                                <RadzenIcon Icon="mail"/>
+                            }
+                            else
+                            {
+                                <RadzenIcon Icon="call"/>
+                            }
+
+                            <span class="main-data-text">@Company.Verifier</span>
+                        </div>
+
+                        <!-- ADDRESS -->
+                        <div class="main-data-row">
+                            <RadzenIcon Icon="location_on"/>
+                            <span class="main-data-text">@FullAddress</span>
+                        </div>
+
+                        <!-- BUTTONS -->
+                        <div class="buttons">
+
+                            <button class="primary" @onclick="GoToReview">
+                                <RadzenIcon Icon="edit"/>
+                                Oceni kompaniju
+                            </button>
+
+                            @if (!string.IsNullOrEmpty(Company.PublicPageUrl))
+                            {
+                                <a class="secondary"
+                                   href="@Company.PublicPageUrl"
+                                   target="_blank">
+                                    Poseti sajt
+                                    <RadzenIcon Icon="open_in_new"/>
+                                </a>
+                            }
+
+                        </div>
+
+                    </div>
+                </div>
+            }
+
+            <div class="divider"></div>
+
+            @if (Company.Images != null && Company.Images.Any())
+            {
+                <div class="company-gallery">
+
+                    @{
+                        var images = Company.Images;
+                        var visibleCount = 5;
+                        var visibleImages = images.Take(visibleCount).ToList();
+                        var remaining = images.Count - visibleImages.Count;
+                    }
+
+                    @for (int i = 0; i < visibleImages.Count; i++)
+                    {
+                        var localIndex = i;
+                        <div class="gallery-item"
+                             @onclick="() => OpenGallery(localIndex)">
+                            <img src="@visibleImages[i]" />
+                        </div>
+                    }
+
+                    @if (remaining > 0)
+                    {
+                        <div class="gallery-item gallery-more"
+                             @onclick="() => OpenGallery(visibleCount)">
+                            <span>+@remaining</span>
+                        </div>
+                    }
+
+                </div>
+            }
+            
+            <div class="verification-card @(Company.IsVerified ? "verified" : "not-verified")">
+
+                <div class="verification-icon">
+                    @if (Company.IsVerified)
+                    {
+                        <RadzenIcon Icon="verified" />
+                    }
+                    else
+                    {
+                        <RadzenIcon Icon="verified_off" />
+                    }
+                </div>
+
+                <div class="verification-content">
+
+                    <div class="verification-title">
+                        @(Company.IsVerified ? "Verifikovan pružalac usluga" : "Nije verifikovan")
+                    </div>
+
+                    <div class="verification-text">
+                        @if (Company.IsVerified)
+                        {
+                            <text>
+                                Pružalac usluge je verifikovan u našem sistemu, možete biti sigurni da su podaci o njemu tačni kao i odgovori na komentare.
+                                Ispod vidite tvrdnje korisnika koji su ocenili pružaoca usluga.
+                            </text>
+                        }
+                        else
+                        {
+                            <text>
+                                Pružalac usluga nije verifikovan u našem sistemu, budite oprezni zbog mogućih netačnih odgovora na komentare ili podataka o njemu.
+                                Ispod vidite tvrdnje korisnika koji su ocenili pružaoca usluga.
+                                Proverite informacije i prijavite nepravilnosti klikom na 
+                                <span class="inline-icon">
+                                    <RadzenIcon Icon="report" Style="font-size:19px"/>
+                                </span>
+                            </text>
+                        }
+                    </div>
+
+                    <!-- procenat (placeholder za sada) -->
+                    <div class="verification-stats">
+
+                        <div class="stat">
+                            <span class="label">Tačni podaci</span>
+                            <div class="bar">
+                                <div class="fill correct" style="width: @_trueDataPercentage"></div>
+                            </div>
+                            <span class="value">@_trueDataPercentage</span>
+                        </div>
+
+                        <div class="stat">
+                            <span class="label">Netačni podaci</span>
+                            <div class="bar">
+                                <div class="fill incorrect" style="width: @_falseDataPercentage"></div>
+                            </div>
+                            <span class="value">@_falseDataPercentage</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+            
+            @if (!string.IsNullOrWhiteSpace(Company.Description))
+            {
+                <div class="company-description">
+
+                    <div class="desc-header">
+                        <RadzenIcon Icon="description" class="desc-icon" />
+                        <span style="font-weight: 300; font-size: 25px">Opis kompanije</span>
+                    </div>
+
+                    <div class="desc-text">
+
+                        @if (!_isDescriptionExpanded)
+                        {
+                            @_shortDescription
+
+                            @if (_hasMoreDescription)
+                            {
+                                <span>... </span>
+                                <span class="desc-toggle-inline" @onclick="ToggleDescription">
+                                    Vidi još
+                                </span>
+                            }
+                        }
+                        else
+                        {
+                            @Company.Description
+
+                            @if (_hasMoreDescription)
+                            {
+                                <span class="desc-toggle-inline" @onclick="ToggleDescription">
+                                    Prikaži manje
+                                </span>
+                            }
+                        }
+
+                    </div>
+
+                </div>
+            }
+        </div>
+
+        <!-- RIGHT -->
+        <div class="sidebar">
+            <CompanyDetailsAdditionalData CompanyId="CompanyId"/>
+        </div>
+
+    </div>
+    
+    <div class="divider"></div>
+</div>
+
+<Reviews CompanyId="CompanyId"/>

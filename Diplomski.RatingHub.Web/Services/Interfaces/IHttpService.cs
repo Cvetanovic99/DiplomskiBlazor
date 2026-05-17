@@ -1,4 +1,5 @@
-﻿using Diplomski.RatingHub.Web.Models;
+﻿using Diplomski.RatingHub.Application.Models.Dtos;
+using Diplomski.RatingHub.Web.Models;
 
 namespace Diplomski.RatingHub.Web.Services.Interfaces;
 

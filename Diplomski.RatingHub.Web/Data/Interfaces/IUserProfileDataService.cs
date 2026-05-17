@@ -7,4 +7,6 @@ namespace Diplomski.RatingHub.Web.Data.Interfaces;
 public interface IUserProfileDataService
 { 
     Task<UserProfileDto> CreateUserProfile(CreateUserProfileDto createUserProfileDto);
+    Task<CurrentUserProfileDto> GetCurrentUserProfile(string identityId);
+    Task BlockUserProfile(int userId);
 }

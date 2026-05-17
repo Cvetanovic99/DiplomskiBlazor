@@ -1,0 +1,241 @@
+﻿.additional-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.14);
+    border: 0.95px solid #dcd6d1;
+}
+
+/* TOP */
+.rating-top {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.rating-score {
+    font-size: 48px;
+    font-weight: 700;
+    color: #111827;
+}
+
+.reviews-count {
+    font-size: 13px;
+    color: #6b7280;
+}
+
+.company-rating {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding-top: 10px;
+}
+
+.provider-rating-box {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 42px;
+    padding: 0 12px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(255, 245, 214, 0.95), rgba(255, 250, 234, 0.98));
+    border: 1px solid rgba(242, 205, 96, 0.28);
+}
+
+.provider-rating-stars {
+    --stars-fill: 0%;
+    position: relative;
+    display: inline-block;
+    font-size: 1.6rem;
+    line-height: 1;
+    letter-spacing: 2px;
+}
+
+.provider-rating-stars-base {
+    color: #e5e7eb;
+}
+
+.provider-rating-stars-fill {
+    color: #f4b400;
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: var(--stars-fill);
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+
+/* BAROVI */
+.rating-bars {
+    margin-top: 5px;
+    padding: 10px;
+}
+
+.bar-row {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 6px;
+}
+
+.bar-label {
+    width: 50px;
+    font-size: 13px;
+    color: #374151;
+}
+
+.bar-track {
+    flex: 1;
+    height: 6px;
+    background: #e5e7eb;
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.bar-fill {
+    height: 100%;
+    border-radius: 999px;
+}
+
+.bar-percent {
+    width: 40px;
+    font-size: 12px;
+    color: #6b7280;
+    text-align: right;
+}
+
+/* SEPARATOR */
+.separator {
+    height: 1px;
+    background: #e5e7eb;
+    margin-bottom: 15px;
+    margin-top: 5px;
+}
+
+/* VERIFIED */
+.verified-section {
+    text-align: center;
+}
+
+.verified-title {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.verified-split {
+    display: flex;
+    justify-content: space-between;
+}
+
+.verified-item {
+    flex: 1;
+}
+
+.verified-percent {
+    font-size: 18px;
+    font-weight: 600;
+    color: #111827;
+}
+
+.verified-label {
+    font-size: 12px;
+    color: #6b7280;
+}
+
+/* Aggregates */
+.aggregates-card {
+    margin-top: 16px;
+    padding: 16px;
+    border-radius: 14px;
+    background: #ffffff;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.05);
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    border: 0.95px solid #dcd6d1;
+}
+
+/* ITEM */
+.aggregate-item {
+    padding: 12px;
+    border-radius: 10px;
+    background: #f9fafb;
+    transition: all 0.2s ease;
+}
+
+.aggregate-item:hover {
+    background: #f3f4f6;
+}
+
+/* GORNJI RED */
+.aggregate-top {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* IKONICA */
+.aggregate-icon {
+    color: #6366f1;
+    font-size: 18px;
+}
+
+/* VREDNOST */
+.aggregate-value {
+    font-size: 16px;
+    font-weight: 600;
+    color: #111827;
+}
+
+/* NAZIV */
+.aggregate-name {
+    margin-top: 4px;
+    font-size: 12px;
+    color: #6b7280;
+}
+
+.aggregate-bar {
+    height: 4px;
+    background: #e5e7eb;
+    border-radius: 999px;
+    margin-top: 6px;
+}
+
+.aggregate-bar-fill {
+    height: 100%;
+    background: #6366f1;
+    border-radius: 999px;
+}
+
+/* 📱 MOBILE */
+@media (max-width: 768px) {
+    .aggregates-card {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Map */
+.map-card {
+    margin-top: 16px;
+    background: #fff;
+    border-radius: 16px;
+    padding: 12px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.05);
+    border: 0.95px solid #dcd6d1;
+}
+
+/* MAPA */
+.company-map {
+    width: 100%;
+    height: 220px;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+/* 📱 MOBILE */
+@media (max-width: 768px) {
+    .company-map {
+        height: 180px;
+    }
+}

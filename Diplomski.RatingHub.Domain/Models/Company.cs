@@ -5,6 +5,7 @@ public class Company : EntityBase
     public required string Name { get; set; }
     public int ReviewsCount { get; set; }
     public double OverallAverageGrade { get; set; }
+    public double SumGradesValue { get; set; } //Sum of average values from all reviews
     public string? Description { get; set; }
     public string? Location { get; set; } //Maybe village name
     public required string Street { get; set; }

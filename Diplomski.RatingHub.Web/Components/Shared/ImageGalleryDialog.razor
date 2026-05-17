@@ -1,0 +1,21 @@
+﻿@inherits PortalComponentBase
+
+<div class="gallery-dialog">
+
+    <div class="gallery-main">
+        <img src="@Images[CurrentIndex]" />
+    </div>
+
+    <!-- strelica levo -->
+    <div class="gallery-nav left"
+         @onclick="Prev">
+        ‹
+    </div>
+
+    <!-- strelica desno -->
+    <div class="gallery-nav right"
+         @onclick="Next">
+        ›
+    </div>
+
+</div>

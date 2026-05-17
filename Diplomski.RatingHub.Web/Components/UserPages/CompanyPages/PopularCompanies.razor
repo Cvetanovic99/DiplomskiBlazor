@@ -49,9 +49,7 @@
                                                 }
                                                 else
                                                 {
-                                                    <div class="provider-card-image-placeholder">
-                                                        <RadzenIcon Icon="business"/>
-                                                    </div>
+                                                    <img src="/images/companyImages/genericCompanyImage.svg" class="provider-card-image"/>
                                                 }
                                             </div>
 
@@ -91,7 +89,7 @@
                                                     <span class="full-location">@c.City, @c.Location, @c.Street @c.HouseNumber</span>
                                                 </div>
 
-                                                <button class="provider-card-btn">
+                                                <button class="provider-card-btn" @onclick="() => GoToDetails(c.Id)">
                                                     Vidi detaljnije
                                                 </button>
 
@@ -121,7 +119,14 @@
                                     {
                                         <div class="provider-card">
                                             <div class="provider-card-image-wrap">
-                                                <img src="@c.ProfileImagePath" class="provider-card-image"/>
+                                                @if (!string.IsNullOrWhiteSpace(c.ProfileImagePath))
+                                                {
+                                                    <img src="@c.ProfileImagePath" class="provider-card-image"/>
+                                                }
+                                                else
+                                                {
+                                                    <img src="/images/companyImages/genericCompanyImage.svg" class="provider-card-image"/>
+                                                }
                                             </div>
 
                                             <div class="provider-card-body">
@@ -184,7 +189,14 @@
                                     {
                                         <div class="provider-card">
                                             <div class="provider-card-image-wrap">
-                                                <img src="@c.ProfileImagePath" class="provider-card-image"/>
+                                                @if (!string.IsNullOrWhiteSpace(c.ProfileImagePath))
+                                                {
+                                                    <img src="@c.ProfileImagePath" class="provider-card-image"/>
+                                                }
+                                                else
+                                                {
+                                                    <img src="/images/companyImages/genericCompanyImage.svg" class="provider-card-image"/>
+                                                }
                                             </div>
 
                                             <div class="provider-card-body">

@@ -1,4 +1,4 @@
-﻿using Diplomski.RatingHub.Web.Models;
+﻿using Diplomski.RatingHub.Application.Models.Dtos;
 using Microsoft.AspNetCore.Http;
 
 namespace Diplomski.RatingHub.Application.Interfaces.Storage;

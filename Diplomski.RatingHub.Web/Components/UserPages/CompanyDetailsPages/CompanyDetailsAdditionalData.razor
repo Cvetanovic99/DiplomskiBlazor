@@ -1,0 +1,127 @@
+﻿@inherits Diplomski.RatingHub.Web.Components.Shared.PortalComponentBase
+
+@if (Model != null)
+{
+    <div class="additional-card">
+
+        <!-- TOP (Ocena + zvezdice) -->
+        <div class="rating-top">
+
+            <div class="rating-score">
+                @Model.OverallAverageGrade.ToString("0.0")
+            </div>
+            
+            <div class="company-rating">
+                <div class="provider-rating-box">
+                    <div class="provider-rating-stars" style="@GetStarsFillStyle(Model.OverallAverageGrade)">
+                        <div class="provider-rating-stars-base">★★★★★</div>
+                        <div class="provider-rating-stars-fill">★★★★★</div>
+                    </div>
+                </div>
+            
+                <div class="reviews-count">
+                    @Model.ReviewsCount ocena
+                </div>
+            </div>
+
+        </div>
+
+        <!-- BAROVI -->
+        <div class="rating-bars">
+
+            @foreach (var item in _starBreakdown)
+            {
+                <div class="bar-row">
+
+                    <span class="bar-label">@item.Stars-star</span>
+
+                    <div class="bar-track">
+                        <div class="bar-fill"
+                             style="width:@item.Percentage%; background:@item.Color">
+                        </div>
+                    </div>
+
+                    <span class="bar-percent">@item.Percentage.ToString("0")%</span>
+
+                </div>
+            }
+
+        </div>
+        
+        <div class="separator"></div>
+        
+        <div class="verified-section">
+
+            <div class="verified-title">Ocene</div>
+
+            <div class="verified-split">
+
+                <div class="verified-item">
+                    <div class="verified-percent">@_unverifiedPercentage.ToString("0")%</div>
+                    <div class="verified-label">Nepotvrdjenih</div>
+                </div>
+
+                <div class="verified-item">
+                    <div class="verified-percent">@_verifiedPercentage.ToString("0")%</div>
+                    <div class="verified-label">Potvrdjenih</div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+}
+else
+{
+    <RadzenText TextStyle="TextStyle.H1" Style="width: 100%">
+        <RadzenSkeleton Animation="SkeletonAnimation.Wave" Style="width: 100%"/>
+    </RadzenText>
+}
+
+@if (Model != null) 
+{
+    <div class="aggregates-card">
+
+        @foreach (var item in Model.RatingAggregates.OrderBy(x => x.SortOrder))
+        {
+            <div class="aggregate-item">
+
+                <div class="aggregate-top">
+
+                    <!-- Ikonica -->
+                    <RadzenIcon Icon="reviews" class="aggregate-icon" />
+
+                    <!-- Ocena -->
+                    <span class="aggregate-value">
+                        @item.AverageValue.ToString("0.0")
+                    </span>
+
+                </div>
+
+                <!-- Naziv -->
+                <div class="aggregate-name">
+                    @item.Name
+                </div>
+                
+                <div class="aggregate-bar">
+                    <div class="aggregate-bar-fill"
+                         style="width:@(item.AverageValue / 5 * 100)%; background:@GetAggregateFillColor(item.AverageValue)">
+                    </div>
+                </div>
+
+            </div>
+        }
+
+    </div>
+}
+else
+{
+    <RadzenText TextStyle="TextStyle.H3" Style="width: 100%; margin-top: 20px">
+        <RadzenSkeleton Animation="SkeletonAnimation.Wave" Style="width: 100%"/>
+    </RadzenText>
+}
+
+    <div class="map-card">
+        <div id="companyDetailsMap" class="company-map"></div>
+    </div>

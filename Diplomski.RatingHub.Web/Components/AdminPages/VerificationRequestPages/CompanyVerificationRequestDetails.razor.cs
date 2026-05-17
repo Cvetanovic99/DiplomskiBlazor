@@ -69,7 +69,7 @@ public partial class CompanyVerificationRequestDetails
     private string GetUserImage()
     {
         return string.IsNullOrWhiteSpace(Model.UserProfileImagePath)
-            ? "/images/userProfileImages/universalProfileImage.png"
+            ? "/images/userProfileImages/universalProfileImageAdmin.png"
             : Model.UserProfileImagePath;
     }
 }

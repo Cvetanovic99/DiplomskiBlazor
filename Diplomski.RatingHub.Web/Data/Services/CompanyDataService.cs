@@ -3,6 +3,7 @@ using Diplomski.RatingHub.Application.Exceptions;
 using Diplomski.RatingHub.Application.Interfaces.Models;
 using Diplomski.RatingHub.Application.Interfaces.Notifications;
 using Diplomski.RatingHub.Application.Models;
+using Diplomski.RatingHub.Application.Models.Dtos;
 using Diplomski.RatingHub.Application.UseCases.Companies.Commands;
 using Diplomski.RatingHub.Application.UseCases.Companies.Queries;
 using Diplomski.RatingHub.Web.Data.Interfaces;
@@ -48,17 +49,17 @@ public class CompanyDataService : DataServiceBase, ICompanyDataService
         int companyId = await Send(
             new CreateCompanyCommand 
             {
-                Name = createCompanyDto.Name,
+                Name = createCompanyDto.Name.Trim(),
                 Description =  createCompanyDto.Description,
                 Location =  createCompanyDto.Location,
                 Street =   createCompanyDto.Street,
                 HouseNumber =   createCompanyDto.HouseNumber,
-                Verifier =  createCompanyDto.Verifier,
+                Verifier =  createCompanyDto.Verifier.Trim(),
                 IsEmailVerifier = createCompanyDto.IsEmailVerifier,
-                PublicPageUrl = createCompanyDto.PublicPageUrl,
+                PublicPageUrl = createCompanyDto.PublicPageUrl?.Trim(),
                 Latitude =   createCompanyDto.Latitude,
                 Longitude =    createCompanyDto.Longitude,
-                CompanyPib =  createCompanyDto.CompanyPib,
+                CompanyPib =  createCompanyDto.CompanyPib?.Trim(),
                 OwnerId = null, //When user who creates company is Anonymous
                 CategoryId = createCompanyDto.CategoryId,
                 CityId = createCompanyDto.CityId,
@@ -76,22 +77,25 @@ public class CompanyDataService : DataServiceBase, ICompanyDataService
 
     public async Task<int> CreateCompanyAsOwner(CreateCompanyDto createCompanyDto)
     {
+        if (string.IsNullOrEmpty(createCompanyDto.Verifier))
+            throw new AppException("Doslo je do greske");
+        
         createCompanyDto.IsEmailVerifier = RegisterUserDto.IsEmail(createCompanyDto.Verifier);
         
         return await Send(
             new CreateCompanyCommand 
             {
-                Name = createCompanyDto.Name,
+                Name = createCompanyDto.Name.Trim(),
                 Description =  createCompanyDto.Description,
                 Location =  createCompanyDto.Location,
                 Street =   createCompanyDto.Street,
                 HouseNumber =   createCompanyDto.HouseNumber,
-                Verifier =  createCompanyDto.Verifier,
+                Verifier =  createCompanyDto.Verifier.Trim(),
                 IsEmailVerifier = createCompanyDto.IsEmailVerifier,
-                PublicPageUrl = createCompanyDto.PublicPageUrl,
+                PublicPageUrl = createCompanyDto.PublicPageUrl?.Trim(),
                 Latitude =   createCompanyDto.Latitude,
                 Longitude =    createCompanyDto.Longitude,
-                CompanyPib =  createCompanyDto.CompanyPib,
+                CompanyPib =  createCompanyDto.CompanyPib?.Trim(),
                 OwnerId = createCompanyDto.OwnerId,
                 CategoryId = createCompanyDto.CategoryId,
                 CityId = createCompanyDto.CityId,
@@ -99,6 +103,33 @@ public class CompanyDataService : DataServiceBase, ICompanyDataService
                 ClaimCompanyIdentifier = null,//It's already created by owner
                 AnonymousEditIdentifier = null//Owner will be able to edit
             });
+    }
+
+    public async Task EditCompany(EditCompanyDto editCompanyDto)
+    {
+        if (string.IsNullOrEmpty(editCompanyDto.Verifier))
+            throw new AppException("Doslo je do greske");
+        
+        editCompanyDto.IsEmailVerifier = RegisterUserDto.IsEmail(editCompanyDto.Verifier);
+        
+        await Send(new EditCompanyCommand
+        {
+            CompanyId = editCompanyDto.CompanyId,
+            Name = editCompanyDto.Name.Trim(),
+            Description =  editCompanyDto.Description,
+            Location =  editCompanyDto.Location,
+            Street =   editCompanyDto.Street,
+            HouseNumber =   editCompanyDto.HouseNumber,
+            Verifier =  editCompanyDto.Verifier.Trim(),
+            IsEmailVerifier = editCompanyDto.IsEmailVerifier,
+            PublicPageUrl = editCompanyDto.PublicPageUrl?.Trim(),
+            Latitude =   editCompanyDto.Latitude,
+            Longitude =    editCompanyDto.Longitude,
+            CompanyPib =  editCompanyDto.CompanyPib?.Trim(),
+            CategoryId = editCompanyDto.CategoryId,
+            CityId = editCompanyDto.CityId,
+            Images =  editCompanyDto.Images,
+        });
     }
 
     public async Task<IPaginatedList<FilteredCompanyDto>> GetFilteredCompanies(int cityId, int categoryId, string filterValue, double overallRatingGrade,
@@ -125,6 +156,41 @@ public class CompanyDataService : DataServiceBase, ICompanyDataService
             CategoryId = categoryId,
             Take = take
         });
+    }
+
+    public async Task<CompanyDetailsDto> GetCompanyDetails(int companyId)
+    {
+        return await Send(new GetCompanyDetailsQuery { CompanyId = companyId });
+    }
+
+    public async Task<CompanyDetailsAdditionalDataDto> GetCompanyDetailsAdditionalData(int companyId)
+    {
+        return await  Send(new GetCompanyDetailsAdditionalDataQuery { CompanyId = companyId });
+    }
+
+    public async Task<bool> ValidateCompanyAnonymousEditIdentifier(int companyId, string companyAnonymousEditIdentifier)
+    {
+        await Task.Delay(500);
+        return await Send(new ValidateCompanyAnonymousEditIdentifierQuery
+        {
+            CompanyId = companyId,
+            AnonymousEditIdentifier = companyAnonymousEditIdentifier
+        });
+    }
+
+    public async Task DeleteCompanyAsAnonymous(int companyId, bool isAdminDeleting = false)
+    {
+        await Send(new DeleteCompanyAsAnonymousCommand { CompanyId = companyId, IsAdminDeleting = isAdminDeleting});
+    }
+
+    public async Task DeleteCompanyAsOwner(int companyId)
+    {
+        await Send(new DeleteCompanyAsOwnerCommand { CompanyId = companyId });
+    }
+
+    public async Task<EditCompanyDto> GetCompanyForEdit(int companyId)
+    {
+        return await Send(new GetCompanyForEditQuery { CompanyId = companyId });
     }
 
     private async Task NotifyOwnerAboutCompanyCreation(CreateCompanyDto createCompanyDto)

@@ -1,7 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Diplomski.RatingHub.Application.Models.Dtos;
 using Diplomski.RatingHub.Application.UseCases.Categories.Queries;
 using Diplomski.RatingHub.Web.Data.Interfaces;
-using Diplomski.RatingHub.Web.Models;
 using Microsoft.AspNetCore.Components;
 using Radzen.Blazor;
 

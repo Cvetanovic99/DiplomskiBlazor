@@ -3,7 +3,7 @@ using AutoMapper;
 using Diplomski.RatingHub.Application.Mapping;
 using Diplomski.RatingHub.Domain.Models;
 
-namespace Diplomski.RatingHub.Web.Models;
+namespace Diplomski.RatingHub.Application.Models.Dtos;
 
 public class CreateCategoryDto
 {

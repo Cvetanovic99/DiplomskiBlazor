@@ -22,7 +22,7 @@
             </div>
 
             <span class="rating-value">@Company.OverallAverageGrade.ToString("0.0")</span>
-            <span class="reviews">(@Company.ReviewsCount reviews)</span>
+            <span class="reviews">(@Company.ReviewsCount ocena)</span>
         </div>
 
         <!-- STATUS -->
@@ -31,30 +31,30 @@
             @if (Company.IsVerified)
             {
                 <div class="status-item verified" >
-                    <RadzenIcon Icon="verified" MouseEnter="@(args=> ShowTooltip(args,"Kompanija je verifikovana na nasoj platformi", TooltipPosition.Top))"/>
-                    <span>Verifikovana</span>
+                    <RadzenIcon Icon="verified" MouseEnter="@(args=> ShowTooltip(args,"Pružalac usluge je verifikovan na nasoj platformi", TooltipPosition.Top))"/>
+                    <span class="status-item-text">Verifikovana</span>
                 </div>
             }
             else
             {
                 <div class="status-item verified-off" >
-                    <RadzenIcon Icon="verified_off" MouseEnter="@(args => ShowTooltip(args,"Kompanija nije verifikovana na nasoj platformi", TooltipPosition.Top))"/>
-                    <span>Nije verifikovana</span>
+                    <RadzenIcon Icon="verified_off" MouseEnter="@(args => ShowTooltip(args,"Pružalac usluge nije verifikovan na nasoj platformi", TooltipPosition.Top))"/>
+                    <span class="status-item-text">Nije verifikovana</span>
                 </div>
             }
 
             @if (Company.IsClaimed)
             {
                 <div class="status-item claimed" >
-                    <RadzenIcon Icon="person" MouseEnter="@(args => ShowTooltip(args,"Kompanija je dodeljena vlasniku", TooltipPosition.Top))" />
-                    <span>Preuzeta</span>
+                    <RadzenIcon Icon="check_circle" MouseEnter="@(args => ShowTooltip(args,"Kompanija je dodeljena vlasniku", TooltipPosition.Top))" />
+                    <span class="status-item-text">Preuzeta</span>
                 </div>
             }
             else
             {
                 <div class="status-item claimed-off">
-                    <RadzenIcon Icon="person_off" MouseEnter="@(args => ShowTooltip(args,"Kompanija nije dodeljena vlasniku", TooltipPosition.Top))"/>
-                    <span>Nije preuzeta</span>
+                    <RadzenIcon Icon="cancel" MouseEnter="@(args => ShowTooltip(args,"Kompanija nije dodeljena vlasniku", TooltipPosition.Top))"/>
+                    <span class="status-item-text">Nije preuzeta</span>
                 </div>
             }
 

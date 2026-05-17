@@ -1,4 +1,5 @@
-﻿using Diplomski.RatingHub.Infrastructure.Auth.Models;
+﻿using Diplomski.RatingHub.Application.Interfaces.Services;
+using Diplomski.RatingHub.Infrastructure.Auth.Models;
 using Diplomski.RatingHub.Infrastructure.Notifications.Email;
 using Diplomski.RatingHub.Infrastructure.Persistence.Contexts;
 using Diplomski.RatingHub.Web.Components.Account;
@@ -22,6 +23,8 @@ public static class DependencyInjection
         services.AddScoped<IReportedContentDataService, ReportedContentDataService>();
         services.AddScoped<ICompanyVerificationRequestDataService, CompanyVerificationRequestDataService>();
         services.AddScoped<ICompanyDataService, CompanyDataService>();
+        services.AddScoped<IReviewDataService, ReviewDataService>();
+        services.AddScoped<ICurrentUserService, CurrentUserService>();
         
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 

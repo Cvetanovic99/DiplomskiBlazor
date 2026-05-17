@@ -1,0 +1,61 @@
+﻿@inherits PortalComponentBase
+
+<div class="report-dialog">
+    <RadzenTemplateForm Data="@model" Submit="@OnSubmit" TItem="ReportContentDto">
+
+        <!-- NASLOV -->
+        <div class="form-group">
+            <label>
+                <RadzenIcon Icon="title" /> Naslov:
+            </label>
+
+            <RadzenTextBox @bind-Value="model.Title" Style="width:100%" Name="Title" />
+
+            <RadzenRequiredValidator Text="Obavezno polje"
+                                     Component="Title"
+                                     Popup="false" />
+        </div>
+
+        <!-- RAZLOG -->
+        <div class="form-group">
+            <label>
+                <RadzenIcon Icon="report" /> Razlog prijave:
+            </label>
+
+            <RadzenTextArea @bind-Value="model.Reason"
+                            Style="width:100%; height:120px"
+                            Name="Reason" />
+
+            <RadzenRequiredValidator Text="Obavezno polje"
+                                     Component="Reason"
+                                     Popup="false" />
+        </div>
+
+        <!-- EMAIL -->
+        <div class="form-group">
+            <label>
+                <RadzenIcon Icon="mail" /> Kontakt Email (opciono):
+            </label>
+
+            <RadzenTextBox @bind-Value="model.Email" Style="width:100%" Name="Email"/>
+            <RadzenEmailValidator Component="Email" Text="Email adresa nije ispravna" Popup="false" />
+        </div>
+
+        <!-- BUTTONS -->
+        <div class="dialog-actions">
+
+            <RadzenButton Text="Odustani"
+                          Click="@OnCancel"
+                          ButtonStyle="ButtonStyle.Light" />
+
+            <RadzenButton Text="Prijavi"
+                          Type="Submit"
+                          ButtonStyle="ButtonStyle.Primary" 
+                          IsBusy="IsLoading"
+                          BusyText="Slanje" />
+
+        </div>
+
+    </RadzenTemplateForm>
+
+</div>

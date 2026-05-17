@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@using System.Security.Claims
+@using Diplomski.RatingHub.Application.Interfaces.Services
+
+@inject ICurrentUserService CurrentUserService
+
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -24,6 +29,8 @@
 <script src="jsscripts/CreateCompanyDisplayMap.js"></script>
 <script src="jsscripts/CompaniesMapDesctopView.js"></script>
 <script src="jsscripts/CompaniesMapMobileView.js"></script>
+<script src="jsscripts/CompanyDetailsMap.js"></script>
+<script src="jsscripts/LocalStorageFunctions.js"></script>
 
 <script src="_content/Radzen.Blazor/Radzen.Blazor.js?v=@(typeof(Radzen.Colors).Assembly.GetName().Version)"></script>
 </body>
@@ -37,4 +44,40 @@
 
     private IComponentRenderMode? PageRenderMode
         => HttpContext.AcceptsInteractiveRouting() ? InteractiveServer : null;
+    
+
+    //Store Current user data
+    protected override async Task OnInitializedAsync()
+    {
+        var httpContext = HttpContext;
+        if (httpContext == null) return;
+
+        var user = httpContext.User;
+        if (user.Identity?.IsAuthenticated == true)
+        {
+            var userId = user.FindFirstValue(ClaimTypes.NameIdentifier);
+            await CurrentUserService.SetAuthenticatedUser(userId);
+        }
+        else
+        {
+            // Anonimni kolačić
+            var request = httpContext.Request;
+            var response = httpContext.Response;
+            string anonymousId = request.Cookies["AnonymousId"];
+
+            if (string.IsNullOrEmpty(anonymousId))
+            {
+                anonymousId = Guid.NewGuid().ToString();
+                response.Cookies.Append("AnonymousId", anonymousId, new CookieOptions
+                {
+                    Expires = DateTimeOffset.UtcNow.AddYears(1),
+                    HttpOnly = true,      // Ne može JS da čita – bezbednije
+                    Secure = true,
+                    SameSite = SameSiteMode.Strict
+                });
+            }
+
+            CurrentUserService.SetAnonymousUser(anonymousId);
+        }
+    }
 }

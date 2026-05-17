@@ -1,12 +1,10 @@
 ﻿using Diplomski.RatingHub.Application.Interfaces.Models;
 using Diplomski.RatingHub.Application.Models;
+using Diplomski.RatingHub.Application.Models.Dtos;
 using Diplomski.RatingHub.Application.UseCases.Categories.Commands;
 using Diplomski.RatingHub.Application.UseCases.Categories.Queries;
-using Diplomski.RatingHub.Domain.Models;
 using Diplomski.RatingHub.Web.Components.Shared;
 using Diplomski.RatingHub.Web.Data.Interfaces;
-using Diplomski.RatingHub.Web.Models;
-using MediatR;
 
 namespace Diplomski.RatingHub.Web.Data.Services;
 

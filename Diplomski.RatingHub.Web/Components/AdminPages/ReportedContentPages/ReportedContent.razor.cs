@@ -44,23 +44,20 @@ public partial class ReportedContent
     }
     private async Task OpenDetails(ReportedContentDto item)
     {
-        var result = await DialogService.OpenAsync<ReportedContentDetails>(
+        await DialogService.OpenAsync<ReportedContentDetails>(
             "Detalji",
-            new Dictionary<string, object>
+            new Dictionary<string, object?>
             {
                 { "Model", item }
             },
             new DialogOptions { Width = "500px", Style = "margin-top: 130px"});
-
-        if (result == true)
-            await _grid.Reload();
     }
 
     private async Task OpenEdit(ReportedContentDto item)
     {
         var result = await DialogService.OpenAsync<EditReportedContent>(
             "Izmena",
-            new Dictionary<string, object>
+            new Dictionary<string, object?>
             {
                 { "Model", item }
             },

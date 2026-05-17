@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using Diplomski.RatingHub.Application.Exceptions;
 using Diplomski.RatingHub.Application.Interfaces.Repositories;
+using Diplomski.RatingHub.Application.Models.Dtos;
 using Diplomski.RatingHub.Application.Specifications;
 using Diplomski.RatingHub.Domain.Models;
-using Diplomski.RatingHub.Web.Models;
 using FluentValidation;
 using MediatR;
 

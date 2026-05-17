@@ -19,4 +19,14 @@ public class UserProfileDataService(IServiceScopeFactory serviceScopeFactory) : 
                 Surname = createUserProfileDto.Surname
             });
     }
+
+    public async Task<CurrentUserProfileDto> GetCurrentUserProfile(string identityId)
+    {
+        return await Send(new GetCurrentUserProfileQuery { IndetityId = identityId });
+    }
+
+    public async Task BlockUserProfile(int userId)
+    {
+        await Send(new BlockUserProfileCommand { UserId = userId });
+    }
 }
