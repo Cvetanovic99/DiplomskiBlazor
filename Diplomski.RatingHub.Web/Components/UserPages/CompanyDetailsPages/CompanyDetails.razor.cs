@@ -1,15 +1,18 @@
 ﻿using System.Security.Claims;
+using System.Text;
 using Diplomski.RatingHub.Application.Enums;
-using Diplomski.RatingHub.Application.Interfaces.Services;
 using Diplomski.RatingHub.Application.UseCases.Categories.Queries;
 using Diplomski.RatingHub.Application.UseCases.Companies.Queries;
 using Diplomski.RatingHub.Domain.Enums;
 using Diplomski.RatingHub.Web.Components.Shared;
 using Diplomski.RatingHub.Web.Constants;
 using Diplomski.RatingHub.Web.Data.Interfaces;
+using Diplomski.RatingHub.Web.Models;
+using Diplomski.RatingHub.Web.Services.Interfaces;
 using Diplomski.RatingHub.Web.Utilities;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.WebUtilities;
 using Radzen;
 using Radzen.Blazor;
 
@@ -23,9 +26,12 @@ public partial class CompanyDetails
     [Inject] public ICompanyDataService CompanyDataService { get; set; } = null!;
     [Inject] public ICategoryDataService CategoryDataService { get; set; } = null!;
     [Inject] public IReviewDataService ReviewDataService { get; set; } = null!;
+    [Inject] public ICurrentUserService CurrentUserService { get; set; } = null!;
     
     private CompanyDetailsDto Company { get; set; } = new();
     private List<CategoryParentDto> _breadcrumbs = new List<CategoryParentDto>();
+
+    private CurrentUserDto _currentUser;
     
     private const string _edit = "edit";
     private const string _delete = "delete";
@@ -40,7 +46,6 @@ public partial class CompanyDetails
     {
         if (RendererInfo.IsInteractive)
         {
-
             var res = await InvokeDataServiceMethod(
                 () => CompanyDataService.GetCompanyDetails(CompanyId), 
                 errorMessage: "Greška pri učitavanju");
@@ -50,9 +55,32 @@ public partial class CompanyDetails
                 SetDescription();
                 await LoadBreadcrumbs();
                 CalculateTrueAndFalseDataPercentage();
-                
+            }
+            else
+            {
+                Company = null;
             }
         }
+    }
+    
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await GetCurrentUser();
+        }
+    }
+
+    private async Task GetCurrentUser()
+    {
+        var currentUser = await CurrentUserService.GetCurrentUserAsync(JSRuntime);
+        if (currentUser == null)
+        {
+            ShowNotification("Doslo je do greske prilikom ucitavanja korisnika", NotificationSeverity.Error);
+            return;
+        }
+        _currentUser = currentUser;
+        await InvokeAsync(StateHasChanged);
     }
 
     private async Task LoadBreadcrumbs()
@@ -84,8 +112,8 @@ public partial class CompanyDetails
         
         if (Company.ReviewsCount > 0)
         {
-            _falseDataPercentage = $"{(falseDataNumber/Company.ReviewsCount) * 100}%";
-            _trueDataPercentage = $"{(Company.CompanyDataTrueCount/Company.ReviewsCount) * 100}%";
+            _falseDataPercentage = $"{((double)falseDataNumber/Company.ReviewsCount) * 100}%";
+            _trueDataPercentage = $"{((double)Company.CompanyDataTrueCount/Company.ReviewsCount) * 100}%";
         }
     }
 
@@ -100,16 +128,20 @@ public partial class CompanyDetails
 
     private async Task GoToReview()
     {
-        string? userIdentityIdentifier = await HandleIdentityId();
-
-        if (userIdentityIdentifier == null)
+        if (_currentUser is null)
         {
             ShowNotification("Doslo je do greske, molimo vas pokusajte kasnije", NotificationSeverity.Error);
             return;
         }
         
+        if (_currentUser.IsAuthenticated && _currentUser.CurrentUserProfile!.Blocked)
+        {
+            ShowNotification("Vas profil je blokiran, zbog toga ne mozete oceniti kompaniju");
+            return;
+        }
+        
         var result = await InvokeDataServiceMethod(
-            () => ReviewDataService.GetIfReviewAlreadyExists(userIdentityIdentifier, CompanyId),
+            () => ReviewDataService.GetIfReviewAlreadyExists(_currentUser.IndetityId, CompanyId),
             errorMessage: "Doslo je do greske, molimo vas pokusajte kasnije");
 
         if (result.ExceptionOccurred)
@@ -121,48 +153,9 @@ public partial class CompanyDetails
             return;
         }
         
-        NavigationManager.NavigateTo($"/companies/{CompanyId}/create-review");
+        var encodedIdentifier = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(_currentUser.IndetityId));
+        NavigationManager.NavigateTo($"/companies/{CompanyId}/create-review?identifier={encodedIdentifier}&isAuthenticated={_currentUser.IsAuthenticated}");
     }
-    
-    private async Task<string?> HandleIdentityId()
-    {
-        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
-
-        
-        if (user.Identity?.IsAuthenticated == true)
-        {
-            string identityId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            if (!string.IsNullOrEmpty(identityId))
-                return identityId;
-            else
-                return null;
-        }
-        else
-        {
-            string? customGuid = await JSRuntime.GetItemFromLocalStorage(LocalStorageKeys.AnonymousUserCustomGuidKey);
-            if (string.IsNullOrEmpty(customGuid))
-            {
-                string guid = Guid.NewGuid().ToString();
-                bool res = await JSRuntime.SetItemToLocalStorage(LocalStorageKeys.AnonymousUserCustomGuidKey, guid);
-                if (!res)
-                {
-                    return null;
-                }
-                
-                return guid;
-            }
-            
-            return customGuid;
-        }
-    }
-    
-    private void GoToCompanyPublicPage()
-    {
-        NavigationManager.NavigateTo($"/companies/create-review/{Company.PublicPageUrl}");
-    }
-    
     
     private void OnBreadcrumbClicked(int categoryId)
     {

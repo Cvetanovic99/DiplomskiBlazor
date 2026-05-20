@@ -29,4 +29,9 @@ public class UserProfileDataService(IServiceScopeFactory serviceScopeFactory) : 
     {
         await Send(new BlockUserProfileCommand { UserId = userId });
     }
+
+    public async Task<bool> CheckForNewNotifications(int userId)
+    {
+        return await Send(new CheckForNewNotificationsQuery { UserId = userId });
+    }
 }

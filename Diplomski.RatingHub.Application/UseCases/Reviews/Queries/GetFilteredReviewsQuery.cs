@@ -18,6 +18,7 @@ public class GetFilteredReviewsQuery : IRequest<IPaginatedList<FilteredReviewDto
     public double MinOverallScore { get; set; }
     public bool OnlyConfirmed { get; set; }
     public bool OnlyWithCompanyResponse { get; set; }
+    public int? CurrentAuthenticatedUserId { get; set; }
 }
 
 public class GetFilteredReviewsQueryValidator : AbstractValidator<GetFilteredReviewsQuery>
@@ -35,10 +36,14 @@ public class GetFilteredReviewsQueryValidator : AbstractValidator<GetFilteredRev
 public class GetFilteredReviewsQueryHandler : IRequestHandler<GetFilteredReviewsQuery, IPaginatedList<FilteredReviewDto>>
 {
     private readonly IDatabaseRepository<Review> _reviewsRepository;
+    private readonly IDatabaseRepository<Like> _likesRepository;
 
-    public GetFilteredReviewsQueryHandler(IDatabaseRepository<Review> reviewsRepository)
+    public GetFilteredReviewsQueryHandler(
+        IDatabaseRepository<Review> reviewsRepository,
+        IDatabaseRepository<Like> likesRepository)
     {
         _reviewsRepository = reviewsRepository;
+        _likesRepository = likesRepository;
     }
 
     public async Task<IPaginatedList<FilteredReviewDto>> Handle(GetFilteredReviewsQuery request, CancellationToken cancellationToken)
@@ -66,8 +71,22 @@ public class GetFilteredReviewsQueryHandler : IRequestHandler<GetFilteredReviews
             specification.And(r => r.CompanyResponseId != null);
         }
         
-        return await _reviewsRepository.GetAndProjectAsPaginatedList<FilteredReviewDto>(specification, request.QueryArgs);
-        
+        var reviews = await _reviewsRepository.GetAndProjectAsPaginatedList<FilteredReviewDto>(specification, request.QueryArgs);
+
+        if (request.CurrentAuthenticatedUserId is not null)//Show to user what he already liked
+        {
+            IList<int> reviewIds = reviews.Items.Where(r => r.LikesCount > 0).Select(r => r.Id).ToList();
+            
+            var likes = await _likesRepository.Get(
+                new Specification<Like>(l => reviewIds.Contains(l.ReviewId) && l.UserId == request.CurrentAuthenticatedUserId));
+
+            foreach (var like in likes)
+            {
+                reviews.Items.First(r => r.Id == like.ReviewId).IsLikedByCurrentAuthenticatedUser = true;
+            }
+        }
+
+        return reviews;
     }
 }
 
@@ -79,7 +98,8 @@ public class FilteredReviewDto : IMapFrom<Review>
     public bool IsAnonymousReview { get; set; }
     public string? ReviewerFullName { get; set; }
     public int LikesCount { get; set; }
-    
+    public bool IsLikedByCurrentAuthenticatedUser { get; set; }
+    public int CompanyId { get; set; }
     public int?  ReviewerId { get; set; }
     public ReviewerDto? Reviewer { get; set; }
     public int? CompanyResponseId { get; set; }

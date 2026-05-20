@@ -3,6 +3,7 @@ using System.Text.Encodings.Web;
 using Diplomski.RatingHub.Application.Exceptions;
 using Diplomski.RatingHub.Application.Interfaces.Notifications;
 using Diplomski.RatingHub.Application.Models.Notifications;
+using Diplomski.RatingHub.Domain.Constants;
 using Diplomski.RatingHub.Infrastructure.Auth.Enums;
 using Diplomski.RatingHub.Infrastructure.Auth.Models;
 using Diplomski.RatingHub.Web.Components.Account.Pages;
@@ -97,7 +98,18 @@ public class AccountDataService : DataServiceBase, IAccountDataService
 
             throw new Exception(message);
         }
-        
+    
+        var roleResult = await _userManager.AddToRoleAsync(user, Roles.RegularUser);
+
+        if (!roleResult.Succeeded)
+        {
+            var message = roleResult.Errors
+                .Select(e => e.Description)
+                .Aggregate((current, next) => $"{current} {next}");
+
+            throw new Exception(message);
+        }
+
         return user;
     }
 
@@ -143,7 +155,7 @@ public class AccountDataService : DataServiceBase, IAccountDataService
         if (emailConfirmationToken is null)
             throw new AppException("Trenutno nismo u mogucnosti da posaljemo link za potvrdu email adrese, molimo vas pokusajte kasnije");
         
-        string callbackUrl = $"{BaseApplicationUrls.BaseHttpsUrl}/Account/ConfirmEmail?userId={user.Id}&code={emailConfirmationToken}";
+        string callbackUrl = $"{BaseApplicationUrls.BaseHttpUrl}/Account/ConfirmEmail?userId={user.Id}&code={emailConfirmationToken}";
         
         return HtmlEncoder.Default.Encode(callbackUrl);
     }

@@ -12,3 +12,9 @@ public class CreateImageDto
     public required string Title { get; set; }
     public bool IsProfile { get; set; }
 }
+
+public class CreateReviewImageDto
+{
+    public required string Path { get; set; }
+    public required string Title { get; set; }
+}

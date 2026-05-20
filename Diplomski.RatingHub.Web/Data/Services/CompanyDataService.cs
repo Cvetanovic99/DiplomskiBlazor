@@ -193,6 +193,21 @@ public class CompanyDataService : DataServiceBase, ICompanyDataService
         return await Send(new GetCompanyForEditQuery { CompanyId = companyId });
     }
 
+    public async Task<CompanyWithRatingCriteriaDto> GetCompanyWithRatingCriteria(int companyId)
+    {
+        return await Send(new GetCompanyAndRatingCriteriaQuery { CompanyId = companyId });
+    }
+
+    public async Task<IPaginatedList<UserCompanyDto>> GetUserCompanies(int userProfileId, QueryArgs queryArgs)
+    {
+        return await Send(new GetUserCompaniesQuery { UserProfileId = userProfileId, QueryArgs = queryArgs});
+    }
+
+    public async Task SetCompanyOwner(int userProfileId, string claimCompanyIdentifier)
+    {
+        await Send(new SetCompanyOwnerCommand { UserProfileId = userProfileId, ClaimCompanyIdentifier = claimCompanyIdentifier });
+    }
+
     private async Task NotifyOwnerAboutCompanyCreation(CreateCompanyDto createCompanyDto)
     {
         try

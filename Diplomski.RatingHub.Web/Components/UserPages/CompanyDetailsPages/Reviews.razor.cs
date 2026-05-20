@@ -1,14 +1,17 @@
 ﻿using System.Security.Claims;
+using System.Text;
 using Diplomski.RatingHub.Application.Enums;
 using Diplomski.RatingHub.Application.Models;
 using Diplomski.RatingHub.Application.UseCases.Reviews.Queries;
 using Diplomski.RatingHub.Web.Constants;
 using Diplomski.RatingHub.Web.Data.Interfaces;
 using Diplomski.RatingHub.Web.Data.Services;
+using Diplomski.RatingHub.Web.Models;
 using Diplomski.RatingHub.Web.Utilities;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.WebUtilities;
 using Radzen;
 
 namespace Diplomski.RatingHub.Web.Components.UserPages.CompanyDetailsPages;
@@ -16,6 +19,7 @@ namespace Diplomski.RatingHub.Web.Components.UserPages.CompanyDetailsPages;
 public partial class Reviews
 {
     [Parameter] public int CompanyId { get; set; }
+    [Parameter] public CurrentUserDto CurrentUser { get; set; }
 
     [Inject] public AuthenticationStateProvider AuthStateProvider { get; set; }
     [Inject] public IReviewDataService ReviewDataService { get; set; } = null!;
@@ -33,9 +37,13 @@ public partial class Reviews
 
     protected override async Task OnInitializedAsync()
     {
-        _filter.CompanId = CompanyId;
+        if (RendererInfo.IsInteractive)
+        {
+            _filter.CompanId = CompanyId;
+            _filter.CurrentAuthenticatedUserId = CurrentUser.CurrentUserProfile?.Id;
 
-        await LoadReviews();
+            await LoadReviews();
+        }
     }
 
     private async Task LoadReviews(int skip = 0)
@@ -52,42 +60,42 @@ public partial class Reviews
 
         if (!result.ExceptionOccurred)
         {
-            //_reviews = result.Result.Items;
-            //_totalCount = result.Result.TotalCount;
-            _reviews = new List<FilteredReviewDto>{ new FilteredReviewDto
-            {
-                Id = 1,
-                Comment = "Svidjala mi se saradnja sa ovim pruzaocem usluga, sve je bilo korektno kako smo se dogovorili. Jedino mislim da je mogao da zavrsi brze jer se puno oduzilo, sta da kazem jos, volim vas.",
-                OverallScore = 3.54,
-                IsAnonymousReview = false,
-                ReviewerFullName = "",
-                LikesCount = 354,
-                ReviewerId = null,
-                Reviewer = new ReviewerDto
-                {
-                    FullName = "Goran Cvetanovic",
-                    ProfileImage = "/images/companyImages/DSC_0323.jpg"
-                },
-                CompanyResponseId = 3,
-                CompanyResponse = new CompanyResponseDto
-                {
-                    Id=3,
-                    CompanyName = "Sabali programiranje",
-                    Text = "Hvala na lepim komentarima gospodine, nadam se da cemo uvek ovako lepo saradjivati. Kada god treba nazovite za slicne radove i preporucite nas drugome.",
-                    Created =  DateTime.Now,
-                    Modified =  DateTime.Now.AddMonths(1),
-                    ProfileImage = "/images/companyImages/DSC_0326.jpg",
-                    Images = new List<string> {"/images/companyImages/DSC_0326.jpg", "/images/companyImages/0872fcc3-044f-4ca0-a1a2-a17133a8e3bf.jpg", 
-                        "/images/companyImages/DSC_0326.jpg", "/images/companyImages/89995aec-289c-4a84-a60a-767ab57a2fee.jpg", "/images/companyImages/DSC_0326.jpg"}
-                    
-                },
-                Created = DateTime.Today,
-                Images = new List<string> {"/images/companyImages/DSC_0326.jpg", "/images/companyImages/0872fcc3-044f-4ca0-a1a2-a17133a8e3bf.jpg", 
-                    "/images/companyImages/DSC_0326.jpg", "/images/companyImages/89995aec-289c-4a84-a60a-767ab57a2fee.jpg", "/images/companyImages/DSC_0326.jpg"},
-                Grades = new List<ReviewGradeDto>{new ReviewGradeDto{CriterionName = "Cena", SortOrder = 1, Grade = 3},
-                new ReviewGradeDto{CriterionName = "Usluga", SortOrder = 2, Grade = 4}, new ReviewGradeDto{CriterionName = "Vreme cekanja", SortOrder = 3, Grade = 5},}
-            }};
-            _totalCount = 30;
+            _reviews = result.Result.Items;
+            _totalCount = result.Result.TotalCount;
+            // _reviews = new List<FilteredReviewDto>{ new FilteredReviewDto
+            // {
+            //     Id = 1,
+            //     Comment = "Svidjala mi se saradnja sa ovim pruzaocem usluga, sve je bilo korektno kako smo se dogovorili. Jedino mislim da je mogao da zavrsi brze jer se puno oduzilo, sta da kazem jos, volim vas.",
+            //     OverallScore = 3.54,
+            //     IsAnonymousReview = false,
+            //     ReviewerFullName = "",
+            //     LikesCount = 354,
+            //     ReviewerId = null,
+            //     Reviewer = new ReviewerDto
+            //     {
+            //         FullName = "Goran Cvetanovic",
+            //         ProfileImage = "/images/companyImages/DSC_0323.jpg"
+            //     },
+            //     CompanyResponseId = 3,
+            //     CompanyResponse = new CompanyResponseDto
+            //     {
+            //         Id=3,
+            //         CompanyName = "Sabali programiranje",
+            //         Text = "Hvala na lepim komentarima gospodine, nadam se da cemo uvek ovako lepo saradjivati. Kada god treba nazovite za slicne radove i preporucite nas drugome.",
+            //         Created =  DateTime.Now,
+            //         Modified =  DateTime.Now.AddMonths(1),
+            //         ProfileImage = "/images/companyImages/DSC_0326.jpg",
+            //         Images = new List<string> {"/images/companyImages/DSC_0326.jpg", "/images/companyImages/0872fcc3-044f-4ca0-a1a2-a17133a8e3bf.jpg", 
+            //             "/images/companyImages/DSC_0326.jpg", "/images/companyImages/89995aec-289c-4a84-a60a-767ab57a2fee.jpg", "/images/companyImages/DSC_0326.jpg"}
+            //         
+            //     },
+            //     Created = DateTime.Today,
+            //     Images = new List<string> {"/images/companyImages/DSC_0326.jpg", "/images/companyImages/0872fcc3-044f-4ca0-a1a2-a17133a8e3bf.jpg", 
+            //         "/images/companyImages/DSC_0326.jpg", "/images/companyImages/89995aec-289c-4a84-a60a-767ab57a2fee.jpg", "/images/companyImages/DSC_0326.jpg"},
+            //     Grades = new List<ReviewGradeDto>{new ReviewGradeDto{CriterionName = "Cena", SortOrder = 1, Grade = 3},
+            //     new ReviewGradeDto{CriterionName = "Usluga", SortOrder = 2, Grade = 4}, new ReviewGradeDto{CriterionName = "Vreme cekanja", SortOrder = 3, Grade = 5},}
+            // }};
+            // _totalCount = 30;
         }
     }
 
@@ -113,25 +121,23 @@ public partial class Reviews
     {
         await LoadReviews();
     }
-    
-    private async Task OnReviewDelete()
-    {
-        await LoadReviews(_skipPages);
-        ShowNotification("Uspesno ste izbrisali ocenu", NotificationSeverity.Success);
-    }
 
     private async Task GoToCreateReview()
     {
-        string? userIdentityIdentifier = await HandleIdentityId();
-
-        if (userIdentityIdentifier == null)
+        if (CurrentUser is null)
         {
             ShowNotification("Doslo je do greske, molimo vas pokusajte kasnije", NotificationSeverity.Error);
             return;
         }
-        
+
+        if (CurrentUser.IsAuthenticated && CurrentUser.CurrentUserProfile!.Blocked)
+        {
+            ShowNotification("Vas profil je blokiran, zbog toga ne mozete oceniti kompaniju");
+            return;
+        }
+
         var result = await InvokeDataServiceMethod(
-            () => ReviewDataService.GetIfReviewAlreadyExists(userIdentityIdentifier, CompanyId),
+            () => ReviewDataService.GetIfReviewAlreadyExists(CurrentUser.IndetityId, CompanyId),
             errorMessage: "Doslo je do greske, molimo vas pokusajte kasnije");
 
         if (result.ExceptionOccurred)
@@ -143,42 +149,9 @@ public partial class Reviews
             return;
         }
         
-
-        NavigationManager.NavigateTo($"/companies/{CompanyId}/create-review");
-    }
-
-    private async Task<string?> HandleIdentityId()
-    {
-        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
-
+        var encodedIdentifier = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(CurrentUser.IndetityId));
         
-        if (user.Identity?.IsAuthenticated == true)
-        {
-            string identityId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            if (!string.IsNullOrEmpty(identityId))
-                return identityId;
-            else
-                return null;
-        }
-        else
-        {
-            string? customGuid = await JSRuntime.GetItemFromLocalStorage(LocalStorageKeys.AnonymousUserCustomGuidKey);
-            if (string.IsNullOrEmpty(customGuid))
-            {
-                string guid = Guid.NewGuid().ToString();
-                bool res = await JSRuntime.SetItemToLocalStorage(LocalStorageKeys.AnonymousUserCustomGuidKey, guid);
-                if (!res)
-                {
-                    return null;
-                }
-                
-                return guid;
-            }
-            
-            return customGuid;
-        }
+        NavigationManager.NavigateTo($"/companies/{CompanyId}/create-review?identifier={encodedIdentifier}&isAuthenticated={CurrentUser.IsAuthenticated}");
     }
 
     private string GetOrderBy()
@@ -232,4 +205,5 @@ public class ReviewsFilterModel
     public int MinOverallScore { get; set; }
     public bool OnlyConfirmed { get; set; }
     public bool OnlyWithCompanyResponse { get; set; }
+    public int? CurrentAuthenticatedUserId { get; set; }
 }

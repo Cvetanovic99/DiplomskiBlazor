@@ -49,7 +49,7 @@
 
             <RadzenTextBox Placeholder="Pretrazi po kljucnim recima..."
                            @bind-Value="_filter.FilterValue"
-                           KeyPress="@OnSearchKeyPress"
+                           @onkeyup="@OnSearchKeyPress"
                            Style="width:100%" 
                            class="reviews-search-input"/>
 
@@ -70,23 +70,23 @@
     <!-- REVIEWS LIST -->
     <div class="reviews-list">
 
-        @if (_reviews.Any())
+        @if (IsLoading)
         {
-            @foreach (var review in _reviews)
-            {
-                <ReviewCard Review="review" OnReviewDelete="OnReviewDelete" />
-            }
+            <RadzenProgressBar Value="100" ShowValue="false"
+                               Mode="ProgressBarMode.Indeterminate" Visible="@(IsLoading)" Style="padding-top: 10px"/>
+                        
+            <RadzenText TextStyle="TextStyle.H1" Style="width: 100%; height: 100%">
+                <RadzenSkeleton Animation="SkeletonAnimation.Wave" Style="width: 100%"/>
+            </RadzenText>
         }
         else
         {
-            if (IsLoading)
+            @if (_reviews.Any())
             {
-                <RadzenProgressBar Value="100" ShowValue="false"
-                                   Mode="ProgressBarMode.Indeterminate" Visible="@(IsLoading)" Style="padding-top: 10px"/>
-                    
-                <RadzenText TextStyle="TextStyle.H1" Style="width: 100%; height: 100%">
-                    <RadzenSkeleton Animation="SkeletonAnimation.Wave" Style="width: 100%"/>
-                </RadzenText>
+                @foreach (var review in _reviews)
+                {
+                    <ReviewCard Review="review" CurrentUser="CurrentUser"/>
+                }
             }
             else
             {

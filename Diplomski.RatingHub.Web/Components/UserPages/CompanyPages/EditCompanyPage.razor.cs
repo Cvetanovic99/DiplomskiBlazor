@@ -15,7 +15,7 @@ namespace Diplomski.RatingHub.Web.Components.UserPages.CompanyPages;
 
 public partial class EditCompanyPage
 {
-   [Parameter] public int CompanyId { get; set; }
+    [Parameter] public int CompanyId { get; set; }
 
     [Inject] public IHttpService HttpService { get; set; } = null!;
     [Inject] public ICityDataService CityDataService { get; set; } = null!;
@@ -42,7 +42,6 @@ public partial class EditCompanyPage
     {
         if (RendererInfo.IsInteractive)
         {
-
             var response = await InvokeDataServiceMethod(
                 () => CompanyDataService.GetCompanyForEdit(CompanyId),
                 errorMessage: "Greška prilikom učitavanja kompanije");
@@ -301,7 +300,10 @@ public partial class EditCompanyPage
             await HttpService.DeleteImage(_companyImageUrl, img.Path);
         }
 
-        NavigationManager.NavigateTo($"/companies/{CompanyId}");
+        if (Model.OwnerId is not null)
+            NavigationManager.NavigateTo($"/user/companies/");
+        else
+            NavigationManager.NavigateTo($"/companies/{CompanyId}");
     }
 
     // =========================

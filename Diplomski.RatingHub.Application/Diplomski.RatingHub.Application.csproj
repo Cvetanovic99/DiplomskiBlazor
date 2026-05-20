@@ -20,6 +20,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Interfaces\Services\" />
       <Folder Include="UseCases\Cities\Commands\" />
     </ItemGroup>
 

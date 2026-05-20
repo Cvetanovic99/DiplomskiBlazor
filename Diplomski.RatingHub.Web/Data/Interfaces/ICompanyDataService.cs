@@ -21,4 +21,7 @@ public interface ICompanyDataService
     Task DeleteCompanyAsAnonymous(int companyId, bool isAdminDeleting = false);
     Task DeleteCompanyAsOwner(int companyId);
     Task<EditCompanyDto> GetCompanyForEdit(int companyId);
+    Task<CompanyWithRatingCriteriaDto> GetCompanyWithRatingCriteria(int companyId);
+    Task<IPaginatedList<UserCompanyDto>> GetUserCompanies(int userProfileId, QueryArgs queryArgs);
+    Task SetCompanyOwner(int userProfileId, string claimCompanyIdentifier);
 }

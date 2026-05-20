@@ -103,8 +103,10 @@
 
             @for (int i = 0; i < Math.Min(3, Review.Images.Count); i++)
             {
-                <img src="@Review.Images[i]"
-                     @onclick="()=>OpenGallery(i, Review.Images)" />
+                <div class="gallery-item">
+                    <img src="@Review.Images[i]"
+                         @onclick="()=>OpenGallery(i, Review.Images)" />
+                </div>
             }
 
             @if (Review.Images.Count > 3)
@@ -127,10 +129,11 @@
         </div>
         <div class="review-likes">
             <div class="report-action-icon-wrapper">
-                <RadzenIcon Icon="thumb_up" class="like-action-icon" @onclick="ReportCompanyResponseClicked" 
-                            MouseEnter="@(args => ShowTooltip(args, "Lajkuj ocenu", TooltipPosition.Top))"/>
+                <RadzenIcon Icon="@(Review.IsLikedByCurrentAuthenticatedUser ? "recommend" : "thumb_up")" class="like-action-icon" @onclick="OnLikeClicked" 
+                            MouseEnter="@(args => ShowTooltip(args, 
+                                            (Review.IsLikedByCurrentAuthenticatedUser ? "Uklonite lajk" : "Lajkuj ocenu"), TooltipPosition.Top))"/>
             </div>
-            <span>(@Review.LikesCount lajkova)</span>
+            <span>(@Review.LikesCount)</span>
         </div>
     </div>
 
@@ -180,8 +183,10 @@
 
                         @for (int i = 0; i < Math.Min(3, Review.CompanyResponse.Images.Count); i++)
                         {
-                            <img src="@Review.CompanyResponse.Images[i]"
-                                 @onclick="() => OpenGallery(i, Review.CompanyResponse.Images)"/>
+                            <div class="gallery-item-response">
+                                <img src="@Review.CompanyResponse.Images[i]"
+                                     @onclick="() => OpenGallery(i, Review.CompanyResponse.Images)"/>
+                            </div>
                         }
 
                         @if (Review.CompanyResponse.Images.Count > 3)

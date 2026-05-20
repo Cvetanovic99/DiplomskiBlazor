@@ -241,7 +241,6 @@ public partial class CreateCompany
                 
                 if(res is true)
                     NavigationManager.NavigateTo($"/companies/{result.Result.CompanyId}");
-                
             }
         }
         else
@@ -260,7 +259,7 @@ public partial class CreateCompany
 
             if (!result.ExceptionOccurred)
             {
-                NavigationManager.NavigateTo($"/user/companies/");
+                NavigationManager.NavigateTo($"/user/companies");
             }
         }
     }
@@ -274,8 +273,15 @@ public partial class CreateCompany
                 await HttpService.DeleteImage(_companyImageUrl, img.Path);
             }
         }
-        
-        NavigationManager.NavigateTo("/");
+
+        if (string.IsNullOrEmpty(OwnerId))
+        {
+            NavigationManager.NavigateTo("/");
+        }
+        else
+        {
+            NavigationManager.NavigateTo("/user/companies");
+        }
     }
 
     private bool ValidateVerifier()

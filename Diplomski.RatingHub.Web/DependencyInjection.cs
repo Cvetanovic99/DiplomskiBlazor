@@ -1,5 +1,4 @@
-﻿using Diplomski.RatingHub.Application.Interfaces.Services;
-using Diplomski.RatingHub.Infrastructure.Auth.Models;
+﻿using Diplomski.RatingHub.Infrastructure.Auth.Models;
 using Diplomski.RatingHub.Infrastructure.Notifications.Email;
 using Diplomski.RatingHub.Infrastructure.Persistence.Contexts;
 using Diplomski.RatingHub.Web.Components.Account;

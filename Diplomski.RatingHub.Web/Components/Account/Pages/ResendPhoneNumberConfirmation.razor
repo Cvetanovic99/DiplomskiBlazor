@@ -96,17 +96,23 @@
 
     private async Task OnValidSubmitAsync()
     {
+        string? identityId = null;
         try
         {
-            string identityId = await AccountDataService.ResendPhoneNumberConfirmationToken(Input.PhoneNumber);
-            
-            RedirectManager.RedirectTo(
-                "Account/ConfirmPhoneNumber",
-                new() { ["identityUserId"] = identityId });
+             identityId = await AccountDataService.ResendPhoneNumberConfirmationToken(Input.PhoneNumber);
+             
         }
         catch (Exception e)
         {
             errorMessage = e.Message;
+            return;
+        }
+
+        if (identityId != null)
+        {
+            RedirectManager.RedirectTo(
+                "Account/ConfirmPhoneNumber",
+                new() { ["identityUserId"] = identityId });
         }
     }
 

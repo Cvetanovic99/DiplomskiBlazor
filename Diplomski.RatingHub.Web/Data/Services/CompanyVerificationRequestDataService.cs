@@ -2,12 +2,14 @@
 using Diplomski.RatingHub.Application.Interfaces.Notifications;
 using Diplomski.RatingHub.Application.Models;
 using Diplomski.RatingHub.Application.UseCases.Companies.Commands;
+using Diplomski.RatingHub.Application.UseCases.Companies.Queries;
 using Diplomski.RatingHub.Application.UseCases.CompanyVerifications.Commands;
 using Diplomski.RatingHub.Application.UseCases.CompanyVerifications.Queries;
 using Diplomski.RatingHub.Application.UseCases.Notifications.Commands;
 using Diplomski.RatingHub.Domain.Enums;
 using Diplomski.RatingHub.Domain.Models;
 using Diplomski.RatingHub.Web.Data.Interfaces;
+using NanoidDotNet;
 
 namespace Diplomski.RatingHub.Web.Data.Services;
 
@@ -67,6 +69,20 @@ public class CompanyVerificationRequestDataService : DataServiceBase, ICompanyVe
         {
             RequestId = requestId,
             Status = newStatus
+        });
+    }
+
+    public async Task<UserCompanyVerificationRequestDto> CreateVerificationRequestStatus(int userProfileId, int CompanyId, string contactEmail, string? description)
+    {
+        string identifier = await Nanoid.GenerateAsync(Nanoid.Alphabets.LettersAndDigits, 15);
+        
+        return await Send(new CreateCompanyVerificationRequestCommand
+        {
+            ContactEmail = contactEmail,
+            Description = description,
+            Identifier = identifier,
+            OwnerId = userProfileId,
+            CompanyId = CompanyId
         });
     }
 }

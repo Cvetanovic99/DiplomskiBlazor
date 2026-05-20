@@ -68,11 +68,11 @@
                             }
                             else if (item.Status is ReportedContentStatus.Dismissed)
                             {
-                                <RadzenIcon Style="cursor: pointer" Icon="x_circle" IconStyle="IconStyle.Danger" MouseEnter="@(args => ShowTooltip(args, "Ignorisan", TooltipPosition.Top))"/>
+                                <RadzenIcon Style="cursor: pointer" Icon="x_circle" IconStyle="IconStyle.Danger" MouseEnter="@(args => ShowTooltip(args, "Odbijen", TooltipPosition.Top))"/>
                             }
                             else
                             {
-                                <RadzenIcon Style="cursor: pointer" Icon="bookmark_check" IconStyle="IconStyle.Success" MouseEnter="@(args => ShowTooltip(args, "Obradjen", TooltipPosition.Top))"/>
+                                <RadzenIcon Style="cursor: pointer" Icon="bookmark_check" IconStyle="IconStyle.Success" MouseEnter="@(args => ShowTooltip(args, "Prihvacen", TooltipPosition.Top))"/>
                             }
                         </Template>
                     </RadzenDataGridColumn>

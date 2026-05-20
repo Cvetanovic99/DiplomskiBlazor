@@ -1,0 +1,167 @@
+﻿@page "/reviews/{ReviewId:int}/edit"
+@using Diplomski.RatingHub.Application.UseCases.Reviews.Queries
+@inherits Diplomski.RatingHub.Web.Components.Shared.PortalComponentBase
+
+<section class="create-company-page">
+
+    <div class="create-company-shell">
+        @if (Model.CompanyId == 0)
+        {
+            <RadzenText TextStyle="TextStyle.H1" Style="width: 100%">
+                <RadzenSkeleton Animation="SkeletonAnimation.Wave" Style="width: 100%"/>
+            </RadzenText>
+        }
+        else
+        {
+
+            <div class="create-company-card">
+
+                <!-- HEADER -->
+                <div class="create-company-header">
+                    <div class="create-company-badge">
+                        <RadzenIcon Icon="rate_review"/>
+                        <span>Ocenite kompaniju</span>
+                    </div>
+                </div>
+
+                <!-- COMPANY INFO -->
+                <div style="display: flex; justify-content: center; width: 100%">
+                    <div class="review-company-info">
+                        <img src="@(Model.CompanyProfileImagePath ?? "/images/companyImages/genericCompanyImage.svg")"/>
+                        <div>
+                            <h3>@Model.CompanyName</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <RadzenTemplateForm TItem="EditReviewDto" Data="@Model" Submit="@HandleSubmit">
+
+                    <!-- CRITERIA -->
+                    <RadzenRow Style="margin-top: 15px">
+                        @foreach (var grade in Model.Grades)
+                        {
+                            <RadzenColumn Size="12" SizeMD="4">
+                                <span style="font-size: 17px;font-weight: bold; color: #4f4c4c;">@grade.RatingCriterionName:</span>
+
+                                <RadzenRating @bind-Value="grade.Grade"
+                                              Stars="5"
+                                              Style="color: gold;"
+                                              Name="@GetCriterionCompnentName(grade.RatingCriterionId)"
+                                              class="rating-stars-grade"/>
+
+                                <RadzenRequiredValidator Component="@($"rating_{grade.RatingCriterionId}")" Text="Obavezno"/>
+                            </RadzenColumn>
+                        }
+                    </RadzenRow>
+
+                    <!-- NAME (only if anonymous) -->
+                    @if (Model.IsAnonymousReview)
+                    {
+                        <RadzenColumn Size="12" Style="margin-top: 17px">
+                            <label class="form-label">
+                                <RadzenIcon Icon="person"/> Ime i prezime(opciono)
+                            </label>
+                            <RadzenTextBox Name="ReviewerFullName"
+                                           @bind-Value="Model.ReviewerFullName"
+                                           Style="width:100%"/>
+                        </RadzenColumn>
+                    }
+
+                    <!-- COMMENT -->
+                    <RadzenColumn Size="12" Style="margin-top: 18px">
+                        <label class="form-label">
+                            <RadzenIcon Icon="description"/> Opisite detaljnije vaše iskustvo:
+                        </label>
+                        <RadzenTextArea Name="Comment"
+                                        @bind-Value="Model.Comment"
+                                        Style="width:100%; height:120px"
+                                        Placeholder="@_commentPlaceholder"/>
+                        
+                        <RadzenRequiredValidator Component="Comment" Text="Obavezno"/>
+                    </RadzenColumn>
+
+                    <!-- VERIFY DATA -->
+                    <div class="verify-card">
+                        <p>Potvrdite da li su podaci(kontakt(broj ili email), adresa, PIB) o pružaocu usluga na našoj platformi tačni:</p>
+
+                        <RadzenRadioButtonList @bind-Value="Model.IsCompanyDataTrue"
+                                               Data="@verifyOptions"
+                                               TextProperty="Text"
+                                               ValueProperty="Value"/>
+                        
+                    </div>
+
+                    <!-- IMAGES -->
+                    <RadzenColumn Size="12" Style="margin-top: 23px">
+
+                        <div class="upload-box">
+
+                            <label class="upload-btn">
+                                <RadzenIcon Icon="upload" />
+                                Dodaj slike
+                                <InputFile OnChange="HandleFiles" multiple hidden />
+                            </label>
+
+                            <div class="upload-area">
+
+                                @if (!_existingImages.Any() && !_newImages.Any())
+                                {
+                                    <div style="display: flex"><RadzenIcon Icon="image" /> Dodajte slike</div>
+                                    <div><span>Izaberite maksimalno 10 slika</span></div>
+                                }
+
+                                @foreach (var img in _existingImages)
+                                {
+                                    <div class="img-card">
+                                        
+                                        <img src="@img.Path"/>
+
+                                        <button type="button" @onclick="() => RemoveExistingImage(img)">
+                                            <RadzenIcon Icon="close" Style="align-self: center"/>
+                                        </button>
+
+                                    </div>
+                                }
+
+                                @foreach (var img in _newImages)
+                                {
+                                    <div class="img-card">
+                                        
+                                        <img src="@img.Path"/>
+
+                                        <button type="button" @onclick="() => RemoveNewImage(img)">
+                                            <RadzenIcon Icon="close" Style="align-self: center"/>
+                                        </button>
+
+                                    </div>
+                                }
+
+                            </div>
+
+                        </div>
+
+                    </RadzenColumn>
+
+                    <!-- ACTIONS -->
+                    <div class="form-actions">
+
+                        <RadzenButton Text="Odustani"
+                                      ButtonStyle="ButtonStyle.Light"
+                                      Icon="arrow_back"
+                                      Click="@Cancel"/>
+
+                        <RadzenButton Text="Kreiraj"
+                                      ButtonType="ButtonType.Submit"
+                                      ButtonStyle="ButtonStyle.Primary"
+                                      Icon="save"
+                                      IsBusy="IsLoading"
+                                      BusyText="Kreiranje"/>
+                    </div>
+
+                </RadzenTemplateForm>
+
+            </div>
+        }
+    </div>
+
+</section>

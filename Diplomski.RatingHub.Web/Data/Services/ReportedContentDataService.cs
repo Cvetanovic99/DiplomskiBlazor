@@ -54,9 +54,9 @@ public class ReportedContentDataService(IServiceScopeFactory serviceScopeFactory
             case ReportedContentEntityType.Company:
                 return $"/companies/{reportedEntityId}";
             case  ReportedContentEntityType.Review:
-                return $"/admin/reviews/{reportedEntityId}";
+                return $"/admin/reportedContent/reviews/{reportedEntityId}";
             case  ReportedContentEntityType.CompanyResponse:
-                return $"/admin/reviews/{reviewId}";
+                return $"/admin/reportedContent/reviews/{reviewId}";
             default:
                 return string.Empty;
         }

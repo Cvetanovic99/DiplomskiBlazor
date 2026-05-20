@@ -186,9 +186,10 @@
 
     public async Task RegisterUser(EditContext editContext)
     {
+        RegisterUserResult? result = null;
         try
         {
-            var result = await AccountDataService.RegisterUser(new RegisterUserDto
+            result = await AccountDataService.RegisterUser(new RegisterUserDto
             {
                 Name = UserModel.Name,
                 Surname = UserModel.Surname,
@@ -196,6 +197,15 @@
                 Password = UserModel.Password
             });
             
+        }
+        catch (Exception e)
+        {
+            Message = e.Message;
+            return;
+        }
+
+        if (result != null)
+        {
             if(result.RegistrationMethod == RegistrationMethod.Email)
                 RedirectManager.RedirectTo(
                     "Account/RegisterConfirmation",
@@ -206,10 +216,6 @@
                     "Account/ConfirmPhoneNumber",
                     new() { ["identityUserId"] = result.UserIdentityId });
             }
-        }
-        catch (Exception e)
-        {
-            Message = e.Message;
         }
     }
     

@@ -1,0 +1,59 @@
+﻿@inherits Diplomski.RatingHub.Web.Components.Shared.PortalComponentBase
+
+<div class="anon-dialog">
+
+    @if (IsLoading)
+    {
+        <div style="width: 100%; display: flex; justify-content: center">
+            <RadzenProgressBarCircular ProgressBarStyle="ProgressBarStyle.Primary" Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" AriaLabel="Primary loading" />
+        </div>
+    }
+    else
+    {
+        <h3 class="dialog-title" style="color:#353334">Unesite kod od 15 cifara koji vam je stigao ma email ili telefon</h3>
+    }
+
+    <RadzenTemplateForm Data="@model" Submit="@OnSubmit" TItem="ClaimCompanyDto">
+
+        <!-- KOD -->
+        <div class="form-group">
+
+            <label>
+                <RadzenIcon Icon="pin" /> Kod:
+            </label>
+
+            <RadzenTextBox @bind-Value="model.Code"
+                           Name="Code"
+                           MaxLength="15"
+                           Style="width:100%" />
+
+            <RadzenRequiredValidator Component="Code"
+                                     Text="Obavezno polje"
+                                     Popup="false" />
+
+            <RadzenLengthValidator Component="Code"
+                                   Min="15"
+                                   Max="15"
+                                   Text="Kod mora imati tačno 15 karaktera"
+                                   Popup="false" />
+
+        </div>
+
+        <!-- BUTTONS -->
+        <div class="dialog-actions">
+
+            <RadzenButton Text="Odustani"
+                          Click="@OnCancel"
+                          ButtonStyle="ButtonStyle.Light" />
+
+            <RadzenButton Text="Preuzmi"
+                          ButtonType="ButtonType.Submit"
+                          ButtonStyle="ButtonStyle.Primary" 
+                          IsBusy="IsLoading" 
+                          BusyText="Preuzimanje"/>
+
+        </div>
+
+    </RadzenTemplateForm>
+
+</div>

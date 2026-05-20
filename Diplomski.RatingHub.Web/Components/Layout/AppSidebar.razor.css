@@ -88,3 +88,21 @@
     background: #fdf1f1;
     color: #8b3a3a;
 }
+
+.app-sidebar-link-notifications {
+    width: 100%;
+    border: none;
+    background: transparent;
+}
+.app-sidebar-link-notifications:hover {
+    background: #f4f7fb;
+    color: #234a8d;   
+}
+
+::deep .notification-icon{
+    color: #1f2a37 !important;
+}
+
+::deep .unread-notifications-icon {
+    color: #b54747 !important;
+}

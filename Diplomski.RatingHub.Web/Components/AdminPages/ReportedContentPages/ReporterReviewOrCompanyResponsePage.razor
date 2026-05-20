@@ -1,0 +1,200 @@
+﻿@page "/admin/reportedContent/reviews/{ReviewId:int}"
+
+@using Diplomski.RatingHub.Domain.Constants
+@using Microsoft.AspNetCore.Authorization
+@inherits Diplomski.RatingHub.Web.Components.Shared.PortalComponentBase
+
+@attribute [Authorize(Roles = Roles.Administrator)]
+
+<section class="create-company-page">
+
+    <div class="create-company-shell">
+        <div class="create-company-card">
+            @if (Review is null)
+            {
+                <RadzenText TextStyle="TextStyle.H1" Style="width: 100%">
+                    <RadzenSkeleton Animation="SkeletonAnimation.Wave" Style="width: 100%"/>
+                </RadzenText>
+            }
+            else
+            {
+                <div class="review-card">
+
+                    <!-- HEADER -->
+                    <div class="review-header">
+
+                        <div class="review-user">
+
+                            <div class="avatar">
+                                <img src="@GetProfileImage()"/>
+                            </div>
+
+                            <div class="user-info">
+                                <div class="name">
+                                    @GetReviewerName()
+                                </div>
+
+                                <div class="verified">
+                                    @if (IsConfirmed())
+                                    {
+                                        <span class="confirmed">
+                                            <RadzenIcon Icon="check_circle" Style="cursor: pointer; font-size: 18px;"
+                                                        MouseEnter="@(args => ShowTooltip(args, "Korisnik je potvrdio broj ili email", TooltipPosition.Top))"/> Potvrdjen
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="not-confirmed">
+                                            <RadzenIcon Icon="cancel" Style="cursor: pointer; font-size: 18px;"
+                                                        MouseEnter="@(args => ShowTooltip(args, "Korisnik je kreirao ocenu anonimno, bez potvrde broja i emaila", TooltipPosition.Top))"/> Nepotvrdjen
+                                        </span>
+                                    }
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- RATING -->
+                    <div class="company-rating">
+                        <div class="provider-rating-box">
+                            <div class="provider-rating-stars" style="@GetStarsFillStyle(Review.OverallScore)">
+                                <div class="provider-rating-stars-base">★★★★★</div>
+                                <div class="provider-rating-stars-fill">★★★★★</div>
+                            </div>
+                        </div>
+
+                        <span class="rating-value">@Review.OverallScore.ToString("0.0")</span>
+                    </div>
+
+                    <!-- GRADES -->
+                    @if (Review.Grades?.Any() == true)
+                    {
+                        <div class="review-grades">
+
+                            @foreach (var g in Review.Grades.OrderBy(x => x.SortOrder))
+                            {
+                                <div class="grade-item">
+                                    <div class="grade-value">
+                                        <RadzenIcon Icon="reviews" Style="color: #636060; font-size: 30px;"/> @g.Grade
+                                    </div>
+                                    <div class="grade-name">
+                                        @g.CriterionName
+                                    </div>
+                                </div>
+                            }
+
+                        </div>
+                    }
+
+                    <!-- COMMENT -->
+                    <div class="review-text">
+                        @Review.Comment
+                    </div>
+
+                    <!-- IMAGES -->
+                    @if (Review.Images?.Any() == true)
+                    {
+                        <div class="review-images">
+
+                            @for (int i = 0; i < Math.Min(3, Review.Images.Count); i++)
+                            {
+                                <div class="gallery-item">
+                                    <img src="@Review.Images[i]"
+                                         @onclick="() => OpenGallery(i, Review.Images)"/>
+                                </div>
+                            }
+
+                            @if (Review.Images.Count > 3)
+                            {
+                                <div class="more-images"
+                                     @onclick="() => OpenGallery(3, Review.Images)">
+                                    +@(Review.Images.Count - 3)
+                                </div>
+                            }
+
+                        </div>
+                    }
+
+                    <!-- DATE AND LIKES -->
+                    <div class="review-date-and-likes">
+                        <div style="dysplay:flex; align-items:center;">
+                            <span class="review-date">
+                                @GetDate()
+                            </span>
+                        </div>
+                        <div class="review-likes">
+                            <div class="report-action-icon-wrapper">
+                                <RadzenIcon Icon="thumb_up" class="like-action-icon"/>
+                            </div>
+                            <span>(@Review.LikesCount)</span>
+                        </div>
+                    </div>
+
+                    <!-- RESPONSE -->
+                    @if (Review.CompanyResponseId != null && Review.CompanyResponse != null)
+                    {
+                        <div class="review-response-wrapper">
+
+                            <div class="curve-line"></div>
+
+                            <div class="review-response">
+
+                                <div class="response-header">
+
+                                    <div class="response-company-data">
+                                        <div class="avatar small">
+                                            <img src="@GetCompanyImage()"/>
+                                        </div>
+
+                                        <div class="response-info">
+                                            <div class="name">
+                                                @Review.CompanyResponse.CompanyName
+                                            </div>
+
+                                            <div style="display: flex; align-items:center;">
+                                                <span class="response-date">@Review.CompanyResponse.Created.ToString("MMMM dd, yyyy")</span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="response-text">
+                                    @Review.CompanyResponse.Text
+                                </div>
+
+                                @if (Review.CompanyResponse.Images?.Any() == true)
+                                {
+                                    <div class="review-response-images">
+
+                                        @for (int i = 0; i < Math.Min(3, Review.CompanyResponse.Images.Count); i++)
+                                        {
+                                            <div class="gallery-item-response">
+                                                <img src="@Review.CompanyResponse.Images[i]"
+                                                     @onclick="() => OpenGallery(i, Review.CompanyResponse.Images)"/>
+                                            </div>
+                                        }
+
+                                        @if (Review.CompanyResponse.Images.Count > 3)
+                                        {
+                                            <div class="more-response-images"
+                                                 @onclick="() => OpenGallery(3, Review.CompanyResponse.Images)">
+                                                +@(Review.CompanyResponse.Images.Count - 3)
+                                            </div>
+                                        }
+
+                                    </div>
+                                }
+
+                            </div>
+                        </div>
+                    }
+
+                </div>
+            }
+            
+        </div>
+    </div>
+</section>

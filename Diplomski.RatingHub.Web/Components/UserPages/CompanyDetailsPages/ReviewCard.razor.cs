@@ -2,6 +2,8 @@
 using Diplomski.RatingHub.Application.UseCases.Reviews.Queries;
 using Diplomski.RatingHub.Domain.Enums;
 using Diplomski.RatingHub.Web.Components.Shared;
+using Diplomski.RatingHub.Web.Data.Interfaces;
+using Diplomski.RatingHub.Web.Models;
 using Microsoft.AspNetCore.Components;
 using Radzen;
 using Radzen.Blazor;
@@ -11,10 +13,13 @@ namespace Diplomski.RatingHub.Web.Components.UserPages.CompanyDetailsPages;
 public partial class ReviewCard 
 {
     [Parameter] public FilteredReviewDto Review { get; set; }
-    [Parameter] public EventCallback OnReviewDelete { get; set; }
+    [Parameter] public CurrentUserDto CurrentUser { get; set; }
+    
+    [Inject] public IReviewDataService ReviewDataService { get; set; }
     
     private const string _edit = "edit";
     private const string _delete = "delete";
+
     private string GetReviewerName()
     {
         if (Review.ReviewerId != null)
@@ -128,10 +133,8 @@ public partial class ReviewCard
 
         if (result is true)
         {
-            if (OnReviewDelete.HasDelegate)
-            {
-                await OnReviewDelete.InvokeAsync();
-            }
+            NavigationManager.NavigateTo($"/companies/{Review.CompanyId}", true);
+            ShowNotification("Uspesno ste izbrisali ocenjivanje", NotificationSeverity.Success);
         }
     }
     
@@ -181,7 +184,44 @@ public partial class ReviewCard
             ShowNotification("Uspesno ste prijavili odgovor kompanije", NotificationSeverity.Success);
         }
     }
-    
+
+    private async Task OnLikeClicked()
+    {
+        if (!CurrentUser.IsAuthenticated)
+        {
+            ShowNotification("Morate biti prijavljeni da bi ste lajkovali");
+        }
+        else
+        {
+            if (CurrentUser.CurrentUserProfile.Blocked)
+            {
+                ShowNotification("Vas profil je blokiran, zbog toga ne mozete lajkovati ocene");
+                return;
+            }
+
+            var result = await InvokeDataServiceMethod(
+                () => ReviewDataService.LikeOrDislikeReview(Review.Id, CurrentUser.CurrentUserProfile!.Id),
+                errorMessage: "Doslo je do greske prilikom lajkovanja ocene");
+
+            if (!result)
+                return;
+
+            if (Review.IsLikedByCurrentAuthenticatedUser)
+            {
+                Review.LikesCount -= 1;
+                Review.IsLikedByCurrentAuthenticatedUser = false;
+                ShowNotification("Uspesno ste sklonili lajk", NotificationSeverity.Success);
+            }
+            else
+            {
+                Review.LikesCount += 1;
+                Review.IsLikedByCurrentAuthenticatedUser = true;
+                ShowNotification("Uspesno ste lajkovali", NotificationSeverity.Success);
+            }
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
     private string GetStarsFillStyle(double rating)
     {
         var percentage = (rating / 5.0) * 100;

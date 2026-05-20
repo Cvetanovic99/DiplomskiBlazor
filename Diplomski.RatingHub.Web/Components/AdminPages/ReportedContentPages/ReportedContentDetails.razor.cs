@@ -18,11 +18,6 @@ public partial class ReportedContentDetails
     private bool _confirmDelete = false;
     private bool _confirmBlockUser = false;
 
-    override protected async Task OnInitializedAsync()
-    {
-        Model.ReportedUserId = 354;
-    }
-
     private async Task Delete()
     {
         if (Enum.TryParse<ReportedContentEntityType>(Model.ReportedEntityType, out var value))

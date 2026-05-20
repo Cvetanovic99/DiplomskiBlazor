@@ -9,4 +9,5 @@ public interface IUserProfileDataService
     Task<UserProfileDto> CreateUserProfile(CreateUserProfileDto createUserProfileDto);
     Task<CurrentUserProfileDto> GetCurrentUserProfile(string identityId);
     Task BlockUserProfile(int userId);
+    Task<bool> CheckForNewNotifications(int userId);
 }

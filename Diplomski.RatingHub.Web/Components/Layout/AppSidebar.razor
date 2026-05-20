@@ -1,34 +1,38 @@
 ﻿@using Diplomski.RatingHub.Domain.Constants
+@inherits Diplomski.RatingHub.Web.Components.Shared.PortalComponentBase
 <AuthorizeView>
     <Authorized Context="authContext">
         <aside class="app-sidebar @(IsExpanded ? "expanded" : "collapsed") d-none d-md-flex">
             <nav class="app-sidebar-nav">
                 <AuthorizeView Roles="@Roles.RegularUser">
                     <Authorized Context="userContext">
-                        <a href="/dashboard" class="app-sidebar-link" title="Kontrolna tabla">
-                            <RadzenIcon Icon="dashboard" class="app-sidebar-link-icon"/>
-                            <span class="app-sidebar-link-text">Kontrolna tabla</span>
-                        </a>
-
-                        <a href="/my-reviews" class="app-sidebar-link" title="Moje ocene">
-                            <RadzenIcon Icon="reviews" class="app-sidebar-link-icon"/>
-                            <span class="app-sidebar-link-text">Moje ocene</span>
-                        </a>
-
-                        <a href="/my-companies" class="app-sidebar-link" title="Moje firme">
-                            <RadzenIcon Icon="business" class="app-sidebar-link-icon"/>
-                            <span class="app-sidebar-link-text">Moje firme</span>
-                        </a>
-
-                        <a href="/companies/create" class="app-sidebar-link" title="Dodaj firmu">
-                            <RadzenIcon Icon="add_business" class="app-sidebar-link-icon"/>
-                            <span class="app-sidebar-link-text">Dodaj firmu</span>
-                        </a>
-
-                        <a href="/profile" class="app-sidebar-link" title="Profil">
-                            <RadzenIcon Icon="person" class="app-sidebar-link-icon"/>
+                        <a href="user/profile" class="app-sidebar-link" title="Profil">
+                            <RadzenIcon Icon="account_circle" class="app-sidebar-link-icon"/>
                             <span class="app-sidebar-link-text">Profil</span>
                         </a>
+                        
+                        <button @onclick="NotificationsClicked" class="app-sidebar-link app-sidebar-link-notifications" title="Obavestenja">
+                            @if (_unreadNotifications)
+                            {
+                                <RadzenIcon Icon="notifications_unread" class="app-sidebar-link-icon unread-notifications-icon"/>
+                            }
+                            else
+                            {
+                                <RadzenIcon Icon="notifications" class="app-sidebar-link-icon notification-icon"/>
+                            }
+                            <span class="app-sidebar-link-text">Obavestenja</span>
+                        </button>
+
+                        <a href="/user/companies" class="app-sidebar-link" title="Moje kompanije">
+                            <RadzenIcon Icon="domain" class="app-sidebar-link-icon"/>
+                            <span class="app-sidebar-link-text">Moje kompanije</span>
+                        </a>
+                        
+                        <a href="/my-reviews" class="app-sidebar-link" title="Moja ocenjivanja">
+                            <RadzenIcon Icon="reviews" class="app-sidebar-link-icon"/>
+                            <span class="app-sidebar-link-text">Moja ocenjivanja</span>
+                        </a>
+                        
                     </Authorized>
                 </AuthorizeView>
 

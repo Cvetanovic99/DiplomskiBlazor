@@ -16,9 +16,10 @@ public partial class CompanyDetailsAdditionalData
     private double _verifiedPercentage;
     private double _unverifiedPercentage;
 
+    private bool _isJsInitialized;
+
     protected override async Task OnInitializedAsync()
     {
-
         if (RendererInfo.IsInteractive)
         {
             var res = await InvokeDataServiceMethod(
@@ -29,8 +30,17 @@ public partial class CompanyDetailsAdditionalData
                 Model = res.Result;
                 CalculateStarProcentage();
                 CalculateVerifiedUnverifiedPercentage();
-                await InitializeMap();
             }
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (Model == null) return;
+        if (!_isJsInitialized)
+        {
+            _isJsInitialized = true;
+            await InitializeMap();
         }
     }
 
@@ -81,7 +91,7 @@ public partial class CompanyDetailsAdditionalData
     private string GetStarsFillStyle(double rating)
     {
         var percentage = (rating / 5.0) * 100;
-        return $"--rating-width:{percentage}%";
+        return $"--stars-fill: {percentage}%";
     }
     
     private string GetAggregateFillColor(double value)

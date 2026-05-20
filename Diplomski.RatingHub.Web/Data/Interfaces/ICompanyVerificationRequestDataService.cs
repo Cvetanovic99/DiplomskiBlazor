@@ -1,5 +1,6 @@
 ﻿using Diplomski.RatingHub.Application.Interfaces.Models;
 using Diplomski.RatingHub.Application.Models;
+using Diplomski.RatingHub.Application.UseCases.Companies.Queries;
 using Diplomski.RatingHub.Application.UseCases.CompanyVerifications.Queries;
 using Diplomski.RatingHub.Domain.Enums;
 
@@ -12,4 +13,5 @@ public interface ICompanyVerificationRequestDataService
     Task SendCompanyVerificationRulesToUser(string userEmail, int userId, string identifier, string companyName);
     Task VerifyCompany(int companyId, int recipiendId);
     Task EditVerificationRequestStatus(int requestId, CompanyVerificationRequestStatus newStatus);
+    Task<UserCompanyVerificationRequestDto> CreateVerificationRequestStatus(int userProfileId, int CompanyId, string contactEmail, string? description);
 }

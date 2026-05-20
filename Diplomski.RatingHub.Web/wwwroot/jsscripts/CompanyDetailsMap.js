@@ -5,7 +5,11 @@
 
     init: function (lat, lng) {
         
-        if (this.map) return;
+        if (this.map) {
+            this.map.remove();
+            this.map = null;
+            this.marker = null;
+        }
 
         const map = L.map('companyDetailsMap', {
             zoomControl: true

@@ -1,0 +1,64 @@
+﻿@inherits Diplomski.RatingHub.Web.Components.Shared.PortalComponentBase
+
+<div class="anon-dialog">
+
+    @if (IsLoading)
+    {
+        <div style="width: 100%; display: flex; justify-content: center">
+            <RadzenProgressBarCircular ProgressBarStyle="ProgressBarStyle.Primary" Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" AriaLabel="Primary loading" />
+        </div>
+    }
+    else
+    {
+        <h3 class="dialog-title" style="color:#353334">
+            Da li želite da kreirate zahtev za verifikaciju vaše kompanije? Nakon uspešnog slanja, zahtev ulazi u proces obrade. O statusu i daljim koracima bićete blagovremeno obavešteni putem e-pošte.
+        </h3>
+    }
+
+    <RadzenTemplateForm Data="@model" Submit="@OnSubmit" TItem="VerifyCompanyRequestDto">
+
+        <!-- KOD -->
+        <div class="form-group">
+
+            <label>
+                <RadzenIcon Icon="mail" /> Kontakt email:
+            </label>
+
+            <RadzenTextBox @bind-Value="model.ContactEmail"
+                           Name="Email"
+                           Style="width:100%" />
+
+            <RadzenRequiredValidator Component="Email" Text="Obavezno polje" Popup="false" />
+
+            <RadzenEmailValidator Component="Email" Text="Email mora biti ispravan" Popup="false" />
+
+        </div>
+        
+        <div class="form-group">
+
+            <label>
+                <RadzenIcon Icon="description" /> Opis:
+            </label>
+
+            <RadzenTextArea Name="Description" @bind-Value="model.Description" Style="width:100%" Placeholder="Par reci o kompaniji i vama"/>
+
+        </div>
+
+        <!-- BUTTONS -->
+        <div class="dialog-actions">
+
+            <RadzenButton Text="Odustani"
+                          Click="@OnCancel"
+                          ButtonStyle="ButtonStyle.Light" />
+
+            <RadzenButton Text="Kreiraj"
+                          ButtonType="ButtonType.Submit"
+                          ButtonStyle="ButtonStyle.Primary" 
+                          IsBusy="IsLoading" 
+                          BusyText="Preuzimanje"/>
+
+        </div>
+
+    </RadzenTemplateForm>
+
+</div>
