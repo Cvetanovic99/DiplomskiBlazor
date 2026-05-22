@@ -1,0 +1,69 @@
+﻿@page "/user/notifications"
+
+@inherits Diplomski.RatingHub.Web.Components.Shared.PortalComponentBase
+
+<section class="notifications-page">
+
+    <div class="notifications-shell">
+
+        <!-- HEADER -->
+        <div class="notifications-header">
+
+            <h2>Obavestenja</h2>
+
+            <RadzenButton Text="Obrisi sva"
+                          Icon="delete"
+                          ButtonStyle="ButtonStyle.Light"
+                          Click="@DeleteAllNotifications" />
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- LISTA -->
+        @if (IsLoading)
+        {
+            <RadzenProgressBar Mode="ProgressBarMode.Indeterminate" />
+            <RadzenText TextStyle="TextStyle.H1" Style="width: 100%; margin-top: 15px;">
+                <RadzenSkeleton Animation="SkeletonAnimation.Wave" Style="width: 100%"/>
+            </RadzenText>
+        }
+        else
+        {
+            if (!_notifications.Any())
+            {
+                <div class="empty-state">
+                    <RadzenIcon Icon="notifications_off" />
+                    <span>Nema obavestenja</span>
+                </div>
+            }
+            else
+            {
+                foreach (var n in _notifications)
+                {
+                    <div class="notification-item">
+
+                        <div class="notification-top">
+                            <div class="notification-title">@n.Title</div>
+                            <div class="notification-date">@FormatDate(n.Created)</div>
+                        </div>
+
+                        <div class="notification-message">@n.Message</div>
+
+                    </div>
+                }
+            }
+        }
+
+        <!-- PAGINACIJA -->
+        <div class="pager-wrapper">
+            <RadzenPager Count="@_totalCount"
+                         PageSize="@_pageSize"
+                         @bind-CurrentPage="_currentPage"
+                         PageChanged="@OnPageChanged"
+                         ShowPagingSummary="true" 
+                         PagingSummaryFormat="@pagingSummaryFormat"/>
+        </div>
+
+    </div>
+
+</section>

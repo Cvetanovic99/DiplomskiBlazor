@@ -72,7 +72,7 @@ public partial class ReviewCard
 
     private string GetDate()
     {
-        return Review.Created.ToString("MMMM dd, yyyy");
+        return Review.Created.ToString("MMMM dd, yyyy", new System.Globalization.CultureInfo("sr-Latn-RS"));
     }
     
     

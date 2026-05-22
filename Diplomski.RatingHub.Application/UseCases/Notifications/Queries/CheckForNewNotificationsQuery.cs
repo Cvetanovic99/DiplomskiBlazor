@@ -4,7 +4,7 @@ using Diplomski.RatingHub.Domain.Models;
 using FluentValidation;
 using MediatR;
 
-namespace Diplomski.RatingHub.Application.UseCases.UserProfiles.Queries;
+namespace Diplomski.RatingHub.Application.UseCases.Notifications.Queries;
 
 public class CheckForNewNotificationsQuery : IRequest<bool>
 {

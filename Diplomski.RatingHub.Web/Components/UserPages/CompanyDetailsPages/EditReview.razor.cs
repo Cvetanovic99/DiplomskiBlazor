@@ -87,7 +87,7 @@ public partial class EditReview
     
     private async Task HandleFiles(InputFileChangeEventArgs e)
     {
-        if (_existingImages.Count + _newImages.Count + e.FileCount > 10)
+        if (_existingImages.Count + _newImages.Count + e.FileCount > 5)
         {
             ShowNotification("Mozete dodati maksimalno 5 slika", NotificationSeverity.Error);
             return;

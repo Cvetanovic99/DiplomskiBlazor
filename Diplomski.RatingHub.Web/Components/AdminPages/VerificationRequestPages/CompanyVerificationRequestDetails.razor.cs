@@ -44,7 +44,7 @@ public partial class CompanyVerificationRequestDetails
     private async Task VerifyCompany()
     {
         var result = await InvokeDataServiceMethod(() =>
-                DataService.VerifyCompany(Model.CompanyId, Model.OwnerId), 
+                DataService.VerifyCompany(Model.CompanyId, Model.OwnerId, Model.CompanyName), 
             "Kompanija je uspesno verifikovana");
 
         if(result)

@@ -1,0 +1,94 @@
+﻿.notifications-page {
+    padding: 20px;
+}
+
+/* layout kao company-container */
+.notifications-shell {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* HEADER */
+.notifications-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.notifications-header h2 {
+    font-size: 28px;
+    font-weight: 600;
+    margin: 0;
+}
+
+/* divider */
+.divider {
+    height: 1px;
+    background: #e5e7eb;
+    margin: 12px 0 20px;
+}
+
+/* ITEM */
+.notification-item {
+    padding: 14px 0;
+    border-bottom: 1px solid #e5e7eb;
+    transition: background 0.2s;
+}
+
+.notification-item:hover {
+    background: rgba(0,0,0,0.02);
+}
+
+/* TEXT */
+.notification-title {
+    font-weight: 600;
+    font-size: 15px;
+    color: #111827;
+}
+
+.notification-message {
+    font-size: 14px;
+    color: #6b7280;
+}
+
+/* EMPTY */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px;
+    color: #9ca3af;
+    gap: 10px;
+}
+
+/* PAGER */
+.pager-wrapper {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .notifications-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .notifications-header h2 {
+        font-size: 22px;
+    }
+}
+
+.notification-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.notification-date {
+    font-size: 13px;
+    color: #9ca3af;
+    white-space: nowrap;
+}

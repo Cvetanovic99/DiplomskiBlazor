@@ -1,4 +1,5 @@
-﻿using Diplomski.RatingHub.Application.UseCases.Reviews.Queries;
+﻿using Diplomski.RatingHub.Application.Models.Dtos;
+using Diplomski.RatingHub.Application.UseCases.Reviews.Queries;
 using Diplomski.RatingHub.Web.Components.Shared;
 using Diplomski.RatingHub.Web.Data.Interfaces;
 using Microsoft.AspNetCore.Components;
@@ -12,6 +13,7 @@ public partial class UserCompanyReviewCard
     [Parameter] public FilteredReviewDto Review { get; set; }
     
     [Inject] public IReviewDataService ReviewDataService { get; set; } = null!;
+    [Inject] public ICompanyResponseDataService CompanyResponseDataService { get; set; } = null!;
     
     private const string _edit = "edit";
     private const string _delete = "delete";
@@ -68,7 +70,7 @@ public partial class UserCompanyReviewCard
 
     private string GetDate()
     {
-        return Review.Created.ToString("MMMM dd, yyyy");
+        return Review.Created.ToString("MMMM dd, yyyy", new System.Globalization.CultureInfo("sr-Latn-RS"));
     }
     
     
@@ -77,108 +79,85 @@ public partial class UserCompanyReviewCard
         switch (item.Value)
         {
             case _edit:
-                await EditReviewClicked();
+                await EditResponseClicked();
                 break;
             case _delete:
-                await DeleteReviewClicked();
+                await DeleteResponseClicked();
                 break;
         }
     }
     
-    private async Task EditReviewClicked()
+    private async Task EditResponseClicked()
     {
-        // var result = await DialogService.OpenAsync<AnonymousEditContentDialog>(
-        //     "Potvrda koda za azuriranje ocene",
-        //     new Dictionary<string, object?>
-        //     {
-        //         { "ContentType", AnonymousEditContentType.Review },
-        //         { "IsEdit", true },
-        //         { "Text", "Unesite kod od 15 karaktera koji ste dobili nakon kreiranja ocene" },
-        //         { "EntityId", Review.Id }
-        //     },
-        //     new DialogOptions
-        //     {
-        //         Width = "500px",
-        //         Height = "auto",
-        //         Style = "margin-top: 130px"
-        //     });
-        //
-        // if (result is true)
-        // {
-        //     NavigationManager.NavigateTo($"/reviews/{Review.Id}/edit");
-        // }
+        var result = await DialogService.OpenAsync<EditCompanyResponse>(
+            "Azuriraj odgovor",
+            new Dictionary<string, object?>
+            {
+                { "Model", new EditCompanyResponseDto
+                {
+                    Id = Review.CompanyResponse!.Id,
+                    Text = Review.CompanyResponse.Text,
+                    Images = Review.CompanyResponse.Images.Select(i => new EditReviewImageDto { Path = i, Title = "" }).ToList()
+                } }
+            },
+            new DialogOptions
+            {
+                Width = "50%",
+                Height = "70%",
+                Style = "margin-top: 130px"
+            });
+        
+        if (result is CompanyResponseDto dto)
+        {
+            Review.CompanyResponse = dto;
+            ShowNotification("Uspesno ste azurirali odgovor", NotificationSeverity.Success);
+            StateHasChanged();
+        }
     }
     
-    private async Task DeleteReviewClicked()
+    private async Task DeleteResponseClicked()
     {
-        // var result = await DialogService.OpenAsync<AnonymousEditContentDialog>(
-        //     "Potvrda koda za brisanje ocene",
-        //     new Dictionary<string, object?>
-        //     {
-        //         { "ContentType", AnonymousEditContentType.Review },
-        //         { "IsEdit", false },
-        //         { "Text", "Unesite kod od 15 karaktera koji ste dobili nakon kreiranja ocene" },
-        //         { "EntityId", Review.Id }
-        //     },
-        //     new DialogOptions
-        //     {
-        //         Width = "500px",
-        //         Height = "auto",
-        //         Style = "margin-top: 130px"
-        //     });
-        //
-        // if (result is true)
-        // {
-        //     NavigationManager.NavigateTo($"/companies/{Review.CompanyId}", true);
-        //     ShowNotification("Uspesno ste izbrisali ocenjivanje", NotificationSeverity.Success);
-        // }
+        var res = await DialogService.Confirm("Da li ste sigurni da zelite da izbrisete odgovor?","Brisanje odgovora",
+            new ConfirmOptions { OkButtonText = "Izbrisi", CancelButtonText = "Odustani", ShowClose = false });
+        if (res is true)
+        {
+            var response = await InvokeDataServiceMethod(
+                () => CompanyResponseDataService.DeleteCompanyResponse(Review.CompanyResponse!.Id),
+                errorMessage: "Doslo je do greske prilikom brisanja");
+
+            if (response)
+            {
+                ShowNotification("Uspesno ste izbrisali odgovor", NotificationSeverity.Success);
+                Review.CompanyResponse = null;
+                StateHasChanged();
+            }
+        }
     }
     
     public async Task AddResponseClicked()
     {
-        // var result = await DialogService.OpenAsync<ReportContentDialog>(
-        //     "Prijavite ocenjivanja",
-        //     new Dictionary<string, object?>
-        //     {
-        //         { "ReportedEntityType", ReportedContentEntityType.Review },
-        //         { "ReportedEntityId", Review.Id },
-        //         { "ContentOwnerId", Review.ReviewerId}
-        //     },
-        //     new DialogOptions
-        //     {
-        //         Width = "500px",
-        //         Height = "auto",
-        //         Style = "margin-top: 130px"
-        //     });
-        //
-        // if (result is true)
-        // {
-        //     ShowNotification("Uspesno ste prijavili ocenjivanje", NotificationSeverity.Success);
-        // }
-    }
-    
-    public async Task ReportCompanyResponseClicked()
-    {
-        // var result = await DialogService.OpenAsync<ReportContentDialog>(
-        //     "Prijavite odgovor kompanije",
-        //     new Dictionary<string, object?>
-        //     {
-        //         { "ReportedEntityType", ReportedContentEntityType.CompanyResponse },
-        //         { "ReportedEntityId", Review.CompanyResponse!.Id },
-        //         { "ContentOwnerId", Review.CompanyResponse.CompanyOwnerId },
-        //         { "ReviewId", Review.Id }
-        //     },
-        //     new DialogOptions
-        //     {
-        //         Width = "500px",
-        //         Height = "auto",
-        //         Style = "margin-top: 130px"
-        //     });
-        //
-        // if (result is true)
-        // {
-        //     ShowNotification("Uspesno ste prijavili odgovor kompanije", NotificationSeverity.Success);
-        // }
+        var result = await DialogService.OpenAsync<CreateCompanyResponse>(
+            "Dodajte odgovor",
+            new Dictionary<string, object?>
+            {
+                { "CompanyId", Review.CompanyId },
+                { "ReviewId", Review.Id },
+                { "ReviewerId", Review.ReviewerId },
+                { "CompanyName", Review.CompanyName }
+            },
+            new DialogOptions
+            {
+                Width = "50%",
+                Height = "70%",
+                Style = "margin-top: 130px"
+            });
+        
+        if (result is CompanyResponseDto dto)
+        {
+            Review.CompanyResponse = dto;
+            ShowNotification("Uspesno ste dodali odgovor", NotificationSeverity.Success);
+            StateHasChanged();
+        }
     }
 
     private string GetStarsFillStyle(double rating)

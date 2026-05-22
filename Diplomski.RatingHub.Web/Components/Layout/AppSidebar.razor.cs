@@ -8,7 +8,7 @@ public partial class AppSidebar
 {
     [Parameter] public bool IsExpanded { get; set; }
     [Inject] public ICurrentUserService CurrentUserService { get; set; }
-    [Inject] public IUserProfileDataService UserProfileDataService { get; set; }
+    [Inject] public INotificationDataService NotificationDataService { get; set; }
 
     private bool _unreadNotifications;
 
@@ -21,7 +21,7 @@ public partial class AppSidebar
             if (authenticatedUser != null)
             {
                 var result = await InvokeDataServiceMethod(
-                    () => UserProfileDataService.CheckForNewNotifications(authenticatedUser.UserProfileId),
+                    () => NotificationDataService.CheckForNewNotifications(authenticatedUser.UserProfileId),
                     errorMessage:"Doslo je do greske prilikom ocenjivanja, molimo vas pokusajte kasnije");
 
                 if (!result.ExceptionOccurred)

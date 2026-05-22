@@ -1,0 +1,125 @@
+﻿@page "/user/reviews"
+
+@using Diplomski.RatingHub.Domain.Constants
+@using Microsoft.AspNetCore.Authorization
+@inherits Diplomski.RatingHub.Web.Components.Shared.PortalComponentBase
+
+@attribute [Authorize(Roles = Roles.RegularUser)]
+
+<div class="reviews-container">
+
+    <!-- HEADER -->
+    <div class="reviews-header">
+        <div class="reviews-title">
+            <RadzenIcon Icon="star" class="header-icon"/>
+            <div>
+                <h3>Sve vase ocene</h3>
+            </div>
+        </div>
+    </div>
+
+    <!-- FILTERS -->
+    <div class="reviews-filters">
+
+        <!-- TOP FILTERS -->
+        <div class="filters-top">
+
+            <label class="checkbox">
+                <RadzenCheckBox @bind-Value="_filter.OnlyConfirmed" TValue="bool"  Change=@(args => OnCheckboxFilterChanged(args))
+                                Style="width: 20px; height: 20px"/>
+                <span>Potvrdjeni profili</span>
+            </label>
+            <RadzenIcon Icon="horizontal_rule" class="filter-divider"/>
+            <label class="checkbox">
+                <RadzenCheckBox @bind-Value="_filter.OnlyWithCompanyResponse" TValue="bool" Change=@(args => OnCheckboxFilterChanged(args))
+                                Style="width: 20px; height: 20px"/>
+                <span>Sa uzvracenim odgovorima</span>
+            </label>
+            <RadzenIcon Icon="horizontal_rule" class="filter-divider"/>
+            <div class="rating-filter">
+                <span>Minimalna ocena:</span>
+                <RadzenRating @bind-Value="_filter.MinOverallScore"
+                              Stars="5" Change=@RatingFilterChanged 
+                              class="rating-stars-filter"/>
+            </div>
+
+        </div>
+
+        <!-- BOTTOM FILTERS -->
+        <div class="filters-bottom">
+
+            <RadzenTextBox Placeholder="Pretrazi po kljucnim recima..."
+                           @bind-Value="_filter.FilterValue"
+                           @onkeyup="@OnSearchKeyPress"
+                           Style="width:100%" 
+                           class="reviews-search-input"/>
+
+            <RadzenDropDown Data="@_sortingOptions"
+                            @bind-Value="_sortingOption"
+                            class="sorting-dropdown">
+            <Template>
+                @GetSortingOptions(context)
+            </Template>
+            </RadzenDropDown>
+
+        </div>
+
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- REVIEWS LIST -->
+    <div class="reviews-list">
+
+        @if (IsLoading)
+        {
+            <RadzenProgressBar Value="100" ShowValue="false"
+                               Mode="ProgressBarMode.Indeterminate" Visible="@(IsLoading)" Style="padding-top: 10px"/>
+                        
+            <RadzenText TextStyle="TextStyle.H1" Style="width: 100%; height: 100%">
+                <RadzenSkeleton Animation="SkeletonAnimation.Wave" Style="width: 100%"/>
+            </RadzenText>
+        }
+        else
+        {
+            @if (_reviews.Any())
+            {
+                @foreach (var review in _reviews)
+                {
+                    <UserReviewsCard Review="review" OnDeleteReview="OnDeleteReviewClicked"/>
+                }
+            }
+            else
+            {
+                <div class="no-reviews-container">
+
+                    <div class="no-reviews-card">
+
+                        <div class="no-reviews-icon">
+                            <RadzenIcon Icon="sentiment_dissatisfied"/>
+                        </div>
+
+                        <h3>Trenutno nema ocena za prikaz</h3>
+
+                        <p>
+                            Pokušajte sa drugim filterima
+                        </p>
+
+                    </div>
+
+                </div>
+            }
+        }
+
+    </div>
+
+    <!-- PAGER -->
+    <div class="reviews-pager">
+        <RadzenPager Count="@_totalCount"
+                     PageSize="_pageSize"
+                     PageChanged="@OnPageChanged"
+                     @bind-CurrentPage="_currentPage"/>
+    </div>
+
+</div>
+

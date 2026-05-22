@@ -23,6 +23,8 @@ public static class DependencyInjection
         services.AddScoped<ICompanyVerificationRequestDataService, CompanyVerificationRequestDataService>();
         services.AddScoped<ICompanyDataService, CompanyDataService>();
         services.AddScoped<IReviewDataService, ReviewDataService>();
+        services.AddScoped<ICompanyResponseDataService, CompanyResponseDataService>();
+        services.AddScoped<INotificationDataService, NotificationDataService>();
         services.AddScoped<ICurrentUserService, CurrentUserService>();
         
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

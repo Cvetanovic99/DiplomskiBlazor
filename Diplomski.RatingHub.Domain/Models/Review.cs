@@ -13,7 +13,6 @@ public class Review : EntityBase
     public UserProfile? Reviewer { get; set; }
     public int CompanyId { get; set; }
     public Company Company { get; set; } = null!;
-    public int? CompanyResponseId { get; set; }
     public CompanyResponse? CompanyResponse { get; set; }
     
     public ICollection<ReviewImage> Images { get; set; } = new List<ReviewImage>();

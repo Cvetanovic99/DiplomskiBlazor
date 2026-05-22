@@ -31,8 +31,8 @@ public partial class UserCompanies
     string pagingSummaryFormat = "Str. {0} od {1} (ukupno {2} kompanija)";
     private const string _edit = "edit";
     private const string _delete = "delete";
-    private string _trueDataPercentage = "0%";
-    private string _falseDataPercentage = "0%";
+    private double _trueDataPercentage;
+    private double _falseDataPercentage;
     private bool _isDescriptionExpanded = false;
     private bool _hasMoreDescription;
     private string _shortDescription = "";
@@ -117,8 +117,8 @@ public partial class UserCompanies
         
         if (Company.ReviewsCount > 0)
         {
-            _falseDataPercentage = $"{((double)falseDataNumber/Company.ReviewsCount) * 100}%";
-            _trueDataPercentage = $"{((double)Company.CompanyDataTrueCount/Company.ReviewsCount) * 100}%";
+            _falseDataPercentage = ((double)falseDataNumber/Company.ReviewsCount) * 100;
+            _trueDataPercentage = ((double)Company.CompanyDataTrueCount/Company.ReviewsCount) * 100;
         }
     }
     

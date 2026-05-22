@@ -67,6 +67,36 @@ public static class FileUploadEndpoints
                 return Results.BadRequest(e.Message);
             }
         });
+        
+        endpoints.MapPost("/api/upload/image/response-image", async (
+            [FromServices] IFileService fileService,
+            [FromForm] IFormFile? file) =>
+        {
+            try
+            {
+                var response = await fileService.UploadImageAsync(file, "companyResponseImages");
+                return Results.Ok(response);
+            }
+            catch (Exception e)
+            {
+                return Results.BadRequest(e.Message);
+            }
+        }).DisableAntiforgery();;
+
+        endpoints.MapDelete("/api/upload/image/response-image", (
+            [FromServices] IFileService fileService,
+            [FromQuery] string path) =>
+        {
+            try
+            {
+                fileService.DeleteImage(path);
+                return Results.Ok();
+            }
+            catch (Exception e)
+            {
+                return Results.BadRequest(e.Message);
+            }
+        });
 
         return endpoints;
     }

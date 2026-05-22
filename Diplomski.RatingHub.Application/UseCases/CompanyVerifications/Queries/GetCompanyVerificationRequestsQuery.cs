@@ -62,9 +62,9 @@ public class CompanyVerificationRequestDto : IMapFrom<CompanyVerificationRequest
     public string? Identifier { get; set; }
     
     public int CompanyId { get; set; }
-    public string? CompanyName { get; set; }
-    public string? CompanyVerifier { get; set; }
-    public string? CompanyFullAddress { get; set; }
+    public string CompanyName { get; set; }
+    public string CompanyVerifier { get; set; }
+    public string CompanyFullAddress { get; set; }
     public string? CompanyUrl { get; set; }
     public int OwnerId { get; set; }
     public string? UserVerifier { get; set; }

@@ -1,0 +1,208 @@
+﻿.create-company-page {
+    padding: 20px;
+}
+
+.create-company-shell {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.create-company-card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 28px;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.06);
+}
+
+/* HEADER */
+.create-company-header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.create-company-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(59,130,246,0.1);
+    color: #2563eb;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+/* COMPANY INFO */
+.review-company-info {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding: 16px;
+    border-radius: 14px;
+    background: #f8fafc;
+    width: 60%;
+}
+
+.review-company-info img {
+    width: 90px;
+    height: 90px;
+    object-fit: contain;
+    background: #fff;
+    border-radius: 12px;
+}
+
+.review-company-info h3 {
+    margin: 10px;
+    font-size: 20px;
+    font-weight: 600;
+    color: #3d3f42;
+}
+
+/* FORM LABEL */
+.form-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #4f4c4c;
+}
+
+/* CRITERIA */
+.criterion-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.criterion-row span {
+    font-weight: 500;
+}
+
+::deep .rating-stars-grade {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+::deep .rating-stars-grade .rzi-star-o {
+    font-size: 30px !important;
+}
+
+::deep .rating-stars-grade button {
+    height: 30px !important;
+    display: flex;
+    align-items: center;
+}
+/* VERIFY CARD */
+.verify-card {
+    margin-top: 20px;
+    padding: 16px;
+    border-radius: 14px;
+    background: rgba(59,130,246,0.08);
+    border: 1px solid rgba(59,130,246,0.2);
+}
+
+.verify-card p {
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: #4f4c4c;
+}
+
+/* UPLOAD */
+.upload-box {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.upload-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #3b82f6;
+    color: white;
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    width: fit-content;
+}
+
+.upload-area {
+    border: 2px dashed #cbd5f5;
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    min-height: 100px;
+    align-items: center;
+    justify-content: center;
+    color: #94a3b8;
+}
+
+.img-card {
+    position: relative;
+    width: 100px;
+    height: 100px;
+}
+
+.img-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+.img-card button {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    background: #ef4444;
+    border: none;
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ACTIONS */
+.form-actions {
+    display: flex;
+    justify-content: end;
+    margin-top: 20px;
+    gap: 10px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+
+    .create-company-card {
+        padding: 18px;
+    }
+
+    .criterion-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+    }
+
+    .review-company-info {
+        flex-direction: column;
+        align-items: center;
+    }
+    .review-company-info h3{
+        margin: 0px;
+    }
+
+    .form-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+}

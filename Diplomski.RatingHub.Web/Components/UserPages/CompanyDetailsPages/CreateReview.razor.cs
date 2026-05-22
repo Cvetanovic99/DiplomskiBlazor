@@ -59,6 +59,7 @@ public partial class CreateReview
                 Model.ReviewerIdentifier = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(Identifier));
                 Model.IsAuthenticated = IsAuthenticated.Value;
                 Model.CompanyOwnerId = Company!.OwnerId;
+                Model.CompanyName =  Company.Name;
 
                 Model.ReviewGrades = Company.RatingCriteria
                     .Select(x => new ReviewGradesDto
@@ -75,7 +76,7 @@ public partial class CreateReview
     {
         if(_images.Count + e.FileCount > 5)
         {
-            ShowNotification("Mozete uploadovati maksimalno 5 slika", NotificationSeverity.Error);
+            ShowNotification("Mozete dodati maksimalno 5 slika", NotificationSeverity.Error);
             return;
         }
 
@@ -149,7 +150,7 @@ public partial class CreateReview
         {
             if (IsAuthenticated!.Value)
             {
-                NavigationManager.NavigateTo($"/user/reviews");
+                NavigationManager.NavigateTo($"/companies/{CompanyId}");
             }
             else
             {

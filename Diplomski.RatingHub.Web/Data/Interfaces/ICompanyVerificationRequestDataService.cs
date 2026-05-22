@@ -11,7 +11,7 @@ public interface ICompanyVerificationRequestDataService
     Task<IPaginatedList<CompanyVerificationRequestDto>> GetVerificationRequests(string search, CompanyVerificationRequestStatus? status, QueryArgs args);
     Task DeleteVerificationRequest(int requestId);
     Task SendCompanyVerificationRulesToUser(string userEmail, int userId, string identifier, string companyName);
-    Task VerifyCompany(int companyId, int recipiendId);
+    Task VerifyCompany(int companyId, int recipiendId, string companyName);
     Task EditVerificationRequestStatus(int requestId, CompanyVerificationRequestStatus newStatus);
     Task<UserCompanyVerificationRequestDto> CreateVerificationRequestStatus(int userProfileId, int CompanyId, string contactEmail, string? description);
 }

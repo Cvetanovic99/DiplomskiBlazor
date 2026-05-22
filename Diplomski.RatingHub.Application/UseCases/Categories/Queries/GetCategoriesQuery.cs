@@ -44,7 +44,6 @@ public class GetCategoriesQueryHandler : IRequestHandler<GetCategoriesQuery, IPa
         var categorySpecification = new Specification<Category>(
             c => c.Name.Contains(request.FilterValue) ||
                  c.Keywords.Any(k => k.Keyword.Contains(request.FilterValue)));
-            //.AddInclude(c =>c.Companies);
 
         
         return await _categoryRepository.GetAndProjectAsPaginatedList<CategoryDto>(categorySpecification, request.QueryArgs);

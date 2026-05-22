@@ -10,7 +10,7 @@ namespace Diplomski.RatingHub.Application.UseCases.Reviews.Queries;
 
 public class GetUserCompanyReviewsQuery : IRequest<IPaginatedList<FilteredReviewDto>>
 {
-    public int CompanId { get; set; }
+    public int CompanyId { get; set; }
     public string FilterValue { get; set; }
     public QueryArgs QueryArgs { get; set; } //For orderBy and pagination
     public double MinOverallScore { get; set; }
@@ -22,7 +22,7 @@ public class GetUserCompanyReviewsQueryValidator : AbstractValidator<GetUserComp
 {
     public GetUserCompanyReviewsQueryValidator()
     {
-        RuleFor(x => x.CompanId).GreaterThan(0)
+        RuleFor(x => x.CompanyId).GreaterThan(0)
             .WithMessage("CompanId mora biti veci od 0");
 
         RuleFor(x => x.FilterValue).MaximumLength(100)
@@ -41,7 +41,7 @@ public class GetUserCompanyReviewsQueryHandler : IRequestHandler<GetUserCompanyR
 
     public async Task<IPaginatedList<FilteredReviewDto>> Handle(GetUserCompanyReviewsQuery request, CancellationToken cancellationToken)
     {
-        var specification = new Specification<Review>(r => r.CompanyId == request.CompanId);
+        var specification = new Specification<Review>(r => r.CompanyId == request.CompanyId);
         
         if (!string.IsNullOrWhiteSpace(request.FilterValue))
         {
@@ -61,7 +61,7 @@ public class GetUserCompanyReviewsQueryHandler : IRequestHandler<GetUserCompanyR
         
         if (request.OnlyWithoutCompanyResponse)
         {
-            specification.And(r => r.CompanyResponseId == null);
+            specification.And(r => r.CompanyResponse == null);
         }
         
         return await _reviewsRepository.GetAndProjectAsPaginatedList<FilteredReviewDto>(specification, request.QueryArgs);

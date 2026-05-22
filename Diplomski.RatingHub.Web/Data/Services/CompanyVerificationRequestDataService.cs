@@ -45,19 +45,19 @@ public class CompanyVerificationRequestDataService : DataServiceBase, ICompanyVe
         await Send(new CreateNotificationCommand
         {
             Title = "Verifikacija kompanije",
-            Message = $"Poslat vam je email sa pravilima verifikacije kompanije {companyName}",
+            Message = $"Poslat vam je e-mejl sa pravilima verifikacije kompanije: {companyName}",
             RecipientId = userId,
             EntityType = nameof(CompanyVerificationRequest)
         });
     }
 
-    public async Task VerifyCompany(int companyId, int recipiendId)
+    public async Task VerifyCompany(int companyId, int recipiendId, string companyName)
     {
         await Send(new VerifyCompanyCommand { CompanyId = companyId });
         await Send(new CreateNotificationCommand
         {
             Title = "Verifikacija kompanije",
-            Message = $"Vaša kompanija je uspešno verifikovana",
+            Message = $"Vaša kompanija: {companyName}, je uspešno verifikovana",
             RecipientId = recipiendId,
             EntityType = nameof(CompanyVerificationRequest)
         });

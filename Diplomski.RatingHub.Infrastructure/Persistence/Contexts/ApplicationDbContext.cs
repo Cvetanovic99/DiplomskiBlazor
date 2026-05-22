@@ -38,6 +38,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         modelBuilder.Entity<Notification>(ConfigureNotification);
         modelBuilder.Entity<CompanyRatingAggregate>(ConfigureCompanyRatingAggregate);
         modelBuilder.Entity<Review>(ConfigureReview);
+        modelBuilder.Entity<CompanyResponse>(ConfigureCompanyResponse);
         modelBuilder.Entity<ReviewGrade>(ConfigureReviewGrade);
         modelBuilder.Entity<Category>(ConfigureCategory);
         modelBuilder.Entity<RatingCriterion>(ConfigureRatingCriterion);
@@ -128,10 +129,9 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
     private void ConfigureReview(EntityTypeBuilder<Review> builder)
     {
-        builder.HasOne<CompanyResponse>()
+        builder.HasOne(r => r.CompanyResponse)
             .WithOne(cr => cr.Review)
             .HasForeignKey<CompanyResponse>(cr => cr.ReviewId)
-            .IsRequired()
             .OnDelete(DeleteBehavior.Restrict);
         
         builder.HasOne(r => r.Company)
@@ -142,6 +142,14 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         builder.HasOne(r => r.Reviewer)
             .WithMany(c => c.Reviews)
             .HasForeignKey(r => r.ReviewerId)
+            .OnDelete(DeleteBehavior.Restrict);
+    }
+    
+    private void ConfigureCompanyResponse(EntityTypeBuilder<CompanyResponse> builder)
+    {
+        builder.HasOne(cr => cr.Company)
+            .WithMany()
+            .HasForeignKey(cr => cr.CompanyId)
             .OnDelete(DeleteBehavior.Restrict);
     }
 

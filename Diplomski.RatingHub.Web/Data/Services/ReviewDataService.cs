@@ -5,6 +5,7 @@ using Diplomski.RatingHub.Application.UseCases.Reviews.Commands;
 using Diplomski.RatingHub.Application.UseCases.Reviews.Queries;
 using Diplomski.RatingHub.Domain.Models;
 using Diplomski.RatingHub.Web.Components.AuthenticatedUserPages.UserCompaniesPages;
+using Diplomski.RatingHub.Web.Components.AuthenticatedUserPages.UserReviewsPages;
 using Diplomski.RatingHub.Web.Components.UserPages.CompanyDetailsPages;
 using Diplomski.RatingHub.Web.Data.Interfaces;
 using NanoidDotNet;
@@ -50,7 +51,7 @@ public class ReviewDataService : DataServiceBase, IReviewDataService
     {
         return await Send(new GetUserCompanyReviewsQuery
         {
-            CompanId = filterModel.CompanId,
+            CompanyId = filterModel.CompanId,
             FilterValue = filterModel.FilterValue,
             QueryArgs = filterModel.QueryArgs,
             MinOverallScore = filterModel.MinOverallScore,
@@ -88,7 +89,7 @@ public class ReviewDataService : DataServiceBase, IReviewDataService
             await Send(new CreateNotificationCommand
             {
                 Title = "Nova ocena",
-                Message = $"Imate novu ocenu kompanije, mozete odgovoriti",
+                Message = $"Nova recenzija za kompaniju {reviewDto.CompanyName} je objavljena. Možete pogledati ocenu i napisati odgovor.",
                 RecipientId = reviewDto.CompanyOwnerId.Value,
                 EntityType = nameof(Review)
             });
@@ -123,5 +124,18 @@ public class ReviewDataService : DataServiceBase, IReviewDataService
     public async Task<FilteredReviewDto> GetReviewForAdmin(int reviewId)
     {
        return await Send(new GetReviewForAdminQuery { ReviewId = reviewId });
+    }
+
+    public async Task<IPaginatedList<FilteredReviewDto>> GetUserReviews(UserReviewsFilterModel filterModel)
+    {
+        return await Send(new GetUserReviewsQuery
+        {
+            UserProfileId = filterModel.UserProfileId,
+            FilterValue = filterModel.FilterValue,
+            QueryArgs = filterModel.QueryArgs,
+            MinOverallScore = filterModel.MinOverallScore,
+            OnlyConfirmed = filterModel.OnlyConfirmed,
+            OnlyWithCompanyResponse = filterModel.OnlyWithCompanyResponse
+        });
     }
 }

@@ -55,7 +55,7 @@ public class GetCompanyRatingCriteriaQueryHandler :  IRequestHandler<GetCompanyA
 public class CompanyWithRatingCriteriaDto : IMapFrom<Company>
 {
     public int Id { get; set; }
-    public string Name { get; set; }
+    public string Name { get; set; } = null!;
     public string? ProfileImagePath { get; set; }
     public int? OwnerId { get; set; }
     public int CategoryId { get; set; }
@@ -72,6 +72,6 @@ public class CompanyWithRatingCriteriaDto : IMapFrom<Company>
 public class CompanyRatingCriterionDto : IMapFrom<RatingCriterion>
 {
     public int Id { get; set; }
-    public string Name { get; set; } 
+    public string Name { get; set; } = null!;
     public int SortOrder { get; set; } 
 }

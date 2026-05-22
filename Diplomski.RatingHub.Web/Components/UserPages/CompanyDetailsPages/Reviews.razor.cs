@@ -20,8 +20,7 @@ public partial class Reviews
 {
     [Parameter] public int CompanyId { get; set; }
     [Parameter] public CurrentUserDto CurrentUser { get; set; }
-
-    [Inject] public AuthenticationStateProvider AuthStateProvider { get; set; }
+    
     [Inject] public IReviewDataService ReviewDataService { get; set; } = null!;
     
     private IEnumerable<FilteredReviewDto> _reviews = new List<FilteredReviewDto>();
@@ -62,40 +61,6 @@ public partial class Reviews
         {
             _reviews = result.Result.Items;
             _totalCount = result.Result.TotalCount;
-            // _reviews = new List<FilteredReviewDto>{ new FilteredReviewDto
-            // {
-            //     Id = 1,
-            //     Comment = "Svidjala mi se saradnja sa ovim pruzaocem usluga, sve je bilo korektno kako smo se dogovorili. Jedino mislim da je mogao da zavrsi brze jer se puno oduzilo, sta da kazem jos, volim vas.",
-            //     OverallScore = 3.54,
-            //     IsAnonymousReview = false,
-            //     ReviewerFullName = "",
-            //     LikesCount = 354,
-            //     ReviewerId = null,
-            //     Reviewer = new ReviewerDto
-            //     {
-            //         FullName = "Goran Cvetanovic",
-            //         ProfileImage = "/images/companyImages/DSC_0323.jpg"
-            //     },
-            //     CompanyResponseId = 3,
-            //     CompanyResponse = new CompanyResponseDto
-            //     {
-            //         Id=3,
-            //         CompanyName = "Sabali programiranje",
-            //         Text = "Hvala na lepim komentarima gospodine, nadam se da cemo uvek ovako lepo saradjivati. Kada god treba nazovite za slicne radove i preporucite nas drugome.",
-            //         Created =  DateTime.Now,
-            //         Modified =  DateTime.Now.AddMonths(1),
-            //         ProfileImage = "/images/companyImages/DSC_0326.jpg",
-            //         Images = new List<string> {"/images/companyImages/DSC_0326.jpg", "/images/companyImages/0872fcc3-044f-4ca0-a1a2-a17133a8e3bf.jpg", 
-            //             "/images/companyImages/DSC_0326.jpg", "/images/companyImages/89995aec-289c-4a84-a60a-767ab57a2fee.jpg", "/images/companyImages/DSC_0326.jpg"}
-            //         
-            //     },
-            //     Created = DateTime.Today,
-            //     Images = new List<string> {"/images/companyImages/DSC_0326.jpg", "/images/companyImages/0872fcc3-044f-4ca0-a1a2-a17133a8e3bf.jpg", 
-            //         "/images/companyImages/DSC_0326.jpg", "/images/companyImages/89995aec-289c-4a84-a60a-767ab57a2fee.jpg", "/images/companyImages/DSC_0326.jpg"},
-            //     Grades = new List<ReviewGradeDto>{new ReviewGradeDto{CriterionName = "Cena", SortOrder = 1, Grade = 3},
-            //     new ReviewGradeDto{CriterionName = "Usluga", SortOrder = 2, Grade = 4}, new ReviewGradeDto{CriterionName = "Vreme cekanja", SortOrder = 3, Grade = 5},}
-            // }};
-            // _totalCount = 30;
         }
     }
 

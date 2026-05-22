@@ -38,7 +38,7 @@
 
         <!-- ACTIONS -->
         <div class="review-actions">
-            @if (Review.CompanyResponseId == null)
+            @if (Review.CompanyResponse == null)
             {
                 <div class="report-action-icon-wrapper">
 
@@ -125,7 +125,7 @@
     </div>
 
     <!-- RESPONSE -->
-    @if (Review.CompanyResponseId != null && Review.CompanyResponse != null)
+    @if (Review.CompanyResponse != null)
     {
         <div class="review-response-wrapper">
 
@@ -146,7 +146,7 @@
                             </div>
                             
                             <div style="display: flex; align-items:center;">
-                                <span class="response-date">@Review.CompanyResponse.Created.ToString("MMMM dd, yyyy")</span>
+                                <span class="response-date">@Review.CompanyResponse.Created.ToString("MMMM dd, yyyy", new System.Globalization.CultureInfo("sr-Latn-RS"))</span>
                             </div>
                         </div>
                         

@@ -5,6 +5,7 @@ public class CreateReviewDto
     public string Comment { get; set; }
     public string? ReviewerFullName { get; set; }
     public int CompanyId { get; set; }
+    public string CompanyName { get; set; }
     public int? CompanyOwnerId { get; set; }
     public string ReviewerIdentifier { get; set; }
     public bool IsAuthenticated { get; set; }

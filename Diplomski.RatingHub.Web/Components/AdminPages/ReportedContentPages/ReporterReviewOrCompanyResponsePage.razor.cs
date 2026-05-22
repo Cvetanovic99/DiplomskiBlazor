@@ -37,7 +37,6 @@ public partial class ReporterReviewOrCompanyResponsePage
                     FullName = "Goran Cvetanovic",
                     ProfileImage = "/images/companyImages/DSC_0323.jpg"
                 },
-                CompanyResponseId = 3,
                 CompanyResponse = new CompanyResponseDto
                 {
                     Id=3,
@@ -111,7 +110,7 @@ public partial class ReporterReviewOrCompanyResponsePage
     
     private string GetDate()
     {
-        return Review.Created.ToString("MMMM dd, yyyy");
+        return Review.Created.ToString("MMMM dd, yyyy", new System.Globalization.CultureInfo("sr-Latn-RS"));
     }
     
     private string GetStarsFillStyle(double rating)

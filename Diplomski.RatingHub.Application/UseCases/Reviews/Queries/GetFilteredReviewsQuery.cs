@@ -37,13 +37,16 @@ public class GetFilteredReviewsQueryHandler : IRequestHandler<GetFilteredReviews
 {
     private readonly IDatabaseRepository<Review> _reviewsRepository;
     private readonly IDatabaseRepository<Like> _likesRepository;
+    private readonly IDatabaseRepository<CompanyResponse> _companyResponseRepository;
 
     public GetFilteredReviewsQueryHandler(
         IDatabaseRepository<Review> reviewsRepository,
-        IDatabaseRepository<Like> likesRepository)
+        IDatabaseRepository<Like> likesRepository,
+        IDatabaseRepository<CompanyResponse> companyResponseRepository)
     {
         _reviewsRepository = reviewsRepository;
         _likesRepository = likesRepository;
+        _companyResponseRepository = companyResponseRepository;
     }
 
     public async Task<IPaginatedList<FilteredReviewDto>> Handle(GetFilteredReviewsQuery request, CancellationToken cancellationToken)
@@ -68,17 +71,16 @@ public class GetFilteredReviewsQueryHandler : IRequestHandler<GetFilteredReviews
         
         if (request.OnlyWithCompanyResponse)
         {
-            specification.And(r => r.CompanyResponseId != null);
+            specification.And(r => r.CompanyResponse != null);
         }
         
         var reviews = await _reviewsRepository.GetAndProjectAsPaginatedList<FilteredReviewDto>(specification, request.QueryArgs);
 
         if (request.CurrentAuthenticatedUserId is not null)//Show to user what he already liked
         {
-            IList<int> reviewIds = reviews.Items.Where(r => r.LikesCount > 0).Select(r => r.Id).ToList();
-            
+            IList<int> reviewIdsWithLikes = reviews.Items.Where(r => r.LikesCount > 0).Select(r => r.Id).ToList();
             var likes = await _likesRepository.Get(
-                new Specification<Like>(l => reviewIds.Contains(l.ReviewId) && l.UserId == request.CurrentAuthenticatedUserId));
+                new Specification<Like>(l => reviewIdsWithLikes.Contains(l.ReviewId) && l.UserId == request.CurrentAuthenticatedUserId));
 
             foreach (var like in likes)
             {
@@ -100,9 +102,9 @@ public class FilteredReviewDto : IMapFrom<Review>
     public int LikesCount { get; set; }
     public bool IsLikedByCurrentAuthenticatedUser { get; set; }
     public int CompanyId { get; set; }
+    public string CompanyName { get; set; } = null!;
     public int?  ReviewerId { get; set; }
     public ReviewerDto? Reviewer { get; set; }
-    public int? CompanyResponseId { get; set; }
     public CompanyResponseDto? CompanyResponse { get; set; }
     
     public DateTime Created { get; set; }
@@ -116,7 +118,9 @@ public class FilteredReviewDto : IMapFrom<Review>
             .ForMember(dest => dest.Images,
                 opt => opt.MapFrom(src => src.Images.Select(i => i.Path).ToList()))
             .ForMember(dest => dest.LikesCount,
-                opt => opt.MapFrom(src => src.Likes.Count));
+                opt => opt.MapFrom(src => src.Likes.Count))
+            .ForMember(dest => dest.CompanyName,
+                opt => opt.MapFrom(src => src.Company.Name));
     }
 }
 
@@ -139,12 +143,13 @@ public class CompanyResponseDto : IMapFrom<CompanyResponse>
 {
     public int Id { get; set; }
     public string CompanyName { get; set; } 
-    public string CompanyOwnerId { get; set; } 
+    public int CompanyOwnerId { get; set; } 
+    public int ReviewId { get; set; }
     public string Text { get; set; }
     public DateTime Created { get; set; }
     public DateTime? Modified { get; set; }
     public string? ProfileImage { get; set; }
-    public List<string>? Images { get; set; } = new();
+    public List<string> Images { get; set; } = new();
     
     public void Mapping(Profile profile)
     {
@@ -152,12 +157,12 @@ public class CompanyResponseDto : IMapFrom<CompanyResponse>
             .ForMember(dest => dest.Images,
                 opt => opt.MapFrom(src => src.Images.Select(i => i.Path).ToList()))
             .ForMember(dest => dest.ProfileImage,
-                opt => opt.MapFrom(src => 
-                    src.Company.Images.FirstOrDefault(i => i.IsProfile).Path))
-            .ForMember(dest => dest.CompanyName,
-                opt => opt.MapFrom(src => src.Company.Name))
-            .ForMember(dest => dest.CompanyOwnerId,
-                opt => opt.MapFrom(src => src.Company.OwnerId));
+                opt => opt.MapFrom(src =>
+                    src.Company.Images.Where(i => i.IsProfile).Select(i => i.Path).FirstOrDefault()))
+        .ForMember(dest => dest.CompanyName,
+            opt => opt.MapFrom(src => src.Company.Name))
+        .ForMember(dest => dest.CompanyOwnerId,
+            opt => opt.MapFrom(src => src.Company.OwnerId));
     }
 }
 

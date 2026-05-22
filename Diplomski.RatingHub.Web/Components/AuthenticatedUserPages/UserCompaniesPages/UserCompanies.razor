@@ -227,17 +227,17 @@
                                 <div class="stat">
                                     <span class="label">Tačni podaci</span>
                                     <div class="bar">
-                                        <div class="fill correct" style="width: @_trueDataPercentage"></div>
+                                        <div class="fill correct" style="width: @_trueDataPercentage.ToString("0.0")%"></div>
                                     </div>
-                                    <span class="value">@_trueDataPercentage</span>
+                                    <span class="value">@_trueDataPercentage.ToString("0")%</span>
                                 </div>
 
                                 <div class="stat">
                                     <span class="label">Netačni podaci</span>
                                     <div class="bar">
-                                        <div class="fill incorrect" style="width: @_falseDataPercentage"></div>
+                                        <div class="fill incorrect" style="width: @_falseDataPercentage.ToString("0.0")%"></div>
                                     </div>
-                                    <span class="value">@_falseDataPercentage</span>
+                                    <span class="value">@_falseDataPercentage.ToString("0")%</span>
                                 </div>
 
                             </div>

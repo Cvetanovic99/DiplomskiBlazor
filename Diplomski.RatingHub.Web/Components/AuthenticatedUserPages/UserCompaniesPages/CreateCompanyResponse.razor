@@ -1,0 +1,89 @@
+﻿@using Diplomski.RatingHub.Application.Models.Dtos
+@inherits Diplomski.RatingHub.Web.Components.Shared.PortalComponentBase
+
+<section class="create-company-page">
+
+    <div class="create-company-shell">
+            <div class="create-company-card">
+
+                <!-- HEADER -->
+                <div class="create-company-header">
+                    <div class="create-company-badge">
+                        <RadzenIcon Icon="rate_review"/>
+                        <span>Dodaj odgovor</span>
+                    </div>
+                </div>
+
+                <RadzenTemplateForm TItem="CreateCompanyResponseDto" Data="@Model" Submit="@HandleSubmit">
+                    
+                    <!-- COMMENT -->
+                    <RadzenColumn Size="12" Style="margin-top: 18px">
+                        <label class="form-label">
+                            <RadzenIcon Icon="description"/> Odgovor:
+                        </label>
+                        <RadzenTextArea Name="Comment"
+                                        @bind-Value="Model.Text"
+                                        Style="width:100%; height:120px"
+                                        Placeholder="Odgovor na ocenjivanje"/>
+                        
+                        <RadzenRequiredValidator Component="Comment" Text="Obavezno"/>
+                    </RadzenColumn>
+
+                    <!-- IMAGES -->
+                    <RadzenColumn Size="12" Style="margin-top: 23px">
+
+                        <div class="upload-box">
+
+                            <label class="upload-btn">
+                                <RadzenIcon Icon="upload"/>
+                                Dodaj slike
+                                <InputFile OnChange="HandleFiles" multiple hidden/>
+                            </label>
+
+                            <div class="upload-area">
+
+                                @if (!_images.Any())
+                                {
+                                    <div style="display: flex"><RadzenIcon Icon="image" /> <span>Dodajte slike</span></div>
+                                    <div><span>Izaberite maksimalno 5 slika</span></div>
+                                }
+
+                                @foreach (var img in _images)
+                                {
+                                    <div class="img-card">
+                                        <img src="@img.Path"/>
+
+                                        <button type="button" @onclick="() => RemoveImage(img)">
+                                            <RadzenIcon Icon="close" Style="align-self: center"/>
+                                        </button>
+                                    </div>
+                                }
+
+                            </div>
+
+                        </div>
+
+                    </RadzenColumn>
+
+                    <!-- ACTIONS -->
+                    <div class="form-actions">
+
+                        <RadzenButton Text="Odustani"
+                                      ButtonStyle="ButtonStyle.Light"
+                                      Icon="arrow_back"
+                                      Click="@Cancel"/>
+
+                        <RadzenButton Text="Kreiraj"
+                                      ButtonType="ButtonType.Submit"
+                                      ButtonStyle="ButtonStyle.Primary"
+                                      Icon="save"
+                                      IsBusy="IsLoading"
+                                      BusyText="Kreiranje"/>
+                    </div>
+
+                </RadzenTemplateForm>
+
+            </div>
+    </div>
+
+</section>
