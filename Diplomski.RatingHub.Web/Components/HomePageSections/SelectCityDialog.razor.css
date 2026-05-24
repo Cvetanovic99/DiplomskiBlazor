@@ -1,0 +1,42 @@
+﻿.anon-dialog {
+    padding: 10px 5px;
+}
+
+/* TITLE */
+.dialog-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+
+/* FORM */
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 500;
+    margin-bottom: 6px;
+}
+
+/* BUTTONS */
+.dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+    .dialog-actions {
+        flex-direction: column;
+    }
+
+    .dialog-actions button {
+        width: 100%;
+    }
+}

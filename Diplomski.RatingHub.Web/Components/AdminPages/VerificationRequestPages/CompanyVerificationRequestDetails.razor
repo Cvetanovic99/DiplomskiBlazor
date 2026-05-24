@@ -21,7 +21,7 @@
         {
             <div class="status-display">
                 <span class="status-badge status-@Model.Status.ToString().ToLower()">
-                    @Model.Status
+                    @GetStatusOptions(Model.Status)
                 </span>
 
                 <RadzenButton Icon="edit"
@@ -36,7 +36,11 @@
                 <RadzenDropDown TValue="CompanyVerificationRequestStatus"
                                 @bind-Value="_newStatus"
                                 Data="@Enum.GetValues(typeof(CompanyVerificationRequestStatus))"
-                                Style="width:180px" />
+                                Style="width:180px">
+                    <Template>
+                        @GetStatusOptions(context)
+                    </Template>
+                </RadzenDropDown>
 
                 <RadzenButton Icon="check" Size="ButtonSize.Small"
                               ButtonStyle="ButtonStyle.Primary"

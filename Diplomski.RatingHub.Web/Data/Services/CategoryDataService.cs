@@ -63,6 +63,26 @@ public class CategoryDataService(IServiceScopeFactory serviceScopeFactory) : Dat
         });
     }
 
+    public async Task<IList<CategoryOrCompanyDto>> GetCategoriesAndCompanies(int cityId, string filterValue, QueryArgs queryArgs)
+    {
+        return await Send(new GetCategoriesAndCompaniesQuery
+        {
+            FilterValue = filterValue,
+            CityId = cityId,
+            QueryArgs = queryArgs
+        });
+    }
+
+    public async Task<IEnumerable<TopCategoryDto>> GetAllTopCategories()
+    {
+        return await Send(new GetAllTopCategoriesQuery());
+    }
+
+    public async Task<IEnumerable<PopularCategoryDto>> GetPopularCategories()
+    {
+        return await Send(new GetPopularCategoriesQuery());
+    }
+
     public async Task CreateCategory(CreateCategoryDto createCategoryDto)
     {
         await Send(new CreateCategoryCommand

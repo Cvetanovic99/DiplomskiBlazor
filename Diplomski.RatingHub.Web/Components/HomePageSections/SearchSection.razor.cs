@@ -1,101 +1,116 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using Diplomski.RatingHub.Application.Models;
+using Diplomski.RatingHub.Application.UseCases.Categories.Queries;
+using Diplomski.RatingHub.Application.UseCases.Cities.Queries;
+using Diplomski.RatingHub.Web.Data.Interfaces;
+using Microsoft.AspNetCore.Components;
 using Radzen;
 
 namespace Diplomski.RatingHub.Web.Components.HomePageSections;
 
-public partial class SearchSection : ComponentBase
+public partial class SearchSection
 {
-    [Inject] protected NavigationManager Navigation { get; set; } = default!;
-
     [Parameter] public string SectionId { get; set; } = "home-search-section";
 
-    protected string? SearchTerm { get; set; }
-    protected string? SelectedCity { get; set; }
+    [Inject] public ICityDataService CityDataService { get; set; } = null!;
+    [Inject] public ICategoryDataService CategoryDataService { get; set; } = null!;
+    
+    
+    private IEnumerable<CityDto> _cities = new List<CityDto>();
+    private string? _selectedCityText;
+    private int _selectedCityId;
+    
+    private IEnumerable<CategoryOrCompanyDto> _categoriesAndCompanies = new List<CategoryOrCompanyDto>();
+    private string? _selectedCategoryText;
+    private CategoryOrCompanyDto? _selectedCategoryOrCompany = null;
+    
 
-    protected List<SearchSuggestionItem> Suggestions { get; set; } = new();
-    protected List<SearchSuggestionItem> FilteredSuggestions { get; set; } = new();
-
-    protected List<string> Cities { get; set; } = new();
-    protected List<string> FilteredCities { get; set; } = new();
-
-    protected override void OnInitialized()
+    private async Task LoadCities(LoadDataArgs args)
     {
-        Suggestions =
-        [
-            new() { Label = "Frizeri", Subtitle = "Kategorija" },
-            new() { Label = "Muški frizeri", Subtitle = "Podkategorija" },
-            new() { Label = "Salon Bella", Subtitle = "Firma · Niš" },
-            new() { Label = "Salon Glamour", Subtitle = "Firma · Beograd" },
-            new() { Label = "Vodoinstalateri", Subtitle = "Kategorija" },
-            new() { Label = "Električari", Subtitle = "Kategorija" },
-            new() { Label = "Auto servis", Subtitle = "Kategorija" },
-            new() { Label = "Marko Jovanović", Subtitle = "Majstor · Električar" },
-            new() { Label = "Milan Petrović", Subtitle = "Majstor · Vodoinstalater" }
-        ];
+        var response = await InvokeDataServiceMethod(
+            () => CityDataService.GetCities(
+                args.Filter?.ToLower() ?? string.Empty,
+                new QueryArgs { Take = 10, Skip = 0 }),
+            errorMessage: "Greška prilikom ucitavanja gradova");
 
-        Cities =
-        [
-            "Niš",
-            "Beograd",
-            "Novi Sad",
-            "Kragujevac",
-            "Subotica",
-            "Pančevo",
-            "Čačak",
-            "Leskovac",
-            "Kraljevo"
-        ];
+        if(!response.ExceptionOccurred)
+            _cities = response.Result.Items;
+    }
+    
+    private void OnCityChanged(object value)
+    {
+        var text = value?.ToString();
 
-        FilteredSuggestions = Suggestions;
-        FilteredCities = Cities;
+        if (string.IsNullOrWhiteSpace(text))
+        {
+            _selectedCityText = null;
+            _selectedCityId = 0;
+            _selectedCategoryOrCompany = null;
+            _selectedCategoryText = null;
+            StateHasChanged();
+            return;
+        }
+
+        _selectedCityText = text;
+
+        var selectedCity = _cities
+            .FirstOrDefault(x => string.Equals(x.Name, text, StringComparison.CurrentCultureIgnoreCase));
+
+        _selectedCityId = selectedCity?.Id ?? 0;
+        StateHasChanged();
+    }
+    
+    private void OnCitySelected()
+    {
+        StateHasChanged();
+    }
+    
+    private async Task LoadCategoriesAndCompanies(LoadDataArgs args)
+    {
+        var res = await InvokeDataServiceMethod(
+            () => CategoryDataService.GetCategoriesAndCompanies(_selectedCityId, args.Filter?.ToLower() ?? string.Empty, new QueryArgs { Take = 10, Skip = 0 }),
+            errorMessage: "Greška prilikom ucitavanja");
+
+        if (!res.ExceptionOccurred)
+            _categoriesAndCompanies = res.Result?.ToList();
+    }
+    
+    private void OnCategoryChanged(object value)
+    {
+        var text = value?.ToString();
+
+        if (string.IsNullOrWhiteSpace(text))
+        {
+            _selectedCategoryText = null;
+            _selectedCategoryOrCompany = null;
+            StateHasChanged();
+            return;
+        }
+
+        _selectedCategoryText = text;
+
+         _selectedCategoryOrCompany = _categoriesAndCompanies
+            .FirstOrDefault(x =>string.Equals(x.Name, text, StringComparison.CurrentCultureIgnoreCase));
+        
+        StateHasChanged();
+    }
+    
+    private void OnCategorySelected()
+    {
+        StateHasChanged();
     }
 
-    protected void LoadSuggestions(LoadDataArgs args)
+    private void ExecuteSearch()
     {
-        var term = args.Filter?.Trim();
+        if (_selectedCategoryOrCompany is null || _selectedCityId == 0)
+        {
+            ShowNotification("Morate izabrati grad i kategoriju/kompaniju");
+            return;
+        }
 
-        FilteredSuggestions = string.IsNullOrWhiteSpace(term)
-            ? Suggestions
-            : Suggestions
-                .Where(x =>
-                    x.Label.Contains(term, StringComparison.OrdinalIgnoreCase) ||
-                    x.Subtitle.Contains(term, StringComparison.OrdinalIgnoreCase))
-                .ToList();
-    }
-
-    protected void LoadCities(LoadDataArgs args)
-    {
-        var term = args.Filter?.Trim();
-
-        FilteredCities = string.IsNullOrWhiteSpace(term)
-            ? Cities
-            : Cities
-                .Where(x => x.Contains(term, StringComparison.OrdinalIgnoreCase))
-                .ToList();
-    }
-
-    protected void OnSearchTermChanged(object? value)
-    {
-        SearchTerm = value?.ToString();
-    }
-
-    protected void OnCityChanged(object? value)
-    {
-        SelectedCity = value?.ToString();
-    }
-
-    protected void ExecuteSearch()
-    {
-        var query = new Dictionary<string, object?>();
-
-        if (!string.IsNullOrWhiteSpace(SearchTerm))
-            query["term"] = SearchTerm;
-
-        if (!string.IsNullOrWhiteSpace(SelectedCity))
-            query["city"] = SelectedCity;
-
-        var url = Navigation.GetUriWithQueryParameters("/search", query);
-        Navigation.NavigateTo(url);
+        if (_selectedCategoryOrCompany!.IsCategory)
+            NavigationManager.NavigateTo($"/companies?CityId={_selectedCityId}&CategoryId={_selectedCategoryOrCompany.Id}");
+        else
+            NavigationManager.NavigateTo($"/companies/{_selectedCategoryOrCompany.Id}");
     }
 
     protected class SearchSuggestionItem

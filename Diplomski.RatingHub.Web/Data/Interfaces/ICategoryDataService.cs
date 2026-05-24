@@ -20,4 +20,7 @@ public interface ICategoryDataService
     Task<IPaginatedList<SubcategoryDto>> GetSubcategories(int parentCategoryId, QueryArgs? queryArgs = null);
     Task<IEnumerable<CategoryParentDto>> GetCategoryParents(int categoryId);
     Task CreateNewCategorySuggestion(SuggestCategoryModel suggestCategoryModel);
+    Task<IList<CategoryOrCompanyDto>> GetCategoriesAndCompanies(int cityId, string filterValue, QueryArgs queryArgs);
+    Task<IEnumerable<TopCategoryDto>> GetAllTopCategories();
+    Task<IEnumerable<PopularCategoryDto>> GetPopularCategories();
 }

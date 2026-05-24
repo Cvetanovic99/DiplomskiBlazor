@@ -1,4 +1,6 @@
-﻿<div class="more-categories-section">
+﻿@inherits Diplomski.RatingHub.Web.Components.Shared.PortalComponentBase
+
+<div class="more-categories-section">
     <div class="more-categories-header">
         <h3 class="more-categories-title">Još popularnih kategorija</h3>
         <p class="more-categories-subtitle">
@@ -10,10 +12,10 @@
         <div class="more-categories-grid">
             @foreach (var category in Categories)
             {
-                <a href="@($"/categories/{category.Slug}")" class="more-categories-card">
+                <button @onclick="() => OnCategoryClick(category)" class="more-categories-card">
                     <RadzenIcon Icon="@category.Icon" class="more-categories-card-icon" />
                     <span class="more-categories-card-title">@category.Name</span>
-                </a>
+                </button>
             }
         </div>
     </div>

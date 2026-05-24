@@ -1,4 +1,5 @@
 ﻿using Diplomski.RatingHub.Application.UseCases.ReportedContents.Queries;
+using Diplomski.RatingHub.Domain.Enums;
 using Diplomski.RatingHub.Web.Data.Interfaces;
 using Microsoft.AspNetCore.Components;
 
@@ -22,5 +23,21 @@ public partial class EditReportedContent
     protected void Cancel()
     {
         DialogService.Close(false);
+    }
+    
+    private string GetStatusOptions(object value)
+    {
+        var option = (ReportedContentStatus)value;
+        switch (option)
+        {
+            case ReportedContentStatus.Dismissed:
+                return "Odbijen";
+            case ReportedContentStatus.Pending: 
+                return "Na cekanju";
+            case ReportedContentStatus.Approved:
+                return "Prihvacen";
+            default:
+                return "";
+        }
     }
 }

@@ -85,4 +85,52 @@ public partial class ReportedContent
             await _grid.Reload();
         }
     }
+    
+    private string GetEntityTypeOptions(object value)
+    {
+        var option = (ReportedContentEntityType)value;
+        switch (option)
+        {
+            case ReportedContentEntityType.Company:
+                return "Kompanija";
+            case ReportedContentEntityType.CompanyResponse: 
+                return "Odgovor kompanije";
+            case ReportedContentEntityType.Review:
+                return "Ocena";
+            default:
+                return "";
+        }
+    }
+    
+    private string GetEntityTypeOptionsFromString(string value)
+    {
+        Enum.TryParse<ReportedContentEntityType>(value, out var result);
+        switch (result)
+        {
+            case ReportedContentEntityType.Company:
+                return "Kompanija";
+            case ReportedContentEntityType.CompanyResponse: 
+                return "Odgovor kompanije";
+            case ReportedContentEntityType.Review:
+                return "Ocena";
+            default:
+                return "";
+        }
+    }
+    
+    private string GetStatusOptions(object value)
+    {
+        var option = (ReportedContentStatus)value;
+        switch (option)
+        {
+            case ReportedContentStatus.Dismissed:
+                return "Odbijen";
+            case ReportedContentStatus.Pending: 
+                return "Na cekanju";
+            case ReportedContentStatus.Approved:
+                return "Prihvacen";
+            default:
+                return "";
+        }
+    }
 }

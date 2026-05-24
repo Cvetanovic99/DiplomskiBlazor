@@ -9,7 +9,11 @@
         <RadzenDropDown TValue="ReportedContentStatus"
                         @bind-Value="Model.Status"
                         Data="@Enum.GetValues(typeof(ReportedContentStatus))"
-                        Style="width:100%" />
+                        Style="width:100%" >
+            <Template>
+                @GetStatusOptions(context)
+            </Template>
+        </RadzenDropDown>
     </div>
 
     <div class="edit-actions">

@@ -17,7 +17,11 @@ const hoverIcon = new L.Icon({
 
 window.initMap = (lat, lng, zoom = 12) => {
 
-    if (window.mapInstance) return;
+    if (window.mapInstance) {
+        window.mapInstance.remove();
+        window.mapInstance = null;
+        window.markersLayer = null;
+    }
 
     const map = L.map('map').setView([lat, lng], zoom);
 

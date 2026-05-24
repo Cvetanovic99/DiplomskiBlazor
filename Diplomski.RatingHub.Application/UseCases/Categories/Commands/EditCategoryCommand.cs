@@ -74,15 +74,13 @@ public class EditCategoryCommandHandler : IRequestHandler<EditCategoryCommand, U
         if (category is null)
             throw new AppException("Kategorija ne postoji");
 
-
-        category.Name = request.Name;
-        category.Slug = request.Slug;
-        category.SortOrder = request.SortOrder;
-        category.Icon = request.Icon;
-        category.ShowOnHomePage = request.ShowOnHomePage;
-
-        await _categoryKeywordRepository.DeleteRange(category.Keywords);
-        category.Keywords = _mapper.Map<List<CategoryKeyword>>(request.Keywords);
+        
+        category.Keywords.Clear();
+        var newKeywords = _mapper.Map<List<CategoryKeyword>>(request.Keywords);
+        foreach (var keyword in newKeywords)
+        {
+            category.Keywords.Add(keyword);
+        }
 
         var existingCriteria = category.RatingCriteria.ToList();
         var incomingCriteria = request.RatingCriteria;
@@ -131,6 +129,12 @@ public class EditCategoryCommandHandler : IRequestHandler<EditCategoryCommand, U
                 category.RatingCriteria.Remove(removed);
             }
         }
+        
+        category.Name = request.Name;
+        category.Slug = request.Slug;
+        category.SortOrder = request.SortOrder;
+        category.Icon = request.Icon;
+        category.ShowOnHomePage = request.ShowOnHomePage;
 
         await _categoryRepository.Update(category);
 

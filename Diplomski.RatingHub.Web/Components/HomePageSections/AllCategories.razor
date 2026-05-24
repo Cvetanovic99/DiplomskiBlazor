@@ -1,4 +1,7 @@
-﻿<div class="all-categories-section">
+﻿@using Diplomski.RatingHub.Application.UseCases.Categories.Queries
+@inherits Diplomski.RatingHub.Web.Components.Shared.PortalComponentBase
+
+<div class="all-categories-section">
     <div class="all-categories-header">
         <h3 class="all-categories-title">Sve kategorije</h3>
         <p class="all-categories-subtitle">
@@ -12,8 +15,8 @@
                     Change="@OnChange"
                     class="all-categories-tree">
             <RadzenTreeLevel 
-                TextProperty="@nameof(CategoryTreeItem.Name)"
-                HasChildren=@(e => (e as CategoryTreeItem).HasChildren) />
+                TextProperty="@nameof(SubcategoryDto.Name)"
+                HasChildren=@(e => (e as SubcategoryDto).HasChildren) />
         </RadzenTree>
     </div>
 </div>

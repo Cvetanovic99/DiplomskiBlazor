@@ -3,6 +3,6 @@
 public enum NewCategorySuggestionStatus
 {
     Pending = 0,
-    Reviewed = 1,
+    Approved = 1,
     Dismissed = 2,
 }

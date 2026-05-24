@@ -1,0 +1,60 @@
+﻿@inherits Diplomski.RatingHub.Web.Components.Shared.PortalComponentBase
+
+<div class="anon-dialog">
+
+    @if (IsLoading)
+    {
+        <div style="width: 100%; display: flex; justify-content: center">
+            <RadzenProgressBarCircular ProgressBarStyle="ProgressBarStyle.Primary" Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" AriaLabel="Primary loading" />
+        </div>
+    }
+    else
+    {
+        <h3 class="dialog-title" style="color: #353535">Prvo morate izabrati grad</h3>
+    }
+
+    <RadzenTemplateForm Data="@model" Submit="@OnSubmit" TItem="ModelDto">
+
+        <!-- KOD -->
+        <div class="form-group">
+
+            <label>
+                <RadzenIcon Icon="add_location_alt" /> Grad:
+            </label>
+
+            <RadzenAutoComplete
+                Name="City"
+                Data="@_cities"
+                TextProperty="Name"
+                @bind-Value="_selectedCityText"
+                MinLength="1"
+                LoadData="@LoadCities"
+                Change="@OnCityChanged"
+                SelectedItemChanged="@OnCitySelected"
+                SelectedItem="@_selectedCityText"
+                Style="width:100%"
+                Placeholder="Npr. Niš, Beograd, Novi Sad..." 
+                class="search-autocomplete"/>
+
+            <RadzenCustomValidator Component="City"
+                                   Validator="@(()=> model.CityId != 0)"
+                                   Text="Izaberite grad" />
+
+        </div>
+
+        <!-- BUTTONS -->
+        <div class="dialog-actions">
+
+            <RadzenButton Text="Odustani"
+                          Click="@OnCancel"
+                          ButtonStyle="ButtonStyle.Light" />
+
+            <RadzenButton Text="Nastavi"
+                          ButtonType="ButtonType.Submit"
+                          ButtonStyle="ButtonStyle.Primary" />
+
+        </div>
+
+    </RadzenTemplateForm>
+
+</div>

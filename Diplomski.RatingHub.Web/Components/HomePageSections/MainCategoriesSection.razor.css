@@ -120,7 +120,7 @@
     border-color: rgba(255, 159, 67, 0.28);
 }
 
-.main-categories-card-icon {
+::deep .main-categories-card-icon {
     font-size: 1.45rem;
     color: #2b5db1;
 }
@@ -218,7 +218,7 @@
         margin-bottom: 10px;
     }
 
-    .main-categories-card-icon {
+    ::deep .main-categories-card-icon {
         font-size: 1.1rem;
     }
 
@@ -262,7 +262,7 @@
         margin-bottom: 8px;
     }
 
-    .main-categories-card-icon {
+    ::deep .main-categories-card-icon {
         font-size: 1rem;
     }
 

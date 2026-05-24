@@ -7,7 +7,11 @@
             <div class="form-field">
                 <label>Status</label>
                 <RadzenDropDown @bind-Value="Model.Status" Style="width:100%;" Placeholder="Izaberi..."
-                                Data="@NewCategorySuggestionsFilterValues.CategorySuggestionStatuses"/>
+                                Data="@NewCategorySuggestionsFilterValues.CategorySuggestionStatuses">
+                    <Template Context="statusContext">
+                        @GetStatusOptions(statusContext)
+                    </Template>
+                </RadzenDropDown>
                 
             </div>
         </RadzenColumn>

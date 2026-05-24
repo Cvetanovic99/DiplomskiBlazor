@@ -209,4 +209,20 @@ public partial class Categories
             _ => "status-default"
         };
     
+    private string GetStatusOptions(object value)
+    {
+        var option = (NewCategorySuggestionStatus)value;
+        switch (option)
+        {
+            case NewCategorySuggestionStatus.Dismissed:
+                return "Odbijen";
+            case NewCategorySuggestionStatus.Pending: 
+                return "Na cekanju";
+            case NewCategorySuggestionStatus.Approved:
+                return "Prihvacen";
+            default:
+                return "";
+        }
+    }
+    
 }

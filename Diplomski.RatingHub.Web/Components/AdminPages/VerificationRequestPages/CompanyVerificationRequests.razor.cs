@@ -82,4 +82,22 @@ public partial class CompanyVerificationRequests
                 await _grid.Reload();
         }
     }
+    
+    private string GetStatusOptions(object value)
+    {
+        var option = (CompanyVerificationRequestStatus)value;
+        switch (option)
+        {
+            case CompanyVerificationRequestStatus.Dismissed:
+                return "Odbijen";
+            case CompanyVerificationRequestStatus.Pending: 
+                return "Na cekanju";
+            case CompanyVerificationRequestStatus.AcctionTaken:
+                return "Obradjuje se";
+            case CompanyVerificationRequestStatus.Approved:
+                return "Prihvacen";
+            default:
+                return "";
+        }
+    }
 }

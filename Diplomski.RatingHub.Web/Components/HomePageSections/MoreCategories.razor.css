@@ -52,7 +52,7 @@
     box-shadow: 0 10px 24px rgba(48, 102, 190, 0.08);
 }
 
-.more-categories-card-icon {
+::deep .more-categories-card-icon {
     font-size: 1.1rem;
     color: #2b5db1;
     flex-shrink: 0;
@@ -93,7 +93,7 @@
         border-radius: 14px;
     }
 
-    .more-categories-card-icon {
+    ::deep .more-categories-card-icon {
         font-size: 0.95rem;
     }
 

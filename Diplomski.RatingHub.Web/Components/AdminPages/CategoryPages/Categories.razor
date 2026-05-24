@@ -142,12 +142,16 @@
                             <RadzenDropDown @bind-Value="_selectedSuggestionStatus" Style="width:100%;" Placeholder="Izaberi..."
                                             Data="@NewCategorySuggestionsFilterValues.CategorySuggestionStatuses"
                                             Change="@OnSuggestionStatusFilterChanged"
-                                            AllowClear="true" />
+                                            AllowClear="true">
+                                <Template Context="statusContext">
+                                    @GetStatusOptions(statusContext)
+                                </Template>
+                            </RadzenDropDown>
                         </FilterTemplate>
                         <Template Context="item">
                             @if (item.Status is NewCategorySuggestionStatus.Pending)
                             {
-                                <RadzenIcon Style="cursor: pointer" Icon="hourglass_top" IconStyle="IconStyle.Info" MouseEnter="@(args => ShowTooltip(args, "Neobradjen", TooltipPosition.Top))"/>
+                                <RadzenIcon Style="cursor: pointer" Icon="hourglass_top" IconStyle="IconStyle.Info" MouseEnter="@(args => ShowTooltip(args, "Na cekanju", TooltipPosition.Top))"/>
                             }
                             else if (item.Status is NewCategorySuggestionStatus.Dismissed)
                             {
@@ -155,7 +159,7 @@
                             }
                             else
                             {
-                                <RadzenIcon Style="cursor: pointer" Icon="bookmark_check" IconStyle="IconStyle.Success" MouseEnter="@(args => ShowTooltip(args, "Obradjen", TooltipPosition.Top))"/>
+                                <RadzenIcon Style="cursor: pointer" Icon="bookmark_check" IconStyle="IconStyle.Success" MouseEnter="@(args => ShowTooltip(args, "Prihvacen", TooltipPosition.Top))"/>
                             }
                         </Template>
                     </RadzenDataGridColumn>

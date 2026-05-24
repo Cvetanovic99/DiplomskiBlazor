@@ -30,7 +30,12 @@
                             Placeholder="Tip sadržaja"
                             class="reports-dropdown"
                             Change="@OnFilterChanged" 
-                            AllowClear="true"/>
+                            AllowClear="true">
+            
+                <Template>
+                    @GetEntityTypeOptions(context)
+                </Template>
+            </RadzenDropDown>
             
             <RadzenDropDown TValue="ReportedContentStatus?"
                             @bind-Value="_selectedStatus"
@@ -38,7 +43,11 @@
                             Placeholder="Status"
                             class="reports-dropdown"
                             Change="@OnFilterChanged" 
-                            AllowClear="true"/>
+                            AllowClear="true">
+                <Template>
+                    @GetStatusOptions(context)
+                </Template>
+            </RadzenDropDown>
 
         </div>
 
@@ -58,13 +67,17 @@
 
                     <RadzenDataGridColumn Property="Title" Title="Naslov"/>
 
-                    <RadzenDataGridColumn Property="ReportedEntityType" Title="Tip"/>
+                    <RadzenDataGridColumn Property="ReportedEntityType" Title="Tip">
+                        <Template Context="item">
+                            @GetEntityTypeOptionsFromString(item.ReportedEntityType)
+                        </Template>
+                    </RadzenDataGridColumn>
 
                     <RadzenDataGridColumn Property="Status" Title="Status" TextAlign="TextAlign.Center">
                         <Template Context="item">
                             @if (item.Status is ReportedContentStatus.Pending)
                             {
-                                <RadzenIcon Style="cursor: pointer" Icon="hourglass_top" IconStyle="IconStyle.Info" MouseEnter="@(args => ShowTooltip(args, "Neobradjen", TooltipPosition.Top))"/>
+                                <RadzenIcon Style="cursor: pointer" Icon="hourglass_top" IconStyle="IconStyle.Info" MouseEnter="@(args => ShowTooltip(args, "Na cekanju", TooltipPosition.Top))"/>
                             }
                             else if (item.Status is ReportedContentStatus.Dismissed)
                             {
@@ -72,7 +85,7 @@
                             }
                             else
                             {
-                                <RadzenIcon Style="cursor: pointer" Icon="bookmark_check" IconStyle="IconStyle.Success" MouseEnter="@(args => ShowTooltip(args, "Prihvacen", TooltipPosition.Top))"/>
+                                <RadzenIcon Style="cursor: pointer" Icon="bookmark_check" IconStyle="IconStyle.Success" MouseEnter="@(args => ShowTooltip(args, "Pregledan", TooltipPosition.Top))"/>
                             }
                         </Template>
                     </RadzenDataGridColumn>

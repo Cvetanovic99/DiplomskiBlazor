@@ -1,4 +1,6 @@
-﻿<section class="main-categories-section">
+﻿@inherits Diplomski.RatingHub.Web.Components.Shared.PortalComponentBase
+
+<section class="main-categories-section">
     <div class="main-categories-shell">
         <div class="main-categories-header">
             <div class="main-categories-badge">
@@ -13,9 +15,9 @@
         </div>
 
         <div class="main-categories-grid">
-            @foreach (var category in MainCategories)
+            @foreach (var category in _mainCategories.Take(10))
             {
-                <a href="@GetCategoryUrl(category)"
+                <button @onclick="() => OnCategoryClick(category)"
                    class="main-categories-card">
                     <div class="main-categories-card-icon-wrap">
                         <RadzenIcon Icon="@category.Icon" class="main-categories-card-icon" />
@@ -24,27 +26,30 @@
                     <div class="main-categories-card-content">
                         <div class="main-categories-card-title">@category.Name</div>
                     </div>
-                </a>
+                </button>
             }
         </div>
 
         <div class="main-categories-actions">
-            <button type="button"
-                    class="main-categories-toggle-btn"
-                    @onclick="ToggleMoreCategories">
-                <span class="@(ShowMoreCategories ? "main-categories-toggle-arrow rotated" : "main-categories-toggle-arrow")">
-                    <RadzenIcon Icon="expand_more" class="main-categories-toggle-arrow-icon" />
-                </span>
-                <span class="main-categories-toggle-text">
-                    @(ShowMoreCategories ? "Sakrij dodatne kategorije" : "Prikaži još kategorija")
-                </span>
-            </button>
+            @if (_mainCategories.Count > _mainCategoriesShowNumber)
+            {
+                <button type="button"
+                        class="main-categories-toggle-btn"
+                        @onclick="ToggleMoreCategories">
+                    <span class="@(ShowMoreCategories ? "main-categories-toggle-arrow rotated" : "main-categories-toggle-arrow")">
+                        <RadzenIcon Icon="expand_more" class="main-categories-toggle-arrow-icon"/>
+                    </span>
+                    <span class="main-categories-toggle-text">
+                        @(ShowMoreCategories ? "Sakrij dodatne kategorije" : "Prikaži još kategorija")
+                    </span>
+                </button>
+            }
 
             <button type="button"
                     class="main-categories-toggle-btn secondary"
                     @onclick="ToggleAllCategories">
                 <span class="@(ShowAllCategories ? "main-categories-toggle-arrow rotated" : "main-categories-toggle-arrow")">
-                    <RadzenIcon Icon="expand_more" class="main-categories-toggle-arrow-icon" />
+                    <RadzenIcon Icon="expand_more" class="main-categories-toggle-arrow-icon"/>
                 </span>
                 <span class="main-categories-toggle-text">
                     @(ShowAllCategories ? "Sakrij sve kategorije" : "Prikaži sve kategorije")
@@ -54,12 +59,12 @@
 
         @if (ShowMoreCategories)
         {
-            <MoreCategories Categories="MoreCategoriesList" />
+            <MoreCategories Categories="_moreCategoriesList" />
         }
 
         @if (ShowAllCategories)
         {
-            <AllCategories Categories="AllCategoriesTree" />
+            <AllCategories Categories="_allCategoriesTree" />
         }
     </div>
 </section>

@@ -30,7 +30,11 @@
                             Placeholder="Status"
                             class="verification-dropdown"
                             Change="@OnFilterChanged"
-                            AllowClear="true" />
+                            AllowClear="true" >
+                <Template>
+                    @GetStatusOptions(context)
+                </Template>
+            </RadzenDropDown>
 
         </div>
 
@@ -56,11 +60,11 @@
                         <Template Context="item">
                             @if (item.Status is CompanyVerificationRequestStatus.Pending)
                             {
-                                <RadzenIcon Style="cursor: pointer" Icon="hourglass_top" IconStyle="IconStyle.Info" MouseEnter="@(args => ShowTooltip(args, "Neobradjen", TooltipPosition.Top))"/>
+                                <RadzenIcon Style="cursor: pointer" Icon="hourglass_top" IconStyle="IconStyle.Info" MouseEnter="@(args => ShowTooltip(args, "Na cekanju", TooltipPosition.Top))"/>
                             }
                             else if (item.Status is CompanyVerificationRequestStatus.Dismissed)
                             {
-                                <RadzenIcon Style="cursor: pointer" Icon="x_circle" IconStyle="IconStyle.Danger" MouseEnter="@(args => ShowTooltip(args, "Ignorisan", TooltipPosition.Top))"/>
+                                <RadzenIcon Style="cursor: pointer" Icon="x_circle" IconStyle="IconStyle.Danger" MouseEnter="@(args => ShowTooltip(args, "Odbijen", TooltipPosition.Top))"/>
                             }
                             else if (item.Status is CompanyVerificationRequestStatus.AcctionTaken)
                             {
@@ -68,7 +72,7 @@
                             }
                             else
                             {
-                                <RadzenIcon Style="cursor: pointer" Icon="bookmark_check" IconStyle="IconStyle.Success" MouseEnter="@(args => ShowTooltip(args, "Obradjen", TooltipPosition.Top))"/>
+                                <RadzenIcon Style="cursor: pointer" Icon="bookmark_check" IconStyle="IconStyle.Success" MouseEnter="@(args => ShowTooltip(args, "Prihvacen", TooltipPosition.Top))"/>
                             }
                         </Template>
                     </RadzenDataGridColumn>

@@ -1,4 +1,6 @@
-﻿<section class="search-section" id="@SectionId">
+﻿@inherits Diplomski.RatingHub.Web.Components.Shared.PortalComponentBase
+
+<section class="search-section" id="@SectionId">
     <div class="search-shell">
         <div class="search-card">
             <div class="search-header">
@@ -9,52 +11,120 @@
 
                 <h2 class="search-title">Pretražite usluge, firme i gradove</h2>
                 <p class="search-subtitle">
-                    Unesite kategoriju, pružaoca usluge ili firmu, zatim izaberite najbliži grad vama i pronađite rezultate koji vam najviše odgovaraju.
+                    Prvo izaberite najbliži grad vama, zatim unesite kategoriju, naziv pružaoca usluge ili PIB kompanije i pretražite rezultate.
                 </p>
             </div>
 
             <div class="search-form">
                 <div class="search-inputs">
-                    <div class="search-field">
-                        <label class="search-label search-label-with-icon" for="search-term">
-                            <span>Šta tražite</span>
-                            <RadzenIcon Icon="psychology_alt" class="search-label-icon" />
-                        </label>
-
-                        <RadzenAutoComplete
-                            @bind-Value="SearchTerm"
-                            Data="@FilteredSuggestions"
-                            TextProperty="Label"
-                            Placeholder="Npr. frizer, vodoinstalater, salon..."
-                            Class="search-autocomplete"
-                            Name="search-term"
-                            MinLength="1"
-                            Change="@OnSearchTermChanged"
-                            LoadData="@LoadSuggestions">
-                            <Template Context="item">
-                                <div class="search-suggestion-item">
-                                    <div class="search-suggestion-main">@item.Label</div>
-                                    <div class="search-suggestion-sub">@item.Subtitle</div>
-                                </div>
-                            </Template>
-                        </RadzenAutoComplete>
-                    </div>
 
                     <div class="search-field">
                         <label class="search-label search-label-with-icon" for="search-city">
                             <span>Grad</span>
                             <RadzenIcon Icon="add_location_alt" class="search-label-icon" />
                         </label>
-
+                        
                         <RadzenAutoComplete
-                            @bind-Value="SelectedCity"
-                            Data="@FilteredCities"
-                            Placeholder="Npr. Niš, Beograd, Novi Sad..."
-                            Class="search-autocomplete"
-                            Name="search-city"
+                            Name="City"
+                            Data="@_cities"
+                            TextProperty="Name"
+                            @bind-Value="_selectedCityText"
                             MinLength="1"
+                            LoadData="@LoadCities"
                             Change="@OnCityChanged"
-                            LoadData="@LoadCities" />
+                            SelectedItemChanged="@OnCitySelected"
+                            SelectedItem="@_selectedCityText"
+                            Style="width:100%"
+                            Placeholder="Npr. Niš, Beograd, Novi Sad..." 
+                            class="search-autocomplete"/>
+                    </div>
+                    
+                    <div class="search-field">
+                        <label class="search-label search-label-with-icon" for="search-term">
+                            <span>Šta tražite</span>
+                            <RadzenIcon Icon="psychology_alt" class="search-label-icon" />
+                        </label>
+                        
+                        <RadzenAutoComplete
+                            Name="Category"
+                            @bind-Value="_selectedCategoryText"
+                            TextProperty="Name"
+                            Data="@_categoriesAndCompanies"
+                            MinLength="1"
+                            LoadData="@LoadCategoriesAndCompanies"
+                            Change="@OnCategoryChanged"
+                            SelectedItem="_selectedCategoryText"
+                            SelectedItemChanged="@OnCategorySelected"
+                            Disabled="@(_selectedCityId == 0)"
+                            Style="width:100%"
+                            Placeholder="Npr. frizer, vodoinstalater, PIB kompanije..."
+                            class="search-autocomplete">
+
+                            <Template Context="c">
+                                @if (c.IsCategory)
+                                {
+                                    <div class="category-item">
+                                        <div class="category-name">@c.Name</div>
+                                        <div class="category-path">@c.FullPath</div>
+                                    </div>
+                                }
+                                else
+                                {
+                                     <div class="company-item">
+
+                                            <img src="@(string.IsNullOrEmpty(c.ProfileImagePath)
+                                                          ? "/images/companyImages/genericCompanyImage.svg"
+                                                          : c.ProfileImagePath)"
+                                                 class="company-img" />
+
+                                            <div class="company-info">
+
+                                                <!-- NAZIV -->
+                                                <div class="company-name-row">
+                                                    <span class="label">Naziv:</span>
+                                                    <span class="company-name">@c.Name</span>
+                                                </div>
+
+                                                <!-- META -->
+                                                <div class="company-meta">
+
+                                                    <!-- PREUZETA -->
+                                                    <div class="meta-item">
+                                                        <span class="label">Preuzeta:</span>
+
+                                                        @if (c.HasOwner)
+                                                        {
+                                                            <RadzenIcon Icon="check_circle" IconStyle="IconStyle.Success" class="icon-success" />
+                                                        }
+                                                        else
+                                                        {
+                                                            <RadzenIcon Icon="cancel" IconStyle="IconStyle.Danger" class="icon-danger" />
+                                                        }
+                                                    </div>
+
+                                                    <!-- PIB -->
+                                                    <div class="meta-item">
+                                                        <span class="label">PIB:</span>
+
+                                                        @if (!string.IsNullOrWhiteSpace(c.CompanyPib))
+                                                        {
+                                                            <span class="pib-value">@c.CompanyPib</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <RadzenIcon Icon="cancel" IconStyle="IconStyle.Danger" class="icon-danger" />
+                                                        }
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                }
+                            </Template>
+
+                        </RadzenAutoComplete>
                     </div>
                 </div>
 

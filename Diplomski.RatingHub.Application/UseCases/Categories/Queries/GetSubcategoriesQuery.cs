@@ -1,4 +1,5 @@
-﻿using Diplomski.RatingHub.Application.Interfaces.Models;
+﻿using AutoMapper;
+using Diplomski.RatingHub.Application.Interfaces.Models;
 using Diplomski.RatingHub.Application.Interfaces.Repositories;
 using Diplomski.RatingHub.Application.Mapping;
 using Diplomski.RatingHub.Application.Models;
@@ -43,4 +44,13 @@ public class SubcategoryDto : IMapFrom<Category>
     public int Id { get; set; }
     public string Name { get; set; }
     public int SortOrder { get; set; }
+    public bool HasChildren { get; set; }
+    
+    public void Mapping(Profile profile)
+    {
+        profile.CreateMap<Category, SubcategoryDto>()
+            .ForMember(dest => dest.HasChildren,
+                options => options.MapFrom((src) => 
+                    src.Subcategories.Any()));
+    }
 }
