@@ -1,4 +1,5 @@
 ﻿using Diplomski.RatingHub.Application.UseCases.Categories.Queries;
+using Diplomski.RatingHub.Web.Components.Shared;
 using Diplomski.RatingHub.Web.Data.Interfaces;
 using Microsoft.AspNetCore.Components;
 using Radzen;
@@ -59,6 +60,28 @@ public partial class MainCategoriesSection
         {
             int cityId = (int)result;
             NavigationManager.NavigateTo($"/companies?CityId={cityId}&CategoryId={category.Id}");
+        }
+    }
+    
+    private async Task OpenSuggestNewSubcategoryDialog()
+    {
+        
+        var result = await DialogService.OpenAsync<SuggestNewCategory>(
+            "Predložite novu kategoriju",
+            new Dictionary<string, object>
+            {
+                { "ParentCategoryId", null }
+            },
+            new DialogOptions
+            {
+                Width = "500px",
+                Height = "auto",
+                Style = "margin-top: 130px"
+            });
+
+        if (result is true)
+        {
+            ShowNotification("Uspesno ste poslali predlog", NotificationSeverity.Success);
         }
     }
 }

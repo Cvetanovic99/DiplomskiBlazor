@@ -6,7 +6,7 @@
             <nav class="app-sidebar-nav">
                 <AuthorizeView Roles="@Roles.RegularUser">
                     <Authorized Context="userContext">
-                        <a href="user/profile" class="app-sidebar-link" title="Profil">
+                        <a href="/user/profile" class="app-sidebar-link" title="Profil">
                             <RadzenIcon Icon="account_circle" class="app-sidebar-link-icon"/>
                             <span class="app-sidebar-link-text">Profil</span>
                         </a>
@@ -20,7 +20,7 @@
                             {
                                 <RadzenIcon Icon="notifications" class="app-sidebar-link-icon notification-icon"/>
                             }
-                            <span class="app-sidebar-link-text">Obavestenja</span>
+                            <span class="app-sidebar-link-text">Obaveštenja</span>
                         </button>
 
                         <a href="/user/companies" class="app-sidebar-link" title="Moje kompanije">
@@ -28,9 +28,14 @@
                             <span class="app-sidebar-link-text">Moje kompanije</span>
                         </a>
                         
-                        <a href="user/reviews" class="app-sidebar-link" title="Moja ocenjivanja">
+                        <a href="/user/reviews" class="app-sidebar-link" title="Moja ocenjivanja">
                             <RadzenIcon Icon="reviews" class="app-sidebar-link-icon"/>
                             <span class="app-sidebar-link-text">Moja ocenjivanja</span>
+                        </a>
+                        
+                        <a href="/" class="app-sidebar-link" title="Pocetna">
+                            <RadzenIcon Icon="home" class="app-sidebar-link-icon"/>
+                            <span class="app-sidebar-link-text">Početna stranica</span>
                         </a>
                         
                     </Authorized>

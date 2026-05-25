@@ -7,6 +7,7 @@ using Diplomski.RatingHub.Domain.Constants;
 using Diplomski.RatingHub.Infrastructure.Auth.Enums;
 using Diplomski.RatingHub.Infrastructure.Auth.Models;
 using Diplomski.RatingHub.Web.Components.Account.Pages;
+using Diplomski.RatingHub.Web.Components.AuthenticatedUserPages.ProfilePages;
 using Diplomski.RatingHub.Web.Constants;
 using Diplomski.RatingHub.Web.Data.Interfaces;
 using Diplomski.RatingHub.Web.Models;
@@ -141,6 +142,26 @@ public class AccountDataService : DataServiceBase, IAccountDataService
             throw new AppException(
                 "Trenutno nismo u mogucnosti da posaljemo poruku za potvrdu broja telefona, molimo vas pokusajte kasnije");
         }
+    }
+
+    public async Task ChangeUserPassword(ChangeUserPasswordDto changeUserPasswordDto)
+    {
+        var user = await _userManager.FindByIdAsync(changeUserPasswordDto.UserIdentityId);
+        if (user is null) 
+            throw new AppException("Korisnik nije pronadjen");
+        
+        var changePasswordResult = await _userManager.ChangePasswordAsync(user, changeUserPasswordDto.OldPassword, changeUserPasswordDto.NewPassword);
+        if (!changePasswordResult.Succeeded)
+        {
+            string errorMessage = $"Error: {string.Join(",", changePasswordResult.Errors.Select(error => error.Description))}";
+            throw new AppException(errorMessage);
+        }
+    }
+
+    public async Task DeleteUserProfile(string identityUserId, int userProfileId)
+    {
+        await DeleteIdentityUserAsync(identityUserId);
+        await _userProfileDataService.DeleteUserProfile(userProfileId);
     }
 
     private async Task<string> CreateEmailConfirmationLink(string email)

@@ -29,4 +29,25 @@ public class UserProfileDataService(IServiceScopeFactory serviceScopeFactory) : 
     {
         await Send(new BlockUserProfileCommand { UserId = userId });
     }
+
+    public async Task<UserProfileDto> GetUserProfile(string identityUserId)
+    {
+        return await Send(new GetUserProfileQuery { IdentityUserId = identityUserId });
+    }
+
+    public async Task<UserProfileDto> EditUserProfile(UserProfileDto userProfileDto)
+    {
+        return await Send(new EditUserProfileCommand
+        {
+            UserProfileId = userProfileDto.Id,
+            Name = userProfileDto.Name,
+            Surname = userProfileDto.Surname,
+            ProfileImagePath = userProfileDto.ProfileImagePath
+        });
+    }
+
+    public async Task DeleteUserProfile(int userProfileId)
+    {
+        throw new NotImplementedException();
+    }
 }

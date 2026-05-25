@@ -4,7 +4,7 @@ namespace Diplomski.RatingHub.Web.Models;
 
 public class AuthenticatedUserDto
 {
-    public required string IndetityId { get; set; }
+    public required string IdentityId { get; set; }
     public required string FullName  { get; set; }
     public int UserProfileId { get; set; }
     public bool IsUserProfileBlocked { get; set; }

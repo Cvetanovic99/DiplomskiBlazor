@@ -9,4 +9,7 @@ public interface IUserProfileDataService
     Task<UserProfileDto> CreateUserProfile(CreateUserProfileDto createUserProfileDto);
     Task<CurrentUserProfileDto> GetCurrentUserProfile(string identityId);
     Task BlockUserProfile(int userId);
+     Task<UserProfileDto> GetUserProfile(string identityUserId);
+     Task<UserProfileDto> EditUserProfile(UserProfileDto userProfileDto);
+     Task DeleteUserProfile(int userProfileId);
 }

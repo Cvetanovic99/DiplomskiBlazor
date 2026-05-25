@@ -1,0 +1,131 @@
+﻿@page "/user/profile"
+
+@using Diplomski.RatingHub.Application.UseCases.UserProfiles.Queries
+@inherits Diplomski.RatingHub.Web.Components.Shared.PortalComponentBase
+
+<section class="profile-page">
+
+    <div class="profile-shell">
+
+        <!-- HEADER -->
+        <div class="profile-header">
+            <h2>Vasi podaci</h2>
+
+            <RadzenButton Icon="delete"
+                          ButtonStyle="ButtonStyle.Danger"
+                          Click="@OnDeleteUserProfileClicked"
+                          Text="Obrisi profil" />
+        </div>
+
+        <!-- FORM PODACI -->
+        <div class="profile-card">
+
+            <RadzenTemplateForm Data="@_userProfile" Submit="@OnEditUserDataSubmit" TItem="UserProfileDto">
+
+                <!-- SLIKA -->
+                <div class="image-section">
+
+                    <div class="profile-image-wrapper">
+                        <img src="@GetCurrentImage()" />
+
+                        @if (!string.IsNullOrEmpty(_newImage))
+                        {
+                            <button type="button" class="remove-btn" @onclick="RemoveNewImage">
+                                ✕
+                            </button>
+                        }
+                    </div>
+
+                    <label class="upload-btn">
+                        <RadzenIcon Icon="upload" />
+                        Izaberi sliku
+                        <InputFile OnChange="HandleImage" hidden />
+                    </label>
+
+                </div>
+
+                <!-- IME -->
+                <div>
+                    <label class="form-label">
+                        <RadzenIcon Icon="person" /> Ime
+                    </label>
+
+                    <RadzenTextBox Name="Name"
+                                   @bind-Value="_userProfile.Name"
+                                   Style="width:100%" />
+
+                    <RadzenRequiredValidator Component="Name" Text="Obavezno" />
+                </div>
+
+                <!-- PREZIME -->
+                <div style="padding-top: 10px;">
+                    <label class="form-label">
+                        <RadzenIcon Icon="person" /> Prezime
+                    </label>
+
+                    <RadzenTextBox Name="Surname"
+                                   @bind-Value="_userProfile.Surname"
+                                   Style="width:100%" />
+
+                    <RadzenRequiredValidator Component="Surname" Text="Obavezno" />
+                </div>
+
+                <!-- ACTIONS -->
+                <div class="form-actions">
+                    <RadzenButton Text="Odustani"
+                                  ButtonStyle="ButtonStyle.Light"
+                                  Click="@CancelChanges" />
+
+                    <RadzenButton Text="Sacuvaj podatke"
+                                  ButtonType="ButtonType.Submit"
+                                  ButtonStyle="ButtonStyle.Primary" />
+                </div>
+
+            </RadzenTemplateForm>
+
+        </div>
+
+        <!-- PASSWORD -->
+        <div class="profile-card">
+
+            <RadzenTemplateForm Data="@_changePasswordModel" Submit="@OnChangePasswordSubmit" TItem="ChangeUserPasswordDto">
+
+                <div>
+                    <label class="form-label">Stara sifra</label>
+                    <RadzenPassword Name="OldPassword"
+                                    @bind-Value="_changePasswordModel.OldPassword"
+                                    Style="width:100%" />
+                    <RadzenRequiredValidator Component="OldPassword" Text="Obavezno" />
+                </div>
+
+                <div style="padding-top: 10px">
+                    <label class="form-label">Nova sifra</label>
+                    <RadzenPassword Name="NewPassword"
+                                    @bind-Value="_changePasswordModel.NewPassword"
+                                    Style="width:100%" />
+                    <RadzenRequiredValidator Component="NewPassword" Text="Obavezno" />
+                </div>
+
+                <div style="padding-top: 10px">
+                    <label class="form-label">Potvrda sifre</label>
+                    <RadzenPassword Name="ConfirmPassword"
+                                    @bind-Value="_confirmPassword"
+                                    Style="width:100%" />
+                    <RadzenRequiredValidator Component="ConfirmPassword" Text="Obavezno" />
+                    <RadzenCompareValidator Visible=@(!string.IsNullOrEmpty(_confirmPassword)) Value=@_changePasswordModel.NewPassword Component="ConfirmPassword" 
+                                            Text="Sifre moraju biti iste" Popup="false" />
+                </div>
+
+                <div class="form-actions">
+                    <RadzenButton Text="Promeni sifru"
+                                  ButtonType="ButtonType.Submit"
+                                  ButtonStyle="ButtonStyle.Primary" />
+                </div>
+
+            </RadzenTemplateForm>
+
+        </div>
+
+    </div>
+
+</section>

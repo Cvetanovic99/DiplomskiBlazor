@@ -11,6 +11,11 @@
             <h2 class="main-categories-title">Istražite najtraženije kategorije</h2>
             <p class="main-categories-subtitle">
                 Pronađite usluge po oblastima koje korisnici najčešće pretražuju.
+                <button class="suggest-subcategory-btn" @onclick="OpenSuggestNewSubcategoryDialog">
+                    <RadzenIcon Icon="lightbulb_2" Style="cursor:pointer; font-size:15px;"
+                                MouseEnter="@(args=> ShowTooltip(args,"Predlozite novu podkategoriju", TooltipPosition.Top))"/>
+                    Predloži novu
+                </button>
             </p>
         </div>
 

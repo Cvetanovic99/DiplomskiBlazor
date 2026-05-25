@@ -40,7 +40,7 @@ public class CurrentUserService : ICurrentUserService
 
                     return new AuthenticatedUserDto
                     {
-                        IndetityId = identityId,
+                        IdentityId = identityId,
                         FullName = userProfile.FullName,
                         UserProfileId = userProfile.Id,
                         IsUserProfileBlocked = userProfile.Blocked

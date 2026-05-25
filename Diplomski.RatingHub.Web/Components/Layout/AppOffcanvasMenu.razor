@@ -1,4 +1,5 @@
-﻿<div class="offcanvas offcanvas-end app-mobile-offcanvas"
+﻿@using Diplomski.RatingHub.Domain.Constants
+<div class="offcanvas offcanvas-end app-mobile-offcanvas"
      tabindex="-1"
      id="appMobileOffcanvas"
      aria-labelledby="appMobileOffcanvasLabel">
@@ -20,78 +21,83 @@
 
     <div class="offcanvas-body app-mobile-offcanvas-body">
         <nav class="app-mobile-nav">
-            <a href="/" class="app-mobile-link">
-                <RadzenIcon Icon="home" class="app-mobile-link-icon" />
-                <span>Početna</span>
-            </a>
-
-            <a href="/categories" class="app-mobile-link">
-                <RadzenIcon Icon="category" class="app-mobile-link-icon" />
-                <span>Kategorije</span>
-            </a>
-
-            <a href="/#home-search-section" class="app-mobile-link">
-                <RadzenIcon Icon="search" class="app-mobile-link-icon" />
-                <span>Pretraga</span>
-            </a>
-
+            
             <AuthorizeView>
-                <Authorized Context="authState">
-                    <div class="app-mobile-userbox">
-                        <div class="app-mobile-userlabel">Ulogovani korisnik</div>
-                        <div class="app-mobile-username">@GetDisplayName(authState.User)</div>
-                    </div>
+                <Authorized Context="authContext">
 
-                    <a href="/dashboard" class="app-mobile-link">
-                        <RadzenIcon Icon="dashboard" class="app-mobile-link-icon" />
-                        <span>Kontrolna tabla</span>
-                    </a>
+                    <AuthorizeView Roles="@Roles.RegularUser">
+                        <Authorized Context="userContext">
 
-                    <a href="/my-reviews" class="app-mobile-link">
-                        <RadzenIcon Icon="reviews" class="app-mobile-link-icon" />
-                        <span>Moje ocene</span>
-                    </a>
+                            <div class="app-mobile-userbox">
+                                <div class="app-mobile-userlabel">Ulogovani korisnik</div>
+                                <div class="app-mobile-username">@GetDisplayName(userContext.User)</div>
+                            </div>
 
-                    <a href="/my-companies" class="app-mobile-link">
-                        <RadzenIcon Icon="business" class="app-mobile-link-icon" />
-                        <span>Moje firme</span>
-                    </a>
+                            <a href="/user/profile" class="app-mobile-link">
+                                <RadzenIcon Icon="account_circle" class="app-mobile-link-icon"/>
+                                <span>Profil</span>
+                            </a>
 
-                    <a href="/companies/create" class="app-mobile-link">
-                        <RadzenIcon Icon="add_business" class="app-mobile-link-icon" />
-                        <span>Dodaj firmu</span>
-                    </a>
+                            <a href="/user/notifications" class="app-mobile-link">
+                                <RadzenIcon Icon="notifications" class="app-mobile-link-icon"/>
+                                <span>Obaveštenja</span>
+                            </a>
 
-                    <a href="/profile" class="app-mobile-link">
-                        <RadzenIcon Icon="person" class="app-mobile-link-icon" />
-                        <span>Profil</span>
-                    </a>
-                    
+                            <a href="/user/companies" class="app-mobile-link">
+                                <RadzenIcon Icon="domain" class="app-mobile-link-icon"/>
+                                <span>Moje kompanije</span>
+                            </a>
+
+                            <a href="/user/reviews" class="app-mobile-link">
+                                <RadzenIcon Icon="reviews" class="app-mobile-link-icon"/>
+                                <span>Moja ocenjivanja</span>
+                            </a>
+
+                            <a href="/" class="app-mobile-link">
+                                <RadzenIcon Icon="home" class="app-mobile-link-icon"/>
+                                <span>Početna stranica</span>
+                            </a>
+                        </Authorized>
+                    </AuthorizeView>
+
+                    <AuthorizeView Roles="@Roles.Administrator">
+                        <Authorized Context="adminContext">
+
+                            <a href="/categories" class="app-mobile-link">
+                                <RadzenIcon Icon="category" class="app-mobile-link-icon"/>
+                                <span>Kategorije</span>
+                            </a>
+
+                            <a href="/reportedContent" class="app-mobile-link">
+                                <RadzenIcon Icon="report" class="app-mobile-link-icon"/>
+                                <span>Prijavljene objave</span>
+                            </a>
+
+                            <a href="/companyVerificationRequests" class="app-mobile-link">
+                                <RadzenIcon Icon="verified_user" class="app-mobile-link-icon"/>
+                                <span>Verifikacioni zahtevi</span>
+                            </a>
+                        </Authorized>
+                    </AuthorizeView>
+
                     <form action="Account/Logout" method="post">
                         <AntiforgeryToken/>
                         <button type="submit" class="app-mobile-link app-mobile-link-danger">
-                            <RadzenIcon Icon="logout" class="app-mobile-link-icon" />
+                            <RadzenIcon Icon="logout" class="app-mobile-link-icon"/>
                             <span>Odjavi se</span>
                         </button>
                     </form>
                 </Authorized>
 
                 <NotAuthorized>
-                    <div class="app-mobile-divider"></div>
-
                     <a href="/Account/Login" class="app-mobile-link">
-                        <RadzenIcon Icon="login" class="app-mobile-link-icon" />
+                        <RadzenIcon Icon="login" class="app-mobile-link-icon"/>
                         <span>Prijavi se</span>
                     </a>
 
                     <a href="/Account/Register" class="app-mobile-link">
-                        <RadzenIcon Icon="person_add" class="app-mobile-link-icon" />
+                        <RadzenIcon Icon="person_add" class="app-mobile-link-icon"/>
                         <span>Kreiraj nalog</span>
-                    </a>
-
-                    <a href="/companies/create" class="app-mobile-link">
-                        <RadzenIcon Icon="business_center" class="app-mobile-link-icon" />
-                        <span>Dodaj firmu za ocenjivanje</span>
                     </a>
                 </NotAuthorized>
             </AuthorizeView>
