@@ -148,7 +148,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     private void ConfigureCompanyResponse(EntityTypeBuilder<CompanyResponse> builder)
     {
         builder.HasOne(cr => cr.Company)
-            .WithMany()
+            .WithMany(c => c.Responses)
             .HasForeignKey(cr => cr.CompanyId)
             .OnDelete(DeleteBehavior.Restrict);
     }
@@ -160,7 +160,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
         //Not need for explicit configuration in fluent API, EF Core convention would work but explicit is better
         builder.HasOne(rg => rg.RatingCriterion)
-            .WithMany()
+            .WithMany(rc => rc.ReviewGrades)
             .HasForeignKey(rg => rg.RatingCriterionId)
             .OnDelete(DeleteBehavior.Restrict);
     }

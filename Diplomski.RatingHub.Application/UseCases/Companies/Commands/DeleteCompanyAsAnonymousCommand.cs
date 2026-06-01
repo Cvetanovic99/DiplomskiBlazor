@@ -123,6 +123,7 @@ public class DeleteCompanyAsAnonymousCommandHandler : IRequestHandler<DeleteComp
         await _reviewImageRepository.DeleteRange(reviewImages);
         await _likesRepository.DeleteRange(reviewLikes);
         await _reviewGradesRepository.DeleteRange(reviewGrades);
+        await _reviewsRepository.DeleteRange(companyReviews);
         
         //Delete VerificationRequests
         if(company.VerificationRequests.Any())
