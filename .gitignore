@@ -351,11 +351,11 @@ RemObjects.SDK.ZLib.dll
 # Ignore Notepad++ bak files
 *.bak
 
-Diplomski.RatingHub.Web/wwwroot/images/companyImages/*.jpg
-Diplomski.RatingHub.Web/wwwroot/images/companyImages/*.JPG
-Diplomski.RatingHub.Web/wwwroot/images/userProfileImages/*.jpg
-Diplomski.RatingHub.Web/wwwroot/images/userProfileImages/*.JPG
-Diplomski.RatingHub.Web/wwwroot/images/companyResponseImages/*.jpg
-Diplomski.RatingHub.Web/wwwroot/images/companyResponseImages/*.JPG
-Diplomski.RatingHub.Web/wwwroot/images/reviewImages/*.jpg
-Diplomski.RatingHub.Web/wwwroot/images/reviewImages/*.JPG
+#Diplomski.RatingHub.Web/wwwroot/images/companyImages/*.jpg
+#Diplomski.RatingHub.Web/wwwroot/images/companyImages/*.JPG
+#Diplomski.RatingHub.Web/wwwroot/images/userProfileImages/*.jpg
+#Diplomski.RatingHub.Web/wwwroot/images/userProfileImages/*.JPG
+#Diplomski.RatingHub.Web/wwwroot/images/companyResponseImages/*.jpg
+#Diplomski.RatingHub.Web/wwwroot/images/companyResponseImages/*.JPG
+#Diplomski.RatingHub.Web/wwwroot/images/reviewImages/*.jpg
+#Diplomski.RatingHub.Web/wwwroot/images/reviewImages/*.JPG

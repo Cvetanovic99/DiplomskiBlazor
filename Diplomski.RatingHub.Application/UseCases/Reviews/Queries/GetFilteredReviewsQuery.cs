@@ -37,16 +37,13 @@ public class GetFilteredReviewsQueryHandler : IRequestHandler<GetFilteredReviews
 {
     private readonly IDatabaseRepository<Review> _reviewsRepository;
     private readonly IDatabaseRepository<Like> _likesRepository;
-    private readonly IDatabaseRepository<CompanyResponse> _companyResponseRepository;
 
     public GetFilteredReviewsQueryHandler(
         IDatabaseRepository<Review> reviewsRepository,
-        IDatabaseRepository<Like> likesRepository,
-        IDatabaseRepository<CompanyResponse> companyResponseRepository)
+        IDatabaseRepository<Like> likesRepository)
     {
         _reviewsRepository = reviewsRepository;
         _likesRepository = likesRepository;
-        _companyResponseRepository = companyResponseRepository;
     }
 
     public async Task<IPaginatedList<FilteredReviewDto>> Handle(GetFilteredReviewsQuery request, CancellationToken cancellationToken)
