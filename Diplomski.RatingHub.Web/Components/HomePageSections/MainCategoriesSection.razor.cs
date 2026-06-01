@@ -16,9 +16,8 @@ public partial class MainCategoriesSection
     protected List<TopCategoryDto> _mainCategories { get; set; } = new();
     protected List<TopCategoryDto> _moreCategoriesList { get; set; } = new();
     protected List<SubcategoryDto> _allCategoriesTree { get; set; } = new();
-    //protected List<AllCategories.CategoryTreeItem> AllCategoriesTree { get; set; } = [];
 
-    private int _mainCategoriesShowNumber = 0;
+    private int _mainCategoriesShowNumber = 12;
 
     protected override async Task OnInitializedAsync()
     {
