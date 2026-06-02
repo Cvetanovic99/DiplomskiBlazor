@@ -158,7 +158,7 @@ public partial class CreateCompany
             var content = ProcessImage(file);
             if (content.ExceptionOccured)
             {
-                ShowNotification($"Slika: {file.Name} je prevelika, maksimalna velicina je '500 KB.'", NotificationSeverity.Error);
+                ShowNotification($"Slika: {file.Name} je prevelika, maksimalna velicina je '10MB.'", NotificationSeverity.Error);
                 continue;
             }
             
@@ -191,7 +191,7 @@ public partial class CreateCompany
         try
         {
             var content = new MultipartFormDataContent();
-            var stream = file.OpenReadStream(5_000_000);
+            var stream = file.OpenReadStream(10_000_000);
             content.Add(new StreamContent(stream), "file", file.Name);
             
             response.Content = content;

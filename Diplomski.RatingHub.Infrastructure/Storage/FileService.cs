@@ -22,8 +22,8 @@ public class FileService : IFileService
         if (!_allowedTypes.Contains(extension))
             throw new AppException("Nepodržan format slike");
 
-        if (file.Length > 5 * 1024 * 1024)
-            throw new AppException("Maksimalna veličina je 5MB");
+        if (file.Length > 10 * 1024 * 1024)
+            throw new AppException("Maksimalna veličina je 10MB");
 
         var fileName = $"{Guid.NewGuid()}{extension}";
         var folder = Path.Combine(BaseStorageFolder,ImagesStorageFolder, folderName);

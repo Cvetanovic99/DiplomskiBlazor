@@ -21,7 +21,7 @@ public class CompanyResponseDataService(IServiceScopeFactory serviceScopeFactory
 
     public async Task<CompanyResponseDto> CreateCompanyResponse(CreateCompanyResponseDto createCompanyResponseDto)
     {
-        if (createCompanyResponseDto.ReviewOwnerId.HasValue)
+        if (createCompanyResponseDto.ReviewOwnerId.HasValue && createCompanyResponseDto.ReviewOwnerId != 0)
         {
 
             await Send(new CreateNotificationCommand

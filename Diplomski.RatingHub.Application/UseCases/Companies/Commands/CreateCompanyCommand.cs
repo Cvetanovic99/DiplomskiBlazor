@@ -39,7 +39,7 @@ public class CreateCompanyCommandValidator : AbstractValidator<CreateCompanyComm
             .MaximumLength(200).WithMessage("Naziv kompanije ne sme biti duzi od 200 karaktera");
 
         RuleFor(x => x.Description).NotEmpty().WithMessage("Opis kompanije je obavezan")
-            .MaximumLength(1000).WithMessage("Opis kompanije ne sme biti duzi od 1000 karaktera");
+            .MaximumLength(2000).WithMessage("Opis kompanije ne sme biti duzi od 1000 karaktera");
 
         RuleFor(x => x.Location)
             .NotEmpty().WithMessage("Lokacija je obavezna")

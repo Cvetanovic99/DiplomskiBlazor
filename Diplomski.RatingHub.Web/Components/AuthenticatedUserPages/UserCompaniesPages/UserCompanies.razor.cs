@@ -143,6 +143,10 @@ public partial class UserCompanies
     {
         var result = await DialogService.OpenAsync<ClaimCompanyDialog>(
             "Preuzimanje kompanije",
+            new Dictionary<string, object?>
+            {
+                { "UserProfileId", _authenticatedUser.UserProfileId }
+            },
             options: new DialogOptions
             {
                 Width = "500px",
