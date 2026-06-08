@@ -65,7 +65,7 @@
                                     @Company.Name
                                 </h1>
                                 <div class="actions">
-                                    @if (!Company.IsVerified && (Company.VerificationRequest == null || Company.VerificationRequest.Status != CompanyVerificationRequestStatus.Dismissed))
+                                    @if (!Company.IsVerified && (Company.VerificationRequest == null || Company.VerificationRequest.Status == CompanyVerificationRequestStatus.Dismissed))
                                     {
                                         <div class="report-action-icon-wrapper">
                                             <RadzenIcon Icon="verified" IconStyle="IconStyle.Light" class="report-action-icon" @onclick="VerifyCompanyClicked"
@@ -338,7 +338,10 @@
                                         }else if (Company.VerificationRequest.Status == CompanyVerificationRequestStatus.Pending)
                                         {
                                             <RadzenIcon Style="cursor: pointer" Icon="hourglass_top" IconStyle="IconStyle.Info" MouseEnter="@(args => ShowTooltip(args, "Ceka na obradu", TooltipPosition.Top))"/>
-                                        } else if (Company.VerificationRequest.Status == CompanyVerificationRequestStatus.Approved)
+                                        } else if (Company.VerificationRequest.Status == CompanyVerificationRequestStatus.AcctionTaken)
+                                        {
+                                            <RadzenIcon Style="cursor: pointer" Icon="start" IconStyle="IconStyle.Primary" MouseEnter="@(args => ShowTooltip(args, "Obradjuje se", TooltipPosition.Top))"/>
+                                        }else
                                         {
                                             <RadzenIcon Style="cursor: pointer" Icon="bookmark_check" IconStyle="IconStyle.Success" MouseEnter="@(args => ShowTooltip(args, "Prihvacen", TooltipPosition.Top))"/>
                                         }

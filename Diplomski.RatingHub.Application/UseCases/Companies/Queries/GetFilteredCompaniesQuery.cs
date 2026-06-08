@@ -57,17 +57,22 @@ public class GetFilteredCompaniesQueryValidator : AbstractValidator<GetFilteredC
 public class GetFilteredCompaniesQueryHandler : IRequestHandler<GetFilteredCompaniesQuery, IPaginatedList<FilteredCompanyDto>>
 {
     private readonly IDatabaseRepository<Company> _companyRepository;
+    private readonly IDatabaseRepository<Category> _categoryRepository;
 
-    public GetFilteredCompaniesQueryHandler(IDatabaseRepository<Company> companyRepository)
+    public GetFilteredCompaniesQueryHandler(IDatabaseRepository<Company> companyRepository,
+        IDatabaseRepository<Category> categoryRepository)
     {
         _companyRepository = companyRepository;
+        _categoryRepository = categoryRepository;
     }
 
     public async Task<IPaginatedList<FilteredCompanyDto>> Handle(GetFilteredCompaniesQuery request, CancellationToken cancellationToken)
     {
-        var spec = new Specification<Company>(c => c.CategoryId == request.CategoryId && 
-                                                   c.CityId == request.CityId);
-        
+        var categoryIds = await GetAllCategoryIds(request.CategoryId);
+
+        var spec = new Specification<Company>(c =>
+            categoryIds.Contains(c.CategoryId) &&
+            c.CityId == request.CityId);
         
         if (!string.IsNullOrWhiteSpace(request.FilterValue))
         {
@@ -103,6 +108,29 @@ public class GetFilteredCompaniesQueryHandler : IRequestHandler<GetFilteredCompa
         
 
         return await _companyRepository.GetAndProjectAsPaginatedList<FilteredCompanyDto>(spec, request.QueryArgs);
+    }
+    
+    private async Task<List<int>> GetAllCategoryIds(int categoryId)
+    {
+        var allCategories = await _categoryRepository.GetAll();
+
+        var result = new List<int>();
+
+        void Traverse(int id)
+        {
+            result.Add(id);
+
+            var children = allCategories
+                .Where(c => c.ParentId == id)
+                .Select(c => c.Id);
+
+            foreach (var child in children)
+                Traverse(child);
+        }
+
+        Traverse(categoryId);
+
+        return result;
     }
 }
 
