@@ -1,5 +1,6 @@
 ﻿using System.Net.Http.Headers;
 using Diplomski.RatingHub.Application.Interfaces.Notifications;
+using Diplomski.RatingHub.Application.Interfaces.Payments;
 using Diplomski.RatingHub.Application.Interfaces.Repositories;
 using Diplomski.RatingHub.Application.Interfaces.Storage;
 using Diplomski.RatingHub.Infrastructure.Auth.Models;
@@ -8,6 +9,8 @@ using Diplomski.RatingHub.Infrastructure.Notifications.Email;
 using Diplomski.RatingHub.Infrastructure.Notifications.Email.Models;
 using Diplomski.RatingHub.Infrastructure.Notifications.Sms;
 using Diplomski.RatingHub.Infrastructure.Notifications.Sms.Models;
+using Diplomski.RatingHub.Infrastructure.Payments;
+using Diplomski.RatingHub.Infrastructure.Payments.Models;
 using Diplomski.RatingHub.Infrastructure.Persistence.Contexts;
 using Diplomski.RatingHub.Infrastructure.Persistence.Repositories;
 using Diplomski.RatingHub.Infrastructure.Storage;
@@ -42,6 +45,7 @@ public static class DependencyInjection
         services.AddScoped<IFileService, FileService>();
         AddEmailNotification(services, configuration);
         AddSmsNotification(services, configuration);
+        AddStripePayment(services, configuration);
         
         return services;
     }
@@ -92,5 +96,14 @@ public static class DependencyInjection
         });
 
         services.AddScoped<ISmsNotificationService, SmsNotificationService>();
+    }
+    
+    private static void AddStripePayment(IServiceCollection services, IConfiguration configuration)
+    {
+        services.Configure<StripeOptions>(
+            configuration.GetSection(StripeOptions.SectionName)
+        );
+
+        services.AddScoped<IPaymentService, PaymentService>();
     }
 }

@@ -94,7 +94,7 @@
                                     }
                                     else
                                     {
-                                        <div class="company-item">
+                                        <div class=@(!c.IsSponsored ? "company-item" : "company-item-sponsored")>
 
                                             <img src="@(string.IsNullOrEmpty(c.ProfileImagePath)
                                                           ? "/images/companyImages/genericCompanyImage.svg"

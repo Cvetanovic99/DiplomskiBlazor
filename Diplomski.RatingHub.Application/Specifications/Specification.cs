@@ -32,10 +32,22 @@ public sealed class Specification<T> : BaseSpecification<T>
         base.ApplyOrderBy(orderByExpression);
         return this;
     }
+    
+    public new Specification<T> ApplyThenOrderBy(Expression<Func<T, object>> thenOrderByExpression)
+    {
+        base.ApplyThenOrderBy(thenOrderByExpression);
+        return this;
+    }
 
     public new Specification<T> ApplyOrderByDescending(Expression<Func<T, object>> orderByDescendingExpression)
     {
         base.ApplyOrderByDescending(orderByDescendingExpression);
+        return this;
+    }
+    
+    public new Specification<T> ApplyThenOrderByDescending(Expression<Func<T, object>> thenOrderByDescendingExpression)
+    {
+        base.ApplyThenOrderByDescending(thenOrderByDescendingExpression);
         return this;
     }
     

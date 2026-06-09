@@ -41,7 +41,8 @@ public class GetCompaniesQueryHandler : IRequestHandler<GetCompaniesQuery, IPagi
         var spec = new Specification<Company>(c => c.CityId == request.CityId &&
             (c.Name.Contains(request.FilterValue) ||
              (c.CompanyPib != null && c.CompanyPib.Contains(request.FilterValue))))
-            .ApplyOrderByDescending(x => x.OwnerId != null);
+            .ApplyOrderByDescending(x => x.IsSponsored)
+            .ApplyThenOrderByDescending(x => x.OwnerId != null);
         
 
         return await _companyRepository.GetAndProjectAsPaginatedList<CompanyDto>(
@@ -59,6 +60,7 @@ public class CompanyDto : IMapFrom<Company>
     public string? ProfileImagePath { get; set; }
     public bool HasOwner  { get; set; }
     public string? CompanyPib  { get; set; }
+    public bool IsSponsored { get; set; }
 
     public void Mapping(Profile profile)
     {

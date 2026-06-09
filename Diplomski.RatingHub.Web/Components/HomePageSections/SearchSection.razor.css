@@ -264,6 +264,17 @@
     display: flex;
     gap: 10px;
     align-items: center;
+    padding: 5px;
+}
+
+.company-item-sponsored {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    padding: 5px;
+    border-radius: 10px;
+    background-color: #fff8cc;
+    border: 1px solid #facc15;
 }
 
 .company-img {

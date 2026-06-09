@@ -91,9 +91,10 @@ public partial class Companies
                 CategoryId.Value,
                 _companyFiltervalue,
                 _minOverallAverageGradeFilterValue,
-                new QueryArgs { Skip = skip, Take = _pageSize, OrderBy = GetOrderBy()},
+                new QueryArgs { Skip = skip, Take = _pageSize},
                 _claimStatusFilterValue,
-                _verificationStatusFilterValue), errorMessage: "Greška pri učitavanju");
+                _verificationStatusFilterValue,
+                GetOrderBy()), errorMessage: "Greška pri učitavanju");
 
         if (!res.ExceptionOccurred)
         {

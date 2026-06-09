@@ -65,6 +65,14 @@
                                     @Company.Name
                                 </h1>
                                 <div class="actions">
+                                    @if (!Company.IsSponsored)
+                                    {
+                                        <div class="report-action-icon-wrapper">
+                                            <RadzenIcon Icon="editor_choice" IconStyle="IconStyle.Light" class="report-action-icon" @onclick="SponsorCompanyClicked"
+                                                        MouseEnter="@(args => ShowTooltip(args, "Sponzorisi kompaniju", TooltipPosition.Top))"/>
+                                        </div>
+                                    }
+                                    
                                     @if (!Company.IsVerified && (Company.VerificationRequest == null || Company.VerificationRequest.Status == CompanyVerificationRequestStatus.Dismissed))
                                     {
                                         <div class="report-action-icon-wrapper">
@@ -348,6 +356,47 @@
                                     </div>
                                 </div>
 
+                            </div>
+
+                        </div>
+
+                    </div>
+                }
+                @if (Company.IsSponsored)
+                {
+                    <div class="verification-card request">
+
+                        <div class="request-icon">
+                            <RadzenIcon Icon="editor_choice"/>
+                        </div>
+
+                        <div class="verification-content">
+                            <div class="request-title-and-actions">
+                                <div class="verification-title">
+                                    Sponzorisanje kompanije
+                                </div>
+                                
+                                <div class="report-action-icon-wrapper" style="background: transparent">
+                                    <RadzenIcon Icon="delete" Style="background: transparent;" IconStyle="IconStyle.Light" class="report-action-icon" @onclick="RemoveCompanyFromSponsoredClicked"
+                                                MouseEnter="@(args => ShowTooltip(args, "Skloni sponzorstvo", TooltipPosition.Top))"/>
+                                </div>
+                            </div>
+
+                            <div class="verification-text">
+                                <text>
+                                    Vaša kompanija je trenutno sponzorisana, što znači da je dodatno istaknuta korisnicima. Ako želite da prestanete sa sponzorstvom, kliknite na dugme za brisanje.
+                                </text>
+
+                            </div>
+
+                            <div class="verification-stats">
+
+                                <div class="request-data">
+                                    <span class="label">Sponzorisana do datuma: </span>
+                                    <div style="font-size: 14px; color: #4d4b4b; font-weight: bold;">
+                                        @GetSponsoredDate()
+                                    </div>
+                                </div>
                             </div>
 
                         </div>

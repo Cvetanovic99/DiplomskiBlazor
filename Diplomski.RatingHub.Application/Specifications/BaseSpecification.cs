@@ -11,7 +11,9 @@ public abstract class BaseSpecification<T> : ISpecification<T>
     public List<Expression<Func<T, object>>> Includes { get; } = new();
     public List<string> IncludeStrings { get; } = new();
     public Expression<Func<T, object>>? OrderBy { get; private set; }
+    public Expression<Func<T, object>>? ThenOrderBy { get; private set; }
     public Expression<Func<T, object>>? OrderByDescending { get; private set; }
+    public Expression<Func<T, object>>? ThenOrderByDescending { get; private set; }
     public int Take { get; private set; }
     public int Skip { get; private set; }
     public bool IsPagingEnabled { get; set; }
@@ -25,10 +27,20 @@ public abstract class BaseSpecification<T> : ISpecification<T>
     {
         OrderBy = orderByExpression;
     }
+    
+    public virtual void ApplyThenOrderBy(Expression<Func<T, object>> thenOrderByExpression)
+    {
+        ThenOrderBy = thenOrderByExpression;
+    }
 
     public virtual void ApplyOrderByDescending(Expression<Func<T, object>> orderByDescendingExpression)
     {
         OrderByDescending = orderByDescendingExpression;
+    }
+    
+    public virtual void ApplyThenOrderByDescending(Expression<Func<T, object>> thenOrderByDescendingExpression)
+    {
+        ThenOrderByDescending = thenOrderByDescendingExpression;
     }
 
     public virtual void ApplyPaging(int skip, int take)

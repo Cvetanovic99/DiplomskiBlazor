@@ -1,0 +1,65 @@
+﻿@page "/user/companies/payment-success"
+
+@inherits Diplomski.RatingHub.Web.Components.Shared.PortalComponentBase
+@if (!_success && IsLoading)
+{
+    <div class="payment-success-page">
+        <div class="payment-success-shell">
+            <div class="payment-success-card">
+                
+                <RadzenText TextStyle="TextStyle.H1" Style="width: 100%">
+                    <RadzenSkeleton Animation="SkeletonAnimation.Wave" Style="width: 100%"/>
+                </RadzenText>
+
+            </div>
+        </div>
+    </div>
+}
+else if (_success)
+{
+    <div class="payment-success-page">
+        <div class="payment-success-shell">
+            <div class="payment-success-card">
+
+                <div class="success-icon-wrapper">
+                    <RadzenIcon Icon="check_circle" class="success-icon"/>
+                </div>
+
+                <h2 class="success-title">
+                    Uspešno ste izvršili uplatu za sponzorisanje kompanije <span><RadzenIcon Icon="celebration" Style="color: #8f63ff"/></span>
+                </h2>
+
+                <p class="success-subtitle">
+                    Vaša kompanija će se sada prikazivati na vrhu pretrage i biće dodatno istaknuta korisnicima.
+                </p>
+
+                <div class="success-action">
+                    <a @onclick="GoToCompany" class="back-link">
+                        <RadzenIcon Icon="arrow_back"/>
+                        <span class="back-link-text">Prikaži kompanije</span>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+} else if (!_success && !IsLoading)
+{
+    <div class="no-companies-container">
+
+        <div class="no-companies-card">
+
+            <div class="no-companies-icon">
+                <RadzenIcon Icon="sentiment_dissatisfied"/>
+            </div>
+
+            <h3> Doslo je do greske</h3>
+
+            <p>
+                Molimo vas pokusajte ceo proces ispocetka
+            </p>
+
+        </div>
+
+    </div>
+}

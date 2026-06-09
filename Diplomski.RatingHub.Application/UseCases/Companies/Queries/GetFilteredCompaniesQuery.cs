@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Linq.Expressions;
+using AutoMapper;
 using Diplomski.RatingHub.Application.Enums;
 using Diplomski.RatingHub.Application.Interfaces.Models;
 using Diplomski.RatingHub.Application.Interfaces.Repositories;
@@ -20,6 +21,7 @@ public class GetFilteredCompaniesQuery : IRequest<IPaginatedList<FilteredCompany
     public double OverallRatingGrade { get; set; }
     public CompanyClaimStatusFilterOptions ClaimStatus { get; set; }
     public CompanyVerificationStatusFilterOptions VerificationStatus { get; set; }
+    public string OrderBy { get; set; }
     
 }
 
@@ -51,6 +53,9 @@ public class GetFilteredCompaniesQueryValidator : AbstractValidator<GetFilteredC
         RuleFor(x => x.VerificationStatus)
             .IsInEnum()
             .WithMessage("VerificationStatus mora biti validna vrednost");
+        
+        RuleFor(x => x.OrderBy).NotEmpty()
+            .WithMessage("Sortiranje mora biti postavljeno");
     }
 }
 
@@ -105,7 +110,18 @@ public class GetFilteredCompaniesQueryHandler : IRequestHandler<GetFilteredCompa
         {
             spec.And(x => x.IsVerified == false);
         }
+
+        spec.ApplyOrderByDescending(c => c.IsSponsored);
         
+        if (request.OrderBy.Split(' ')[1] == "desc")
+        {
+            spec.ApplyThenOrderByDescending(GetSecondOrder(request.OrderBy));
+        }
+        else
+        {
+            spec.ApplyThenOrderBy(GetSecondOrder(request.OrderBy));
+        }
+
 
         return await _companyRepository.GetAndProjectAsPaginatedList<FilteredCompanyDto>(spec, request.QueryArgs);
     }
@@ -132,6 +148,20 @@ public class GetFilteredCompaniesQueryHandler : IRequestHandler<GetFilteredCompa
 
         return result;
     }
+
+    private Expression<Func<Company, object>> GetSecondOrder(string orderBy)
+    {
+            string value = orderBy.Split(' ')[0];
+            switch (value)
+            {
+                case $"{nameof(FilteredCompanyDto.OverallAverageGrade)}":
+                    return c => c.OverallAverageGrade;
+                case $"{nameof(FilteredCompanyDto.Created)}":
+                    return c => c.Created;
+            }
+
+            return c => c.Id;
+    }
 }
 
 public class FilteredCompanyDto : IMapFrom<Company>
@@ -151,6 +181,7 @@ public class FilteredCompanyDto : IMapFrom<Company>
     public string? PublicPageUrl  { get; set; }
     public bool IsVerified { get; set; }
     public bool IsClaimed { get; set; }
+    public bool IsSponsored { get; set; }
     public string? ProfileImagePath { get; set; }
     public List<string>? Images { get; set; } = new();
     public DateTime Created { get; set; }

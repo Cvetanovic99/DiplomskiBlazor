@@ -19,6 +19,9 @@ internal sealed class SmsNotificationService : ISmsNotificationService
 
     public Task SendResetPasswordTokenWithEmail(string token)//This is only because sms sender doesn't work
     => _emailNotificationService.SendAsync(EmailTemplates.ResetPasswordToken(token));
+    
+    public Task NotifyOwnerAboutSponsoredCompanyExpiration(string companyName, string expirationDate)//This is only because sms sender doesn't work
+        => _emailNotificationService.SendAsync(EmailTemplates.SponsoredCompanyExpiration(companyName, expirationDate));
 
     public Task NotifyOwnerAboutCompanyCreationWithEmail(string companyName, string claimCompanyIdentifier)
         => _emailNotificationService.SendAsync(

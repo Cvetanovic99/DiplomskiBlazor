@@ -46,7 +46,8 @@ public class GetCategoriesAndCompaniesQueryHandler : IRequestHandler<GetCategori
         var spec = new Specification<Company>(c => c.CityId == request.CityId &&
                                                    (c.Name.Contains(request.FilterValue) ||
                                                     (c.CompanyPib != null && c.CompanyPib.Contains(request.FilterValue))))
-            .ApplyOrderByDescending(x => x.OwnerId != null);
+            .ApplyOrderByDescending(x => x.IsSponsored)
+            .ApplyThenOrderByDescending(x => x.OwnerId != null);
         
 
         var companies = await _companyRepository.GetAndProjectAsPaginatedList<CompanySearchSectionDto>(spec, new QueryArgs {Skip=0, Take = 15});
@@ -68,6 +69,7 @@ public class GetCategoriesAndCompaniesQueryHandler : IRequestHandler<GetCategori
             ProfileImagePath = c.ProfileImagePath,
             HasOwner = c.HasOwner,
             CompanyPib = c.CompanyPib,
+            IsSponsored = c.IsSponsored,
             IsCategory = false
         }));
         
@@ -88,6 +90,7 @@ public class CategoryOrCompanyDto
     public string? ProfileImagePath { get; set; }
     public bool HasOwner  { get; set; }
     public string? CompanyPib  { get; set; }
+    public bool IsSponsored { get; set; }
 }
 
 public class CompanySearchSectionDto : IMapFrom<Company>
@@ -97,6 +100,7 @@ public class CompanySearchSectionDto : IMapFrom<Company>
     public string? ProfileImagePath { get; set; }
     public bool HasOwner  { get; set; }
     public string? CompanyPib  { get; set; }
+    public bool IsSponsored { get; set; }
     
     public void Mapping(Profile profile)
     {

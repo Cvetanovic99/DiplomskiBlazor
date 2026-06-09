@@ -61,6 +61,16 @@ public static class EmailTemplates
                        """
         );
     
+    public static EmailMessage NotificationAboutSponsoredCompanyExpiration(string toEmail, string companyName, string expirationDate) =>
+        new(
+            To: new EmailRecipient(toEmail),
+            Subject: $"Obavestenje o isteku sponzorisane kompanije: {companyName} na platformi 'Kriterijum'",
+            HtmlBody: $"""
+                           <p>Postovani vasoj kompaniji: '{companyName}' istice sponzorisanje: {expirationDate}.</p>
+                           <p>Ukoliko zelite mozete pre isteka ili nakon toga opet izvrsiti uplatu za sponzorisanje kompanije</p>
+                       """
+        );
+    
     public static EmailMessage ConfirmToken(string token) =>//Just for testing purposes
         new(
             To: new EmailRecipient("cvetanovicgoran99@gmail.com"),
@@ -76,6 +86,16 @@ public static class EmailTemplates
             Subject: "Resetovanje lozinke",
             HtmlBody: $"""
                            <p>Kod za resetovanje lozinke je: {token} </p>
+                       """
+        );
+    
+    public static EmailMessage SponsoredCompanyExpiration(string companyName, string expirationDate) =>//Just for testing purposes
+        new(
+            To: new EmailRecipient("cvetanovicgoran99@gmail.com"),
+            Subject: $"Obavestenje o isteku sponzorisane kompanije: {companyName} na platformi 'Kriterijum'",
+            HtmlBody: $"""
+                           <p>Postovani vasoj kompaniji: '{companyName}' istice sponzorisanje: {expirationDate}.</p>
+                           <p>Ukoliko zelite mozete pre isteka ili nakon toga opet izvrsiti uplatu za sponzorisanje kompanije</p>
                        """
         );
 }

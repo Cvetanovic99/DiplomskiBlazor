@@ -1,0 +1,30 @@
+﻿@page "/user/companies/payment-cancel"
+@inherits Diplomski.RatingHub.Web.Components.Shared.PortalComponentBase
+
+
+<div class="payment-cancel-page">
+    <div class="payment-cancel-shell">
+        <div class="payment-cancel-card">
+
+            <div class="cancel-icon-wrapper">
+                <RadzenIcon Icon="cancel" class="cancel-icon" />
+            </div>
+
+            <h2 class="cancel-title">
+                Niste završili proces sponzorisanja
+            </h2>
+
+            <p class="cancel-subtitle">
+                Vaša kompanija neće biti dodatno istaknuta dok se uplata ne izvrši.
+            </p>
+
+            <div class="cancel-action">
+                <a @onclick="GoBack" class="retry-link">
+                    <RadzenIcon Icon="arrow_back" />
+                    <span class="retry-link-text">Vrati se nazad</span>
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>

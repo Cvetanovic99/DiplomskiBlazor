@@ -27,11 +27,21 @@ public class SpecificationEvaluator<T> where T : class, IDatabaseEntity
         // Apply ordering if expressions are set
         if (specification.OrderBy != null)
         {
-            query = query.OrderBy(specification.OrderBy);
+            if(specification.ThenOrderBy != null)
+                query = query.OrderBy(specification.OrderBy).ThenBy(specification.ThenOrderBy);
+            else if(specification.ThenOrderByDescending != null)
+                query = query.OrderBy(specification.OrderBy).ThenByDescending(specification.ThenOrderByDescending);
+            else
+                query = query.OrderBy(specification.OrderBy);
         }
         else if (specification.OrderByDescending != null)
         {
-            query = query.OrderByDescending(specification.OrderByDescending);
+            if (specification.ThenOrderBy != null)
+                query = query.OrderByDescending(specification.OrderByDescending).ThenBy(specification.ThenOrderBy);
+            else if(specification.ThenOrderByDescending != null)
+                query = query.OrderByDescending(specification.OrderByDescending).ThenByDescending(specification.ThenOrderByDescending);
+            else
+                query = query.OrderByDescending(specification.OrderByDescending);
         }
 
         // Apply paging if enabled

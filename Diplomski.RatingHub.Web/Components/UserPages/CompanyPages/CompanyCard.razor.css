@@ -42,9 +42,18 @@
     gap: 8px;
 }
 
+.company-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
 .company-title {
     font-size: 18px;
     font-weight: 700;
+    margin: 0;
+    flex: 1;
 }
 
 /* RATING */
@@ -256,4 +265,25 @@
         width: 80px;
         height: 60px;
     }
+}
+
+.sponsored-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+
+    padding: 4px 8px;
+    font-size: 12px;
+    font-weight: 400;
+
+    background-color: #fff8cc;
+    border: 1px solid #facc15;
+    border-radius: 6px;
+
+    color: #92400e; 
+}
+
+.badge-icon {
+    font-size: 16px;
+    color: #facc15;
 }

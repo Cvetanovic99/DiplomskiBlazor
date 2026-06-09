@@ -20,6 +20,8 @@ public class Company : EntityBase
     public bool IsVerified { get; set; }//Is verified with video-admin
     public string? AnonymousEditIdentifier { get; set; }//If someone create company anonymously and whant to edit
     public string? ClaimCompanyIdentifier { get; set; }//When someone whant to claim company using this identifier-code
+    public bool IsSponsored { get; set; }
+    public DateTime? SponsoredUntil { get; set; }
     //public int CreatorId { get; set; }
     //public UserProfile Creator { get; set; } = null!;
     public int? OwnerId { get; set; }

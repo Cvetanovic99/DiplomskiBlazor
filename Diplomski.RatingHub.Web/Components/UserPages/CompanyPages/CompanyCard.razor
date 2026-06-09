@@ -10,7 +10,17 @@
     <!-- CONTENT -->
     <div class="company-card-content">
 
-        <h3 class="company-title">@Company.Name</h3>
+        <div class="company-header">
+            <h3 class="company-title">@Company.Name</h3>
+
+            @if (Company.IsSponsored)
+            {
+                <div class="sponsored-badge">
+                    <RadzenIcon Icon="editor_choice" class="badge-icon"/>
+                    <span>Sponzorisano</span>
+                </div>
+            }
+        </div>
 
         <!-- RATING -->
         <div class="company-rating">

@@ -8,4 +8,5 @@ public interface ISmsNotificationService
     Task SendConfirmationTokenWithEmail(string token);
     Task SendResetPasswordTokenWithEmail(string token);
     Task NotifyOwnerAboutCompanyCreationWithEmail(string companyName, string claimCompanyIdentifier);
+    Task NotifyOwnerAboutSponsoredCompanyExpiration(string companyName, string expirationDate);
 }

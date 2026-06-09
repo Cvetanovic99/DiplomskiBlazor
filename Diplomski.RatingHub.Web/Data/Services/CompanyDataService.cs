@@ -2,6 +2,7 @@
 using Diplomski.RatingHub.Application.Exceptions;
 using Diplomski.RatingHub.Application.Interfaces.Models;
 using Diplomski.RatingHub.Application.Interfaces.Notifications;
+using Diplomski.RatingHub.Application.Interfaces.Payments;
 using Diplomski.RatingHub.Application.Models;
 using Diplomski.RatingHub.Application.Models.Dtos;
 using Diplomski.RatingHub.Application.UseCases.Companies.Commands;
@@ -16,13 +17,16 @@ public class CompanyDataService : DataServiceBase, ICompanyDataService
 {
     private readonly IEmailNotificationService _emailNotificationService;
     private readonly ISmsNotificationService _smsNotificationService;
+    private readonly IPaymentService _paymentService;
     public CompanyDataService(
         IServiceScopeFactory serviceScopeFactory, 
         IEmailNotificationService emailNotificationService,
-        ISmsNotificationService smsNotificationService) : base(serviceScopeFactory)
+        ISmsNotificationService smsNotificationService,
+        IPaymentService paymentService) : base(serviceScopeFactory)
     {
         _emailNotificationService = emailNotificationService;
         _smsNotificationService = smsNotificationService;
+        _paymentService = paymentService;
     }
     public async Task<IPaginatedList<CompanyDto>> GetCompanies(string filterValue, int cityId, QueryArgs queryArgs)
     {
@@ -133,8 +137,7 @@ public class CompanyDataService : DataServiceBase, ICompanyDataService
     }
 
     public async Task<IPaginatedList<FilteredCompanyDto>> GetFilteredCompanies(int cityId, int categoryId, string filterValue, double overallRatingGrade,
-        QueryArgs queryArgs, CompanyClaimStatusFilterOptions claimStatus,
-        CompanyVerificationStatusFilterOptions verificationStatus)
+        QueryArgs queryArgs, CompanyClaimStatusFilterOptions claimStatus, CompanyVerificationStatusFilterOptions verificationStatus, string orderBy)
     {
         return await Send(new GetFilteredCompaniesQuery
         {
@@ -144,7 +147,8 @@ public class CompanyDataService : DataServiceBase, ICompanyDataService
             OverallRatingGrade = overallRatingGrade,
             QueryArgs = queryArgs,
             ClaimStatus = claimStatus,
-            VerificationStatus = verificationStatus
+            VerificationStatus = verificationStatus,
+            OrderBy = orderBy
         });
     }
 
@@ -206,6 +210,21 @@ public class CompanyDataService : DataServiceBase, ICompanyDataService
     public async Task SetCompanyOwner(int userProfileId, string claimCompanyIdentifier)
     {
         await Send(new SetCompanyOwnerCommand { UserProfileId = userProfileId, ClaimCompanyIdentifier = claimCompanyIdentifier });
+    }
+
+    public async Task SetCompanyAsSponsored(int companyId)
+    {
+       await Send(new SetCompanyAsSponsoredCommand { CompanyId = companyId });
+    }
+
+    public async Task<string> CreateCheckoutSession(int companyId)
+    {
+        return await _paymentService.CreateCheckoutSession(companyId);
+    }
+
+    public async Task RemoveCompanyFromSponsored(int companyId)
+    {
+        await Send(new RemoveCompanyFromSponsoredCommand { CompanyId = companyId });
     }
 
     private async Task NotifyOwnerAboutCompanyCreation(CreateCompanyDto createCompanyDto)

@@ -61,6 +61,8 @@ public class UserCompanyDto : IMapFrom<Company>
     public bool IsVerified { get; set; }//Is verified with video-admin
     public bool IsClaimed { get; set; }
     public string? AnonymousEditIdentifier { get; set; }//If someone create company anonymously and whant to edit
+    public bool IsSponsored { get; set; }
+    public DateTime? SponsoredUntil { get; set; }
     public int? OwnerId { get; set; }
     public int CategoryId { get; set; }
     public DateTime Created { get; set; }

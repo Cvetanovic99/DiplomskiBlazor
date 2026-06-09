@@ -162,7 +162,7 @@ public partial class UserCompanies
         }
     }
 
-    public async Task VerifyCompanyClicked()
+    private async Task VerifyCompanyClicked()
     {
         var result = await DialogService.OpenAsync<RequestCompanyVerificationDialog>(
             "Zahtev za verifikaciju",
@@ -186,6 +186,44 @@ public partial class UserCompanies
             ShowNotification("Uspesno ste preuzeli kompaniju", NotificationSeverity.Success);
         }
         
+    }
+    
+    private async Task SponsorCompanyClicked()
+    {
+        var res = await DialogService.Confirm("Cena sponzorisanja kompanije je 10€. Nakon uplate vasa kompanija ce se prikazivati na vrhu pretrage i bice dodatno istaknuta korisnicima.",
+            "Sponzorisanje kompanije", new ConfirmOptions { OkButtonText = "Nastavi", CancelButtonText = "Odustani", ShowClose = false });
+        if (res is true)
+        {
+            var response = await InvokeDataServiceMethod(
+                () => CompanyDataService.CreateCheckoutSession(Company.Id),
+                errorMessage: "Doslo je do greske, molimo vas pokusajte kasnije.");
+
+            if (!response.ExceptionOccurred)
+            {
+                NavigationManager.NavigateTo(response.Result, true);
+            }
+        }
+        
+    }
+    
+    private async Task RemoveCompanyFromSponsoredClicked()
+    {
+        var res = await DialogService.Confirm("Da li ste sigurni da zelite da prestanete sa sponzorstvom kompanije?","Prekid sponzorstva kompanije",
+            new ConfirmOptions { OkButtonText = "Prestani", CancelButtonText = "Odustani", ShowClose = false });
+        if (res is true)
+        {
+            var response = await InvokeDataServiceMethod(
+                () => CompanyDataService.RemoveCompanyFromSponsored(Company.Id),
+                errorMessage: "Doslo je do greske");
+
+            if (response)
+            {
+                ShowNotification("Uspesno ste prestali sa sponzorstvom", NotificationSeverity.Success);
+                Company.IsSponsored = false;
+                Company.SponsoredUntil = null;
+                StateHasChanged();
+            }
+        }
     }
 
     private async Task DeleteVerificationRequestClicked()
@@ -273,5 +311,20 @@ public partial class UserCompanies
     private void ToggleDescription()
     {
         _isDescriptionExpanded = !_isDescriptionExpanded;
+    }
+    
+    private string? GetSponsoredDate()
+    {
+        if (Company.SponsoredUntil == null)
+        {
+            return "";
+        }
+        else
+        {
+            TimeZoneInfo serbiaZone = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time");
+            DateTime serbiaTime = TimeZoneInfo.ConvertTimeFromUtc(Company.SponsoredUntil.Value, serbiaZone);
+            
+            return serbiaTime.ToString("MMMM dd, yyyy HH:mm", new System.Globalization.CultureInfo("sr-Latn-RS"));
+        }
     }
 }

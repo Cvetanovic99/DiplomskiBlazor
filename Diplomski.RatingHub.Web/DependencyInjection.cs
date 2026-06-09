@@ -34,6 +34,7 @@ public static class DependencyInjection
         services.AddScoped<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
         
         AddHttpClient(services, configuration);
+        services.AddHostedService<SponsoredCompanyBackgroundService>();
         
         return services;
     }
